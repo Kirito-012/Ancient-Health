@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* React Quill Editor Custom Styles */
+.ql-container {
+	font-size: 16px;
+	min-height: 200px;
+}
+
+.ql-editor {
+	min-height: 200px;
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.ql-editor.ql-blank::before {
+	color: #9ca3af;
+	font-style: normal;
+}
+
+.ql-toolbar {
+	background: #f8fafc;
+	border: 1px solid #e2e8f0 !important;
+	border-bottom: none !important;
+	border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.ql-container {
+	border: 1px solid #e2e8f0 !important;
+	border-radius: 0 0 0.5rem 0.5rem;
+}
