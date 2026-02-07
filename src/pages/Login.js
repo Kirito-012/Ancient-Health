@@ -18,11 +18,9 @@ const Login = () => {
 			[e.target.name]: e.target.value,
 		})
 	}
-
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		setIsLoading(true)
-
 		try {
 			const response = await axios.post(
 				`${process.env.REACT_APP_API_URL}/api/auth/login`,
@@ -75,7 +73,7 @@ const Login = () => {
 						<p className='text-slate-600'>Sign in to your account</p>
 					</div>
 
-					<form onSubmit={handleSubmit}>
+					<form>
 						<div className='mb-6'>
 							<label className='block text-sm font-semibold text-slate-700 mb-2'>
 								Email Address
@@ -107,11 +105,11 @@ const Login = () => {
 						</div>
 
 						<button
-							type='submit'
+							onClick={handleSubmit}
 							disabled={isLoading}
 							className={`w-full py-3 rounded-lg font-semibold transition ${isLoading
-									? 'bg-slate-400 cursor-not-allowed'
-									: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+								? 'bg-slate-400 cursor-not-allowed'
+								: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
 								}`}>
 							{isLoading ? (
 								<span className='flex items-center justify-center gap-2'>
