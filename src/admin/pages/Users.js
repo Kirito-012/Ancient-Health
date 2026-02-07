@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Users = () => {
 	const [users, setUsers] = useState([])
@@ -35,8 +35,8 @@ const Users = () => {
 	const fetchCurrentUser = async () => {
 		try {
 			const token = localStorage.getItem('token')
-			const response = await fetch('http://localhost:3010/api/auth/me', {
-				headers: {Authorization: `Bearer ${token}`},
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
+				headers: { Authorization: `Bearer ${token}` },
 			})
 			const data = await response.json()
 			if (data.success) {
@@ -50,7 +50,7 @@ const Users = () => {
 	const fetchUsers = async () => {
 		try {
 			const token = localStorage.getItem('token')
-			const response = await fetch('http://localhost:3010/api/auth/users', {
+			const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/users`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
@@ -113,14 +113,14 @@ const Users = () => {
 		try {
 			const token = localStorage.getItem('token')
 			const response = await fetch(
-				`http://localhost:3010/api/auth/users/${userId}/role`,
+				`${process.env.REACT_APP_API_URL}/api/auth/users/${userId}/role`,
 				{
 					method: 'PATCH',
 					headers: {
 						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify({role: newRole}),
+					body: JSON.stringify({ role: newRole }),
 				}
 			)
 
@@ -129,7 +129,7 @@ const Users = () => {
 			if (data.success) {
 				// Update local state
 				const updatedUsers = users.map((user) =>
-					user.id === userId ? {...user, role: newRole} : user
+					user.id === userId ? { ...user, role: newRole } : user
 				)
 				setUsers(updatedUsers)
 				setOpenRoleDropdown(null)
@@ -235,13 +235,12 @@ const Users = () => {
 								{roleFilter === 'all'
 									? 'All Roles'
 									: roleFilter === 'admin'
-									? 'Admins Only'
-									: 'Users Only'}
+										? 'Admins Only'
+										: 'Users Only'}
 							</span>
 							<svg
-								className={`w-4 h-4 text-slate-400 transition-transform ${
-									showFilterDropdown ? 'rotate-180' : ''
-								}`}
+								className={`w-4 h-4 text-slate-400 transition-transform ${showFilterDropdown ? 'rotate-180' : ''
+									}`}
 								fill='none'
 								stroke='currentColor'
 								viewBox='0 0 24 24'>
@@ -262,11 +261,10 @@ const Users = () => {
 											setRoleFilter('all')
 											setShowFilterDropdown(false)
 										}}
-										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
-											roleFilter === 'all'
+										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${roleFilter === 'all'
 												? 'bg-purple-50 text-purple-700 font-medium'
 												: 'text-slate-600 hover:bg-slate-50'
-										}`}>
+											}`}>
 										All Roles
 									</button>
 									<button
@@ -274,11 +272,10 @@ const Users = () => {
 											setRoleFilter('admin')
 											setShowFilterDropdown(false)
 										}}
-										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
-											roleFilter === 'admin'
+										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${roleFilter === 'admin'
 												? 'bg-purple-50 text-purple-700 font-medium'
 												: 'text-slate-600 hover:bg-slate-50'
-										}`}>
+											}`}>
 										Admins Only
 									</button>
 									<button
@@ -286,11 +283,10 @@ const Users = () => {
 											setRoleFilter('user')
 											setShowFilterDropdown(false)
 										}}
-										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
-											roleFilter === 'user'
+										className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${roleFilter === 'user'
 												? 'bg-purple-50 text-purple-700 font-medium'
 												: 'text-slate-600 hover:bg-slate-50'
-										}`}>
+											}`}>
 										Users Only
 									</button>
 								</div>
@@ -444,16 +440,14 @@ const Users = () => {
 														)
 													}
 													className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-purple-500
-														${
-															user.role === 'admin'
-																? 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100'
-																: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+														${user.role === 'admin'
+															? 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100'
+															: 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
 														}`}>
 													{user.role === 'admin' ? '👑 Admin' : '👤 User'}
 													<svg
-														className={`w-3 h-3 transition-transform ${
-															openRoleDropdown === user.id ? 'rotate-180' : ''
-														}`}
+														className={`w-3 h-3 transition-transform ${openRoleDropdown === user.id ? 'rotate-180' : ''
+															}`}
 														fill='none'
 														stroke='currentColor'
 														viewBox='0 0 24 24'>
@@ -474,11 +468,10 @@ const Users = () => {
 																onClick={() =>
 																	handleRoleChange(user.id, 'user')
 																}
-																className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
-																	user.role === 'user'
+																className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${user.role === 'user'
 																		? 'bg-blue-50 text-blue-700'
 																		: 'text-slate-600 hover:bg-slate-50'
-																}`}>
+																	}`}>
 																<span className='text-base'>👤</span>
 																<div className='text-left'>
 																	<p className='font-medium'>User</p>
@@ -505,11 +498,10 @@ const Users = () => {
 																onClick={() =>
 																	handleRoleChange(user.id, 'admin')
 																}
-																className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${
-																	user.role === 'admin'
+																className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors ${user.role === 'admin'
 																		? 'bg-purple-50 text-purple-700'
 																		: 'text-slate-600 hover:bg-slate-50'
-																}`}>
+																	}`}>
 																<span className='text-base'>👑</span>
 																<div className='text-left'>
 																	<p className='font-medium'>Admin</p>

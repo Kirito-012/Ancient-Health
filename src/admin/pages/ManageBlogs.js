@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -9,7 +9,7 @@ const ManageBlogs = () => {
 	const [blogs, setBlogs] = useState([])
 	const [categories, setCategories] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [editModal, setEditModal] = useState({isOpen: false, blog: null})
+	const [editModal, setEditModal] = useState({ isOpen: false, blog: null })
 	const [editForm, setEditForm] = useState({
 		metaTitle: '',
 		metaDescription: '',
@@ -31,11 +31,11 @@ const ManageBlogs = () => {
 	// Rich text editor modules configuration
 	const quillModules = {
 		toolbar: [
-			[{header: [1, 2, 3, false]}],
+			[{ header: [1, 2, 3, false] }],
 			['bold', 'italic', 'underline', 'strike'],
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-			[{align: []}],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			[{ indent: '-1' }, { indent: '+1' }],
+			[{ align: [] }],
 			['link'],
 			['clean'],
 		],
@@ -62,7 +62,7 @@ const ManageBlogs = () => {
 	const fetchBlogs = async () => {
 		try {
 			// Build query parameters
-			let url = 'http://localhost:3010/api/blogs?'
+			let url = `${process.env.REACT_APP_API_URL}/api/blogs?`
 			const params = []
 
 			if (searchText.trim()) {
@@ -91,7 +91,7 @@ const ManageBlogs = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get('http://localhost:3010/api/categories')
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -113,11 +113,11 @@ const ManageBlogs = () => {
 		})
 		setEditImage(blog.image)
 		setEditImagePreview(blog.image)
-		setEditModal({isOpen: true, blog})
+		setEditModal({ isOpen: true, blog })
 	}
 
 	const closeEditModal = () => {
-		setEditModal({isOpen: false, blog: null})
+		setEditModal({ isOpen: false, blog: null })
 		setEditForm({
 			metaTitle: '',
 			metaDescription: '',
@@ -165,7 +165,7 @@ const ManageBlogs = () => {
 			}
 
 			const response = await axios.put(
-				`http://localhost:3010/api/blogs/${editModal.blog._id}`,
+				`${process.env.REACT_APP_API_URL}/api/blogs/${editModal.blog._id}`,
 				blogData
 			)
 
@@ -191,7 +191,7 @@ const ManageBlogs = () => {
 
 		try {
 			const response = await axios.delete(
-				`http://localhost:3010/api/blogs/${id}`
+				`${process.env.REACT_APP_API_URL}/api/blogs/${id}`
 			)
 
 			if (response.data.success) {
@@ -319,18 +319,16 @@ const ManageBlogs = () => {
 									onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
 									className='w-full pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-left text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-200 text-sm'>
 									<span
-										className={`block truncate ${
-											!selectedCategory ? 'text-slate-400' : ''
-										}`}>
+										className={`block truncate ${!selectedCategory ? 'text-slate-400' : ''
+											}`}>
 										{selectedCategory
 											? categories.find((c) => c._id === selectedCategory)?.name
 											: 'All Categories'}
 									</span>
 									<span className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
 										<svg
-											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-												showCategoryDropdown ? 'rotate-180' : ''
-											}`}
+											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''
+												}`}
 											fill='none'
 											stroke='currentColor'
 											viewBox='0 0 24 24'>
@@ -349,11 +347,10 @@ const ManageBlogs = () => {
 										<div className='max-h-60 overflow-auto p-1'>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													!selectedCategory
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!selectedCategory
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setSelectedCategory('')
 													setShowCategoryDropdown(false)
@@ -364,11 +361,10 @@ const ManageBlogs = () => {
 												<button
 													key={cat._id}
 													type='button'
-													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-														selectedCategory === cat._id
+													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${selectedCategory === cat._id
 															? 'bg-blue-50 text-blue-700 font-medium'
 															: 'text-slate-700 hover:bg-slate-50'
-													}`}
+														}`}
 													onClick={() => {
 														setSelectedCategory(cat._id)
 														setShowCategoryDropdown(false)
@@ -595,7 +591,7 @@ const ManageBlogs = () => {
 											type='text'
 											value={editForm.title}
 											onChange={(e) =>
-												setEditForm({...editForm, title: e.target.value})
+												setEditForm({ ...editForm, title: e.target.value })
 											}
 											className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 											required
@@ -611,7 +607,7 @@ const ManageBlogs = () => {
 											<select
 												value={editForm.category}
 												onChange={(e) =>
-													setEditForm({...editForm, category: e.target.value})
+													setEditForm({ ...editForm, category: e.target.value })
 												}
 												className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 												required>
@@ -633,7 +629,7 @@ const ManageBlogs = () => {
 												type='text'
 												value={editForm.author}
 												onChange={(e) =>
-													setEditForm({...editForm, author: e.target.value})
+													setEditForm({ ...editForm, author: e.target.value })
 												}
 												className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 												required
@@ -647,7 +643,7 @@ const ManageBlogs = () => {
 												type='date'
 												value={editForm.date}
 												onChange={(e) =>
-													setEditForm({...editForm, date: e.target.value})
+													setEditForm({ ...editForm, date: e.target.value })
 												}
 												className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 												required
@@ -673,7 +669,7 @@ const ManageBlogs = () => {
 											type='text'
 											value={editForm.metaTitle}
 											onChange={(e) =>
-												setEditForm({...editForm, metaTitle: e.target.value})
+												setEditForm({ ...editForm, metaTitle: e.target.value })
 											}
 											className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 											required
@@ -709,7 +705,7 @@ const ManageBlogs = () => {
 												theme='snow'
 												value={editForm.content}
 												onChange={(value) =>
-													setEditForm({...editForm, content: value})
+													setEditForm({ ...editForm, content: value })
 												}
 												modules={quillModules}
 												formats={quillFormats}
@@ -769,11 +765,10 @@ const ManageBlogs = () => {
 								<button
 									type='submit'
 									disabled={isSaving}
-									className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${
-										isSaving
+									className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
 											? 'bg-slate-400 cursor-not-allowed'
 											: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-									}`}>
+										}`}>
 									{isSaving ? (
 										<>
 											<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>

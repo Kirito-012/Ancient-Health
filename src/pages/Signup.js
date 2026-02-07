@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const Signup = () => {
@@ -34,7 +34,7 @@ const Signup = () => {
 
 		try {
 			const response = await axios.post(
-				'http://localhost:3010/api/auth/signup',
+				`${process.env.REACT_APP_API_URL}/api/auth/signup`,
 				{
 					name: formData.name,
 					email: formData.email,
@@ -43,7 +43,7 @@ const Signup = () => {
 			)
 
 			if (response.data.success) {
-				const {token, user} = response.data.data
+				const { token, user } = response.data.data
 
 				// Store token
 				localStorage.setItem('token', token)
@@ -154,11 +154,10 @@ const Signup = () => {
 						<button
 							type='submit'
 							disabled={isLoading}
-							className={`w-full py-3 rounded-lg font-semibold transition ${
-								isLoading
+							className={`w-full py-3 rounded-lg font-semibold transition ${isLoading
 									? 'bg-slate-400 cursor-not-allowed'
 									: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
-							}`}>
+								}`}>
 							{isLoading ? (
 								<span className='flex items-center justify-center gap-2'>
 									<svg

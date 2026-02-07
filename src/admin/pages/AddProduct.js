@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -28,16 +28,16 @@ const AddProduct = () => {
 	// Variant State
 	const [hasVariants, setHasVariants] = useState(false)
 	const [variants, setVariants] = useState([])
-	const [variantOptions, setVariantOptions] = useState([{name: '', values: ''}]) // e.g., [{name: 'Color', values: 'Red,Blue'}]
+	const [variantOptions, setVariantOptions] = useState([{ name: '', values: '' }]) // e.g., [{name: 'Color', values: 'Red,Blue'}]
 
 	// Rich text editor modules configuration
 	const quillModules = {
 		toolbar: [
-			[{header: [1, 2, 3, false]}],
+			[{ header: [1, 2, 3, false] }],
 			['bold', 'italic', 'underline', 'strike'],
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-			[{align: []}],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			[{ indent: '-1' }, { indent: '+1' }],
+			[{ align: [] }],
 			['link'],
 			['clean'],
 		],
@@ -69,7 +69,7 @@ const AddProduct = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get('http://localhost:3010/api/categories')
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -80,7 +80,7 @@ const AddProduct = () => {
 	}
 
 	const handleInputChange = (e) => {
-		const {name, value} = e.target
+		const { name, value } = e.target
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
@@ -143,7 +143,7 @@ const AddProduct = () => {
 
 	// Handle FAQ operations
 	const addFaq = () => {
-		setFaqs((prev) => [...prev, {question: '', answer: ''}])
+		setFaqs((prev) => [...prev, { question: '', answer: '' }])
 	}
 
 	const removeFaq = (index) => {
@@ -166,7 +166,7 @@ const AddProduct = () => {
 	}
 
 	const addVariantOption = () => {
-		setVariantOptions([...variantOptions, {name: '', values: ''}])
+		setVariantOptions([...variantOptions, { name: '', values: '' }])
 	}
 
 	const removeVariantOption = (index) => {
@@ -185,7 +185,7 @@ const AddProduct = () => {
 			const name = opt.name.trim()
 			const lowerName = name.toLowerCase()
 			if (!normalizedOptions[lowerName]) {
-				normalizedOptions[lowerName] = {name: name, values: []}
+				normalizedOptions[lowerName] = { name: name, values: [] }
 			}
 			const vals = opt.values
 				.split(',')
@@ -205,7 +205,7 @@ const AddProduct = () => {
 			const next = []
 			generated.forEach((prev) => {
 				option.values.forEach((value) => {
-					next.push([...prev, {key: option.name, value}])
+					next.push([...prev, { key: option.name, value }])
 				})
 			})
 			generated = next
@@ -379,7 +379,7 @@ const AddProduct = () => {
 			const token = localStorage.getItem('token')
 
 			const response = await axios.post(
-				'http://localhost:3010/api/products',
+				`${process.env.REACT_APP_API_URL}/api/products`,
 				productData,
 				{
 					headers: {
@@ -416,7 +416,7 @@ const AddProduct = () => {
 				setFaqs([])
 				setHasVariants(false)
 				setVariants([])
-				setVariantOptions([{name: '', values: ''}])
+				setVariantOptions([{ name: '', values: '' }])
 			}
 		} catch (error) {
 			console.error('Error adding product:', error)
@@ -536,11 +536,10 @@ const AddProduct = () => {
 							Product Images <span className='text-red-500'>*</span>
 						</label>
 						<div
-							className={`border-2 border-dashed rounded-lg p-8 text-center transition ${
-								isDragging
+							className={`border-2 border-dashed rounded-lg p-8 text-center transition ${isDragging
 									? 'border-blue-500 bg-blue-50'
 									: 'border-slate-300 hover:border-slate-400'
-							}`}
+								}`}
 							onDragEnter={handleDragEnter}
 							onDragOver={handleDragOver}
 							onDragLeave={handleDragLeave}
@@ -656,13 +655,11 @@ const AddProduct = () => {
 									}}
 								/>
 								<div
-									className={`block w-14 h-8 rounded-full transition ${
-										hasVariants ? 'bg-blue-600' : 'bg-slate-300'
-									}`}></div>
+									className={`block w-14 h-8 rounded-full transition ${hasVariants ? 'bg-blue-600' : 'bg-slate-300'
+										}`}></div>
 								<div
-									className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition transform ${
-										hasVariants ? 'translate-x-6' : ''
-									}`}></div>
+									className={`absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition transform ${hasVariants ? 'translate-x-6' : ''
+										}`}></div>
 							</div>
 							<span className='font-semibold text-slate-700'>
 								This product has options (e.g., Size, Color)
@@ -1042,7 +1039,7 @@ const AddProduct = () => {
 							setFaqs([])
 							setHasVariants(false)
 							setVariants([])
-							setVariantOptions([{name: '', values: ''}])
+							setVariantOptions([{ name: '', values: '' }])
 						}}
 						className='px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition'>
 						Reset
@@ -1050,11 +1047,10 @@ const AddProduct = () => {
 					<button
 						type='submit'
 						disabled={isSubmitting}
-						className={`px-8 py-3 rounded-lg font-semibold transition ${
-							isSubmitting
+						className={`px-8 py-3 rounded-lg font-semibold transition ${isSubmitting
 								? 'bg-slate-400 cursor-not-allowed'
 								: 'bg-blue-600 hover:bg-blue-700 text-white'
-						}`}>
+							}`}>
 						{isSubmitting ? (
 							<span className='flex items-center gap-2'>
 								<svg

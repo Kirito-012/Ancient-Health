@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 const AdminHome = () => {
@@ -16,25 +16,25 @@ const AdminHome = () => {
 		try {
 			// Fetch categories first
 			const categoriesRes = await axios.get(
-				'http://localhost:3010/api/categories'
+				`${process.env.REACT_APP_API_URL}/api/categories`
 			)
 			setCategories(categoriesRes.data.data)
 
 			// Fetch latest products
 			const productsRes = await axios.get(
-				'http://localhost:3010/api/products?limit=5'
+				`${process.env.REACT_APP_API_URL}/api/products?limit=5`
 			)
 			setLatestProducts(productsRes.data.data)
 
 			// Fetch latest blogs
-			const blogsRes = await axios.get('http://localhost:3010/api/blogs')
+			const blogsRes = await axios.get(`${process.env.REACT_APP_API_URL}/api/blogs`)
 			setLatestBlogs(blogsRes.data.data.slice(0, 3))
 
 			// Fetch latest users
 			const token = localStorage.getItem('token')
 			if (token) {
 				const usersRes = await axios.get(
-					'http://localhost:3010/api/auth/users',
+					`${process.env.REACT_APP_API_URL}/api/auth/users`,
 					{
 						headers: {
 							Authorization: `Bearer ${token}`,
@@ -197,18 +197,17 @@ const AdminHome = () => {
 								{/* Stock Status */}
 								<div className='absolute top-3 right-3'>
 									<span
-										className={`px-2 py-1 text-xs font-semibold rounded-full ${
-											product.stock > 10
+										className={`px-2 py-1 text-xs font-semibold rounded-full ${product.stock > 10
 												? 'bg-green-100 text-green-800'
 												: product.stock > 0
-												? 'bg-yellow-100 text-yellow-800'
-												: 'bg-red-100 text-red-800'
-										}`}>
+													? 'bg-yellow-100 text-yellow-800'
+													: 'bg-red-100 text-red-800'
+											}`}>
 										{product.stock > 10
 											? 'In Stock'
 											: product.stock > 0
-											? 'Low Stock'
-											: 'Out of Stock'}
+												? 'Low Stock'
+												: 'Out of Stock'}
 									</span>
 								</div>
 							</div>
@@ -367,9 +366,8 @@ const AdminHome = () => {
 											</span>
 										</div>
 										<div
-											className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
-												user.role === 'admin' ? 'bg-red-500' : 'bg-green-500'
-											}`}></div>
+											className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${user.role === 'admin' ? 'bg-red-500' : 'bg-green-500'
+												}`}></div>
 									</div>
 									<div className='flex-1 min-w-0'>
 										<h3 className='font-bold text-slate-900 text-lg truncate'>
@@ -382,11 +380,10 @@ const AdminHome = () => {
 								</div>
 								<div className='flex flex-col items-end gap-2'>
 									<span
-										className={`px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap ${
-											user.role === 'admin'
+										className={`px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap ${user.role === 'admin'
 												? 'bg-red-100 text-red-800 border-2 border-red-300'
 												: 'bg-emerald-100 text-emerald-800 border-2 border-emerald-300'
-										}`}>
+											}`}>
 										{user.role}
 									</span>
 									<p className='text-sm text-slate-600 font-medium whitespace-nowrap'>

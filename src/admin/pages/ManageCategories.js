@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const ManageCategories = () => {
 	const [categories, setCategories] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [editModal, setEditModal] = useState({isOpen: false, category: null})
-	const [editForm, setEditForm] = useState({name: '', color: ''})
+	const [editModal, setEditModal] = useState({ isOpen: false, category: null })
+	const [editForm, setEditForm] = useState({ name: '', color: '' })
 	const [isSaving, setIsSaving] = useState(false)
 
 	useEffect(() => {
@@ -16,7 +16,7 @@ const ManageCategories = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get('http://localhost:3010/api/categories')
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -29,13 +29,13 @@ const ManageCategories = () => {
 	}
 
 	const handleEdit = (category) => {
-		setEditModal({isOpen: true, category})
-		setEditForm({name: category.name, color: category.color})
+		setEditModal({ isOpen: true, category })
+		setEditForm({ name: category.name, color: category.color })
 	}
 
 	const handleCloseModal = () => {
-		setEditModal({isOpen: false, category: null})
-		setEditForm({name: '', color: ''})
+		setEditModal({ isOpen: false, category: null })
+		setEditForm({ name: '', color: '' })
 	}
 
 	const handleUpdateCategory = async (e) => {
@@ -45,7 +45,7 @@ const ManageCategories = () => {
 		try {
 			const token = localStorage.getItem('token')
 			const response = await axios.put(
-				`http://localhost:3010/api/categories/${editModal.category._id}`,
+				`${process.env.REACT_APP_API_URL}/api/categories/${editModal.category._id}`,
 				editForm,
 				{
 					headers: {
@@ -80,7 +80,7 @@ const ManageCategories = () => {
 		try {
 			const token = localStorage.getItem('token')
 			const response = await axios.delete(
-				`http://localhost:3010/api/categories/${category._id}`,
+				`${process.env.REACT_APP_API_URL}/api/categories/${category._id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -154,7 +154,7 @@ const ManageCategories = () => {
 											<div className='flex items-center gap-2'>
 												<div
 													className='w-8 h-8 rounded-full border-2 border-slate-200'
-													style={{backgroundColor: category.color}}></div>
+													style={{ backgroundColor: category.color }}></div>
 												<span className='text-sm text-slate-600'>
 													{category.color}
 												</span>
@@ -222,7 +222,7 @@ const ManageCategories = () => {
 									type='text'
 									value={editForm.name}
 									onChange={(e) =>
-										setEditForm({...editForm, name: e.target.value})
+										setEditForm({ ...editForm, name: e.target.value })
 									}
 									className='w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
 									required
@@ -238,7 +238,7 @@ const ManageCategories = () => {
 										type='color'
 										value={editForm.color}
 										onChange={(e) =>
-											setEditForm({...editForm, color: e.target.value})
+											setEditForm({ ...editForm, color: e.target.value })
 										}
 										className='w-16 h-12 border border-slate-300 rounded-lg cursor-pointer'
 									/>
@@ -246,7 +246,7 @@ const ManageCategories = () => {
 										type='text'
 										value={editForm.color}
 										onChange={(e) =>
-											setEditForm({...editForm, color: e.target.value})
+											setEditForm({ ...editForm, color: e.target.value })
 										}
 										className='flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
 										placeholder='#000000'
@@ -264,11 +264,10 @@ const ManageCategories = () => {
 								<button
 									type='submit'
 									disabled={isSaving}
-									className={`px-6 py-3 rounded-lg font-semibold transition ${
-										isSaving
+									className={`px-6 py-3 rounded-lg font-semibold transition ${isSaving
 											? 'bg-slate-400 cursor-not-allowed'
 											: 'bg-blue-600 hover:bg-blue-700 text-white'
-									}`}>
+										}`}>
 									{isSaving ? 'Updating...' : 'Update Category'}
 								</button>
 							</div>

@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -27,7 +27,7 @@ const AddBlog = () => {
 
 	const fetchCategories = async () => {
 		try {
-			const response = await axios.get('http://localhost:3010/api/categories')
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -40,11 +40,11 @@ const AddBlog = () => {
 	// Rich text editor modules configuration
 	const quillModules = {
 		toolbar: [
-			[{header: [1, 2, 3, false]}],
+			[{ header: [1, 2, 3, false] }],
 			['bold', 'italic', 'underline', 'strike'],
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-			[{align: []}],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			[{ indent: '-1' }, { indent: '+1' }],
+			[{ align: [] }],
 			['link'],
 			['clean'],
 		],
@@ -63,7 +63,7 @@ const AddBlog = () => {
 	]
 
 	const handleInputChange = (e) => {
-		const {name, value} = e.target
+		const { name, value } = e.target
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
@@ -147,7 +147,7 @@ const AddBlog = () => {
 			}
 
 			const response = await axios.post(
-				'http://localhost:3010/api/blogs',
+				`${process.env.REACT_APP_API_URL}/api/blogs`,
 				blogData
 			)
 
@@ -405,9 +405,8 @@ const AddBlog = () => {
 					<button
 						type='submit'
 						disabled={isSubmitting}
-						className={`px-8 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-sm ${
-							isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-						}`}>
+						className={`px-8 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl text-sm ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+							}`}>
 						{isSubmitting ? 'Creating...' : 'Create Blog'}
 					</button>
 				</div>

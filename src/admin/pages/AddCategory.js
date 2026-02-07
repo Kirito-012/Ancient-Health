@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const AddCategory = () => {
@@ -44,7 +44,7 @@ const AddCategory = () => {
 			const color = generateRandomColor()
 
 			const response = await axios.post(
-				'http://localhost:3010/api/categories',
+				`${process.env.REACT_APP_API_URL}/api/categories`,
 				{
 					name: categoryName.trim(),
 					color: color,
@@ -127,11 +127,10 @@ const AddCategory = () => {
 						<button
 							type='submit'
 							disabled={isSubmitting}
-							className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm transition-all flex items-center gap-2 ${
-								isSubmitting
+							className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm transition-all flex items-center gap-2 ${isSubmitting
 									? 'bg-slate-400 cursor-not-allowed'
 									: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-							}`}>
+								}`}>
 							{isSubmitting ? (
 								<>
 									<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>

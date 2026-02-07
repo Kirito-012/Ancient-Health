@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import axios from 'axios'
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -9,7 +9,7 @@ const ManageProducts = () => {
 	const [products, setProducts] = useState([])
 	const [categories, setCategories] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [editModal, setEditModal] = useState({isOpen: false, product: null})
+	const [editModal, setEditModal] = useState({ isOpen: false, product: null })
 	const [editForm, setEditForm] = useState({
 		title: '',
 		brand: '',
@@ -30,7 +30,7 @@ const ManageProducts = () => {
 	// Variant State for Edit
 	const [hasVariants, setHasVariants] = useState(false)
 	const [variants, setVariants] = useState([])
-	const [variantOptions, setVariantOptions] = useState([{name: '', values: ''}])
+	const [variantOptions, setVariantOptions] = useState([{ name: '', values: '' }])
 
 	// Search state
 	const [searchText, setSearchText] = useState('')
@@ -79,11 +79,11 @@ const ManageProducts = () => {
 	// Rich text editor modules configuration
 	const quillModules = {
 		toolbar: [
-			[{header: [1, 2, 3, false]}],
+			[{ header: [1, 2, 3, false] }],
 			['bold', 'italic', 'underline', 'strike'],
-			[{list: 'ordered'}, {list: 'bullet'}],
-			[{indent: '-1'}, {indent: '+1'}],
-			[{align: []}],
+			[{ list: 'ordered' }, { list: 'bullet' }],
+			[{ indent: '-1' }, { indent: '+1' }],
+			[{ align: [] }],
 			['link'],
 			['clean'],
 		],
@@ -110,7 +110,7 @@ const ManageProducts = () => {
 
 	const fetchCategories = useCallback(async () => {
 		try {
-			const response = await axios.get('http://localhost:3010/api/categories')
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -122,7 +122,7 @@ const ManageProducts = () => {
 	const fetchProducts = useCallback(async () => {
 		try {
 			// Build query parameters
-			let url = 'http://localhost:3010/api/products?'
+			let url = `${process.env.REACT_APP_API_URL}/api/products?`
 			const params = []
 
 			const currentSearch = searchRef.current
@@ -178,7 +178,7 @@ const ManageProducts = () => {
 	}
 
 	const handleEdit = (product) => {
-		setEditModal({isOpen: true, product})
+		setEditModal({ isOpen: true, product })
 		setEditForm({
 			title: product.title,
 			brand: product.brand || '',
@@ -199,14 +199,14 @@ const ManageProducts = () => {
 		// Ensure variants have necessary fields and migrate legacy single image to images array
 		const loadedVariants = (product.variants || []).map((v) => ({
 			...v,
-			images: v.images || (v.image ? [{url: v.image, key: v.image}] : []),
+			images: v.images || (v.image ? [{ url: v.image, key: v.image }] : []),
 		}))
 		setVariants(loadedVariants)
-		setVariantOptions([{name: '', values: ''}]) // Clean slate for generator
+		setVariantOptions([{ name: '', values: '' }]) // Clean slate for generator
 	}
 
 	const handleCloseModal = () => {
-		setEditModal({isOpen: false, product: null})
+		setEditModal({ isOpen: false, product: null })
 		setEditForm({
 			title: '',
 			brand: '',
@@ -223,7 +223,7 @@ const ManageProducts = () => {
 		setEditFaqs([])
 		setHasVariants(false)
 		setVariants([])
-		setVariantOptions([{name: '', values: ''}])
+		setVariantOptions([{ name: '', values: '' }])
 	}
 
 	const handleImageSelect = (e) => {
@@ -276,7 +276,7 @@ const ManageProducts = () => {
 	}
 
 	const addFaq = () => {
-		setEditFaqs((prev) => [...prev, {question: '', answer: ''}])
+		setEditFaqs((prev) => [...prev, { question: '', answer: '' }])
 	}
 
 	const removeFaq = (index) => {
@@ -299,7 +299,7 @@ const ManageProducts = () => {
 	}
 
 	const addVariantOption = () => {
-		setVariantOptions([...variantOptions, {name: '', values: ''}])
+		setVariantOptions([...variantOptions, { name: '', values: '' }])
 	}
 
 	const removeVariantOption = (index) => {
@@ -318,7 +318,7 @@ const ManageProducts = () => {
 			const next = []
 			generated.forEach((prev) => {
 				values.forEach((value) => {
-					next.push([...prev, {key: option.name, value}])
+					next.push([...prev, { key: option.name, value }])
 				})
 			})
 			generated = next
@@ -399,7 +399,7 @@ const ManageProducts = () => {
 			}
 
 			const response = await axios.put(
-				`http://localhost:3010/api/products/${editModal.product._id}`,
+				`${process.env.REACT_APP_API_URL}/api/products/${editModal.product._id}`,
 				productData,
 				{
 					headers: {
@@ -434,7 +434,7 @@ const ManageProducts = () => {
 		try {
 			const token = localStorage.getItem('token')
 			const response = await axios.delete(
-				`http://localhost:3010/api/products/${product._id}`,
+				`${process.env.REACT_APP_API_URL}/api/products/${product._id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${token}`,
@@ -590,18 +590,16 @@ const ManageProducts = () => {
 									onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
 									className='w-full pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-left text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-200 text-sm'>
 									<span
-										className={`block truncate ${
-											!selectedCategory ? 'text-slate-400' : ''
-										}`}>
+										className={`block truncate ${!selectedCategory ? 'text-slate-400' : ''
+											}`}>
 										{selectedCategory
 											? categories.find((c) => c._id === selectedCategory)?.name
 											: 'All Categories'}
 									</span>
 									<span className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
 										<svg
-											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-												showCategoryDropdown ? 'rotate-180' : ''
-											}`}
+											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''
+												}`}
 											fill='none'
 											stroke='currentColor'
 											viewBox='0 0 24 24'>
@@ -620,11 +618,10 @@ const ManageProducts = () => {
 										<div className='max-h-60 overflow-auto p-1'>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													!selectedCategory
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!selectedCategory
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setSelectedCategory('')
 													setShowCategoryDropdown(false)
@@ -635,11 +632,10 @@ const ManageProducts = () => {
 												<button
 													key={cat._id}
 													type='button'
-													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-														selectedCategory === cat._id
+													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${selectedCategory === cat._id
 															? 'bg-blue-50 text-blue-700 font-medium'
 															: 'text-slate-700 hover:bg-slate-50'
-													}`}
+														}`}
 													onClick={() => {
 														setSelectedCategory(cat._id)
 														setShowCategoryDropdown(false)
@@ -664,22 +660,20 @@ const ManageProducts = () => {
 									onClick={() => setShowStockDropdown(!showStockDropdown)}
 									className='w-full pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-left text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-200 text-sm'>
 									<span
-										className={`block truncate ${
-											!stockFilter ? 'text-slate-400' : ''
-										}`}>
+										className={`block truncate ${!stockFilter ? 'text-slate-400' : ''
+											}`}>
 										{stockFilter === 'in_stock'
 											? 'In Stock'
 											: stockFilter === 'low_stock'
-											? 'Low Stock'
-											: stockFilter === 'no_stock'
-											? 'No Stock'
-											: 'All Stock Status'}
+												? 'Low Stock'
+												: stockFilter === 'no_stock'
+													? 'No Stock'
+													: 'All Stock Status'}
 									</span>
 									<span className='absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none'>
 										<svg
-											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
-												showStockDropdown ? 'rotate-180' : ''
-											}`}
+											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${showStockDropdown ? 'rotate-180' : ''
+												}`}
 											fill='none'
 											stroke='currentColor'
 											viewBox='0 0 24 24'>
@@ -698,11 +692,10 @@ const ManageProducts = () => {
 										<div className='p-1'>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													!stockFilter
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!stockFilter
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setStockFilter('')
 													setShowStockDropdown(false)
@@ -711,11 +704,10 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													stockFilter === 'in_stock'
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'in_stock'
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setStockFilter('in_stock')
 													setShowStockDropdown(false)
@@ -724,11 +716,10 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													stockFilter === 'low_stock'
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'low_stock'
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setStockFilter('low_stock')
 													setShowStockDropdown(false)
@@ -737,11 +728,10 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
-													stockFilter === 'no_stock'
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'no_stock'
 														? 'bg-blue-50 text-blue-700 font-medium'
 														: 'text-slate-700 hover:bg-slate-50'
-												}`}
+													}`}
 												onClick={() => {
 													setStockFilter('no_stock')
 													setShowStockDropdown(false)
@@ -1065,7 +1055,7 @@ const ManageProducts = () => {
 													type='text'
 													value={editForm.sku}
 													onChange={(e) =>
-														setEditForm({...editForm, sku: e.target.value})
+														setEditForm({ ...editForm, sku: e.target.value })
 													}
 													className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 													placeholder='SKU-001'
@@ -1092,7 +1082,7 @@ const ManageProducts = () => {
 												theme='snow'
 												value={editForm.description}
 												onChange={(value) =>
-													setEditForm({...editForm, description: value})
+													setEditForm({ ...editForm, description: value })
 												}
 												modules={quillModules}
 												formats={quillFormats}
@@ -1110,11 +1100,10 @@ const ManageProducts = () => {
 											Images
 										</label>
 										<div
-											className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${
-												isDragging
+											className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${isDragging
 													? 'border-blue-500 bg-blue-50/50 scale-[1.02]'
 													: 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
-											}`}
+												}`}
 											onDragEnter={handleDragEnter}
 											onDragOver={handleDragOver}
 											onDragLeave={handleDragLeave}
@@ -1205,13 +1194,11 @@ const ManageProducts = () => {
 												}}
 											/>
 											<div
-												className={`block w-12 h-7 rounded-full transition ${
-													hasVariants ? 'bg-blue-600' : 'bg-slate-300'
-												}`}></div>
+												className={`block w-12 h-7 rounded-full transition ${hasVariants ? 'bg-blue-600' : 'bg-slate-300'
+													}`}></div>
 											<div
-												className={`absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform ${
-													hasVariants ? 'translate-x-5' : ''
-												}`}></div>
+												className={`absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform ${hasVariants ? 'translate-x-5' : ''
+													}`}></div>
 										</div>
 										<span className='text-sm font-medium text-slate-700'>
 											Has Variants?
@@ -1381,7 +1368,7 @@ const ManageProducts = () => {
 																<div className='flex flex-col gap-2'>
 																	<div className='flex flex-wrap gap-1'>
 																		{variant.images &&
-																		variant.images.length > 0 ? (
+																			variant.images.length > 0 ? (
 																			variant.images.map((img, i) => (
 																				<img
 																					key={i}
@@ -1597,11 +1584,10 @@ const ManageProducts = () => {
 								type='submit'
 								form='edit-product-form'
 								disabled={isSaving}
-								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${
-									isSaving
+								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
 										? 'bg-slate-400 cursor-not-allowed'
 										: 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
-								}`}>
+									}`}>
 								{isSaving ? (
 									<>
 										<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>

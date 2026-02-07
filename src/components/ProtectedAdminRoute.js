@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
-import {Navigate} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 import axios from 'axios'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
-const ProtectedAdminRoute = ({children}) => {
+const ProtectedAdminRoute = ({ children }) => {
 	const [isChecking, setIsChecking] = useState(true)
 	const [isAdmin, setIsAdmin] = useState(false)
 
@@ -25,7 +25,7 @@ const ProtectedAdminRoute = ({children}) => {
 			}
 
 			// Verify user and check role
-			const response = await axios.get('http://localhost:3010/api/auth/me', {
+			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
