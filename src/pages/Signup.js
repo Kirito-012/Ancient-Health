@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const Signup = () => {
 	const navigate = useNavigate()
 	const [formData, setFormData] = useState({
-		name: '',
+		phone: '',
 		email: '',
 		password: '',
 		confirmPassword: '',
@@ -15,10 +15,21 @@ const Signup = () => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		})
+		if (e.target.name === 'phone') {
+			// Only allow numbers
+			const value = e.target.value.replace(/\D/g, '')
+			if (value.length <= 10) {
+				setFormData({
+					...formData,
+					phone: value,
+				})
+			}
+		} else {
+			setFormData({
+				...formData,
+				[e.target.name]: e.target.value,
+			})
+		}
 	}
 
 	const handleSubmit = async (e) => {
@@ -30,13 +41,18 @@ const Signup = () => {
 			return
 		}
 
+		if (formData.phone.length !== 10) {
+			toast.error('Please enter a valid 10-digit phone number')
+			return
+		}
+
 		setIsLoading(true)
 
 		try {
 			const response = await axios.post(
 				`${process.env.REACT_APP_API_URL}/api/auth/signup`,
 				{
-					name: formData.name,
+					phone: formData.phone,
 					email: formData.email,
 					password: formData.password,
 				}
@@ -48,7 +64,7 @@ const Signup = () => {
 				// Store token
 				localStorage.setItem('token', token)
 
-				toast.success(`Account created successfully! Welcome, ${user.name}`, {
+				toast.success(`Account created successfully! Welcome!`, {
 					position: 'top-right',
 					autoClose: 2000,
 				})
@@ -91,17 +107,27 @@ const Signup = () => {
 					<form onSubmit={handleSubmit}>
 						<div className='mb-6'>
 							<label className='block text-sm font-semibold text-slate-700 mb-2'>
-								Full Name
+								Phone Number
 							</label>
-							<input
-								type='text'
-								name='name'
-								value={formData.name}
-								onChange={handleChange}
-								className='w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
-								placeholder='Enter your full name'
-								required
-							/>
+							<div className="relative">
+								<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+									<img
+										src="https://flagcdn.com/w20/in.png"
+										alt="Indian Flag"
+										className="w-5 h-auto mr-2"
+									/>
+									<span className="text-gray-500 font-medium">+91</span>
+								</div>
+								<input
+									type='tel'
+									name='phone'
+									value={formData.phone}
+									onChange={handleChange}
+									className='w-full pl-20 pr-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
+									placeholder='Enter your phone number'
+									required
+								/>
+							</div>
 						</div>
 
 						<div className='mb-6'>
@@ -155,8 +181,8 @@ const Signup = () => {
 							type='submit'
 							disabled={isLoading}
 							className={`w-full py-3 rounded-lg font-semibold transition ${isLoading
-									? 'bg-slate-400 cursor-not-allowed'
-									: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+								? 'bg-slate-400 cursor-not-allowed'
+								: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
 								}`}>
 							{isLoading ? (
 								<span className='flex items-center justify-center gap-2'>

@@ -4,8 +4,11 @@ import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { useCart } from '../context/CartContext'
+
 const Login = () => {
 	const navigate = useNavigate()
+	const { login } = useCart()
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -30,8 +33,8 @@ const Login = () => {
 			if (response.data.success) {
 				const { token, user } = response.data.data
 
-				// Store token
-				localStorage.setItem('token', token)
+				// Store token using context
+				login(token)
 
 				toast.success(`Welcome back, ${user.name}!`, {
 					position: 'top-right',
