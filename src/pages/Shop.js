@@ -3,6 +3,9 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useCart } from '../context/CartContext'
 
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
 const Shop = () => {
     const { addToCart } = useCart()
     const [products, setProducts] = useState([])

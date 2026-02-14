@@ -33,7 +33,7 @@ import 'react-toastify/dist/ReactToastify.css'
 const App = () => {
 	return (
 		<CartProvider>
-			<ToastContainer position='bottom-right' />
+			<ToastContainer position='top-right' />
 			<Router>
 				<Routes>
 					{/* Homepage */}
