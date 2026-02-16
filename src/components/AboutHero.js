@@ -1,13 +1,13 @@
 import React from 'react'
 
-import aboutBg from '../assets/hero-bg.png' // Using existing asset for now, can be replaced
+import aboutBg from '../assets/about_bg.jpg'
 
 const AboutHero = () => {
     return (
         <section className='relative min-h-[60vh] lg:h-[70vh] flex items-center justify-center overflow-hidden py-20 lg:py-0'>
             {/* Background Image with Overlay */}
             <div className='absolute inset-0 z-0'>
-                <div className='absolute inset-0 bg-gradient-to-b from-[#1e4035]/90 via-[#2d5f4f]/80 to-[#1e4035]/90 z-10'></div>
+                <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/80 via-[#162923]/70 to-[#0f1c18] z-10'></div>
                 <img
                     src={aboutBg}
                     alt='Himalayan Landscape'

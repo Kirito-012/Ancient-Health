@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { motion } from 'framer-motion'
-import { Upload, Mail, Phone, MapPin, ArrowRight, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
+import { Mail, MapPin, ArrowRight, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
 
 const Footer = () => {
     return (
@@ -11,9 +11,9 @@ const Footer = () => {
             <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-0 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
             {/* Subtle Background Elements */}
-            <div className='absolute inset-0 z-0 pointer-events-none'>
-                <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[120px]'></div>
-                <div className='absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#d4a574]/5 rounded-full blur-[100px]'></div>
+            <div className='absolute inset-0 z-0 pointer-events-none overflow-hidden'>
+                <div className='absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-[#2d5f4f]/10 rounded-full blur-[150px]'></div>
+                <div className='absolute -bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-[#d4a574]/5 rounded-full blur-[130px]'></div>
             </div>
 
             {/* Elegant Top Border */}

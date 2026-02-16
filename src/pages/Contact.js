@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { Mail, MapPin, Instagram, Twitter, Linkedin, Send } from 'lucide-react'
 
@@ -12,6 +12,7 @@ const Contact = () => {
         message: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [openFaqIndex, setOpenFaqIndex] = useState(null)
     const { scrollY } = useScroll()
     const y1 = useTransform(scrollY, [0, 500], [0, 200])
 
@@ -28,6 +29,20 @@ const Contact = () => {
             setFormData({ name: '', email: '', message: '' })
         }, 1500)
     }
+
+    const toggleFaq = (index) => {
+        setOpenFaqIndex(openFaqIndex === index ? null : index)
+    }
+
+    const faqData = [
+        { q: "Origins of Ingredients", a: "Sourced directly from the untouched valleys of the Himalayas, ensuring absolute purity. Our gathering process respects ancient traditions and sustainable practices." },
+        { q: "Shipping Globally", a: "We traverse borders. Shipping is available to most nations worldwide with express delivery options. Standard shipping takes 5-7 business days, while express delivery arrives in 2-3 days." },
+        { q: "Purity Guarantee", a: "100% organic, tested, and verified. Nothing artificial enters our sanctuary. Each batch undergoes rigorous testing by third-party laboratories to ensure the highest quality standards." },
+        { q: "Product Certifications", a: "All our products are certified organic, non-GMO, and cruelty-free. We hold certifications from leading international organic certification bodies." },
+        { q: "Return Policy", a: "We offer a 30-day satisfaction guarantee. If you're not completely satisfied with your purchase, return it for a full refund or exchange. Products must be unopened and in original condition." },
+        { q: "Consultation Services", a: "Free wellness consultations are available with every purchase. Our Ayurvedic practitioners can help you choose the right products for your specific needs and goals." },
+        { q: "Wholesale Opportunities", a: "We partner with select retailers and wellness centers. Contact us for wholesale pricing and partnership opportunities. Minimum order quantities apply." }
+    ]
 
     return (
         <div className='min-h-screen bg-[#0f1c18] text-[#e8e6e3] font-sans selection:bg-[#d4a574] selection:text-[#0f1c18] overflow-hidden'>
@@ -135,9 +150,11 @@ const Contact = () => {
                             </div>
 
                             {/* RIGHT COLUMN: The Form (Span 7) */}
-                            <div className='lg:col-span-7 p-10 lg:p-16 flex flex-col justify-center'>
-                                <form onSubmit={handleSubmit} className='space-y-12'>
-                                    <div className='grid md:grid-cols-2 gap-10'>
+                            <div className='lg:col-span-7 p-10 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-white/[0.02] to-white/[0.05]'>
+                                <form onSubmit={handleSubmit} className='space-y-8'>
+                                    {/* Name & Email Row */}
+                                    <div className='grid md:grid-cols-2 gap-6'>
+                                        {/* Name Field */}
                                         <div className='group relative'>
                                             <input
                                                 type='text'
@@ -145,15 +162,15 @@ const Contact = () => {
                                                 value={formData.name}
                                                 onChange={handleChange}
                                                 required
-                                                className='block w-full bg-transparent border-b border-white/20 py-4 text-xl text-white placeholder-transparent focus:border-[#d4a574] focus:outline-none transition-all duration-300 peer'
-                                                placeholder='Name'
+                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
+                                                placeholder='Full Name'
                                             />
-                                            <label className='absolute left-0 top-4 text-white/40 text-lg transition-all duration-300 peer-placeholder-shown:text-xl peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-[#d4a574] peer-active:-top-4 peer-active:text-xs peer-valid:-top-4 peer-valid:text-xs peer-valid:text-[#d4a574] pointer-events-none'>
-                                                Your Name
+                                            <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
+                                                Full Name
                                             </label>
-                                            <div className='absolute bottom-0 left-0 w-0 h-[1px] bg-[#d4a574] transition-all duration-500 group-hover:w-full peer-focus:w-full'></div>
                                         </div>
 
+                                        {/* Email Field */}
                                         <div className='group relative'>
                                             <input
                                                 type='email'
@@ -161,50 +178,85 @@ const Contact = () => {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 required
-                                                className='block w-full bg-transparent border-b border-white/20 py-4 text-xl text-white placeholder-transparent focus:border-[#d4a574] focus:outline-none transition-all duration-300 peer'
-                                                placeholder='Email'
+                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
+                                                placeholder='Email Address'
                                             />
-                                            <label className='absolute left-0 top-4 text-white/40 text-lg transition-all duration-300 peer-placeholder-shown:text-xl peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-[#d4a574] peer-active:-top-4 peer-active:text-xs peer-valid:-top-4 peer-valid:text-xs peer-valid:text-[#d4a574] pointer-events-none'>
+                                            <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
                                                 Email Address
                                             </label>
-                                            <div className='absolute bottom-0 left-0 w-0 h-[1px] bg-[#d4a574] transition-all duration-500 group-hover:w-full peer-focus:w-full'></div>
                                         </div>
                                     </div>
 
+                                    {/* Message Field */}
                                     <div className='group relative'>
                                         <textarea
                                             name='message'
                                             value={formData.message}
                                             onChange={handleChange}
                                             required
-                                            rows='1'
-                                            className='block w-full bg-transparent border-b border-white/20 py-4 text-xl text-white placeholder-transparent focus:border-[#d4a574] focus:outline-none transition-all duration-300 peer resize-none min-h-[100px]'
-                                            placeholder='Message'
-                                            onInput={(e) => {
-                                                e.target.style.height = 'auto';
-                                                e.target.style.height = e.target.scrollHeight + 'px';
-                                            }}
+                                            rows='6'
+                                            className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 resize-none peer'
+                                            placeholder='Your Message'
                                         ></textarea>
-                                        <label className='absolute left-0 top-4 text-white/40 text-lg transition-all duration-300 peer-placeholder-shown:text-xl peer-placeholder-shown:top-4 peer-focus:-top-4 peer-focus:text-xs peer-focus:text-[#d4a574] peer-active:-top-4 peer-active:text-xs peer-valid:-top-4 peer-valid:text-xs peer-valid:text-[#d4a574] pointer-events-none'>
-                                            Tell us your story
+                                        <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
+                                            Your Message
                                         </label>
-                                        <div className='absolute bottom-0 left-0 w-0 h-[1px] bg-[#d4a574] transition-all duration-500 group-hover:w-full peer-focus:w-full'></div>
+                                        {/* Character hint */}
+                                        <div className='mt-2 text-right'>
+                                            <span className='text-xs text-white/30'>{formData.message.length} characters</span>
+                                        </div>
                                     </div>
 
-                                    <div className='pt-8 flex justify-end'>
+                                    {/* Info Cards */}
+                                    <div className='grid md:grid-cols-2 gap-4 pt-4'>
+                                        <div className='flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
+                                            <div className='mt-0.5'>
+                                                <svg className='w-5 h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className='text-white text-sm font-medium mb-0.5'>Response Time</h4>
+                                                <p className='text-white/50 text-xs font-light'>We typically respond within 24 hours</p>
+                                            </div>
+                                        </div>
+
+                                        <div className='flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
+                                            <div className='mt-0.5'>
+                                                <svg className='w-5 h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className='text-white text-sm font-medium mb-0.5'>Privacy First</h4>
+                                                <p className='text-white/50 text-xs font-light'>Your data is encrypted and secure</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <div className='pt-6'>
                                         <button
                                             type='submit'
                                             disabled={isSubmitting}
-                                            className='group relative px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30'
+                                            className='group relative w-full bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed'
                                         >
+                                            {/* Sliding Background */}
                                             <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
-                                            <span className='relative z-10 flex items-center space-x-3'>
+
+                                            {/* Content */}
+                                            <span className='relative z-10 flex items-center justify-center space-x-3 px-10 py-4'>
                                                 <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
-                                                    {isSubmitting ? 'Sending...' : 'Send Raven'}
+                                                    {isSubmitting ? 'Sending...' : 'Send Message'}
                                                 </span>
-                                                <Send className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                                                <Send className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
                                             </span>
                                         </button>
+
+                                        {/* Additional Info */}
+                                        <p className='text-center text-xs text-white/40 mt-4 font-light'>
+                                            By submitting, you agree to our communication terms
+                                        </p>
                                     </div>
                                 </form>
                             </div>
@@ -228,22 +280,45 @@ const Contact = () => {
                 </motion.div>
 
                 <div className='space-y-0'>
-                    {[
-                        { q: "Origins of Ingredients", a: "Sourced directly from the untouched valleys of the Himalayas, ensuring absolute purity." },
-                        { q: "Shipping Globally", a: "We traverse borders. Shipping is available to most nations worldwide." },
-                        { q: "Purity Guarantee", a: "100% organic, tested, and verified. Nothing artificial enters our sanctuary." }
-                    ].map((item, i) => (
-                        <div key={i} className='group border-b border-white/10'>
-                            <details className='group'>
-                                <summary className='flex justify-between items-center py-8 cursor-pointer list-none'>
-                                    <span className='text-xl text-white/80 font-light group-hover:text-[#d4a574] transition-colors'>{item.q}</span>
-                                    <span className='text-white/40 group-hover:text-[#d4a574] transition-transform duration-300 group-open:rotate-45 text-2xl font-thin'>+</span>
-                                </summary>
-                                <div className='pb-8 text-white/50 leading-relaxed font-light'>
-                                    {item.a}
-                                </div>
-                            </details>
-                        </div>
+                    {faqData.map((item, i) => (
+                        <motion.div
+                            key={i}
+                            className='border-b border-white/10'
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1, duration: 0.5 }}
+                        >
+                            <button
+                                onClick={() => toggleFaq(i)}
+                                className='w-full flex justify-between items-center py-8 cursor-pointer text-left group'
+                            >
+                                <span className='text-xl text-white/80 font-light group-hover:text-[#d4a574] transition-colors'>{item.q}</span>
+                                <motion.span
+                                    animate={{ rotate: openFaqIndex === i ? 45 : 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className='text-white/40 group-hover:text-[#d4a574] transition-colors text-2xl font-thin'
+                                >
+                                    +
+                                </motion.span>
+                            </button>
+
+                            <AnimatePresence initial={false}>
+                                {openFaqIndex === i && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                                        className='overflow-hidden'
+                                    >
+                                        <div className='pb-8 text-white/50 leading-relaxed font-light pr-8'>
+                                            {item.a}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
                     ))}
                 </div>
             </section>

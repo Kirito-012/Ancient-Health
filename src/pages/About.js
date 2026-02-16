@@ -8,7 +8,7 @@ import CTASection from '../components/CTASection'
 
 const About = () => {
     return (
-        <div className='min-h-screen bg-white'>
+        <div className='min-h-screen bg-[#0f1c18]'>
             <Navbar />
             <AboutHero />
             <StoryJourney />

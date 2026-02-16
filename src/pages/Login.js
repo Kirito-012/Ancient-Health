@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
+import { motion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 
 const Login = () => {
@@ -64,96 +64,123 @@ const Login = () => {
 	}
 
 	return (
-		<div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>
+		<section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3]'>
 			<ToastContainer />
 
-			<div className='w-full max-w-md'>
-				<div className='bg-white rounded-2xl shadow-2xl p-8 border border-slate-200'>
-					<div className='text-center mb-8'>
-						<h1 className='text-3xl font-bold text-slate-800 mb-2'>
-							Welcome Back
-						</h1>
-						<p className='text-slate-600'>Sign in to your account</p>
-					</div>
+			{/* Grain Overlay - Exactly from Hero */}
+			<div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
-					<form>
-						<div className='mb-6'>
-							<label className='block text-sm font-semibold text-slate-700 mb-2'>
-								Email Address
-							</label>
-							<input
-								type='email'
-								name='email'
-								value={formData.email}
-								onChange={handleChange}
-								className='w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
-								placeholder='Enter your email'
-								required
-							/>
+			{/* Parallax Background - Exactly from Hero */}
+			<div className='absolute inset-0 z-0 overflow-hidden'>
+				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
+				<div className='absolute inset-0'>
+					<img
+						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2500&auto=format&fit=crop"
+						alt="Ancient Mystical Forest"
+						className="w-full h-full object-cover opacity-50 scale-110"
+					/>
+				</div>
+
+				{/* Ambient Golden Glow - Exactly from Hero */}
+				<motion.div
+					animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
+					transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+					className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px]'
+				/>
+			</div>
+
+			{/* Content */}
+			<div className='relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
+				<div className='max-w-md mx-auto'>
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+						style={{ willChange: 'transform, opacity' }}
+					>
+						{/* Card */}
+						<div className='bg-[#0f1c18]/60 backdrop-blur-xl border border-white/10 rounded-[2rem] p-12 overflow-hidden shadow-2xl transform-gpu'>
+							{/* Glass Glints */}
+							<div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
+							<div className='absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/20 to-transparent'></div>
+
+							{/* Header */}
+							<div className='text-center mb-10'>
+								<h1 className='text-5xl font-serif font-light text-white mb-3'>
+									Welcome Back
+								</h1>
+								<p className='text-white/60 font-light'>Sign in to continue your wellness journey</p>
+							</div>
+
+							{/* Form */}
+							<form onSubmit={handleSubmit} className='space-y-6'>
+								{/* Email Field */}
+								<div>
+									<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+										Email Address
+									</label>
+									<input
+										type='email'
+										name='email'
+										value={formData.email}
+										onChange={handleChange}
+										className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+										placeholder='your@email.com'
+										required
+									/>
+								</div>
+
+								{/* Password Field */}
+								<div>
+									<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+										Password
+									</label>
+									<input
+										type='password'
+										name='password'
+										value={formData.password}
+										onChange={handleChange}
+										className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+										placeholder='••••••••'
+										required
+									/>
+								</div>
+
+								{/* Submit Button - Exact Hero Style */}
+								<button
+									type='submit'
+									disabled={isLoading}
+									className='group relative w-full px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'>
+									<div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
+									<span className='relative z-10 flex items-center justify-center space-x-3'>
+										<span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
+											{isLoading ? 'Signing in...' : 'Sign In'}
+										</span>
+										{!isLoading && (
+											<svg className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+											</svg>
+										)}
+									</span>
+								</button>
+							</form>
+
+							{/* Footer */}
+							<div className='mt-8 text-center border-t border-white/5 pt-6'>
+								<p className='text-sm text-white/60'>
+									Don't have an account?{' '}
+									<a
+										href='/signup'
+										className='text-[#d4a574] hover:text-[#d4a574]/80 font-serif transition-colors border-b border-[#d4a574]/30 hover:border-[#d4a574]'>
+										Sign up
+									</a>
+								</p>
+							</div>
 						</div>
-
-						<div className='mb-6'>
-							<label className='block text-sm font-semibold text-slate-700 mb-2'>
-								Password
-							</label>
-							<input
-								type='password'
-								name='password'
-								value={formData.password}
-								onChange={handleChange}
-								className='w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
-								placeholder='Enter your password'
-								required
-							/>
-						</div>
-
-						<button
-							onClick={handleSubmit}
-							disabled={isLoading}
-							className={`w-full py-3 rounded-lg font-semibold transition ${isLoading
-								? 'bg-slate-400 cursor-not-allowed'
-								: 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
-								}`}>
-							{isLoading ? (
-								<span className='flex items-center justify-center gap-2'>
-									<svg
-										className='animate-spin h-5 w-5'
-										xmlns='http://www.w3.org/2000/svg'
-										fill='none'
-										viewBox='0 0 24 24'>
-										<circle
-											className='opacity-25'
-											cx='12'
-											cy='12'
-											r='10'
-											stroke='currentColor'
-											strokeWidth='4'></circle>
-										<path
-											className='opacity-75'
-											fill='currentColor'
-											d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
-									</svg>
-									Signing in...
-								</span>
-							) : (
-								'Sign In'
-							)}
-						</button>
-					</form>
-
-					<div className='mt-6 text-center'>
-						<p className='text-sm text-slate-600'>
-							Don't have an account?{' '}
-							<a
-								href='/signup'
-								className='text-blue-600 hover:text-blue-700 font-semibold'>
-								Sign up
-							</a>
-						</p>
-					</div>
+					</motion.div>
 				</div>
 			</div>
-		</div>
+		</section>
 	)
 }
 

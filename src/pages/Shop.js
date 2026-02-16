@@ -4,7 +4,8 @@ import Footer from '../components/Footer'
 import { useCart } from '../context/CartContext'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import shopBg from '../assets/hero-bg.png'
+import shop_bg from "../assets/shop_bg.png"
+
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Shop = () => {
@@ -15,29 +16,60 @@ const Shop = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [totalPages, setTotalPages] = useState(1)
     const [activeCategory, setActiveCategory] = useState('All')
+    const [categories, setCategories] = useState(['All'])
+    const [categoriesLoading, setCategoriesLoading] = useState(true)
 
-    const categories = ['All', 'Shilajit', 'Saffron', 'Honey', 'Tea', 'Herbs']
+    // Fetch categories on component mount
+    useEffect(() => {
+        fetchCategories()
+    }, [])
 
     useEffect(() => {
         fetchProducts()
         // eslint-disable-next-line
     }, [currentPage, activeCategory]) // Refetch when category changes
 
+    const fetchCategories = async () => {
+        try {
+            setCategoriesLoading(true)
+            const response = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/categories`
+            )
+            const data = await response.json()
+
+            if (data.success && data.data) {
+                // Extract category names and prepend 'All'
+                const categoryNames = data.data.map(cat => cat.name)
+                setCategories(['All', ...categoryNames])
+            } else {
+                // Fallback to just 'All' if fetch fails
+                console.warn('Failed to fetch categories, using default')
+                setCategories(['All'])
+            }
+        } catch (err) {
+            console.error('Error fetching categories:', err)
+            // Fallback to just 'All' on error
+            setCategories(['All'])
+        } finally {
+            setCategoriesLoading(false)
+        }
+    }
+
     const fetchProducts = async () => {
         try {
             setLoading(true)
-            // In a real app, you'd append category to the query string: &category=${activeCategory}
             const response = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/products?page=${currentPage}&limit=12`
+                `${process.env.REACT_APP_API_URL}/api/products?page=${currentPage}&limit=100`
             )
             const data = await response.json()
 
             if (data.success) {
-                // Client-side filtering for demo purposes if backend doesn't support it yet
+                // Client-side filtering based on selected category
                 let filteredProducts = data.data
                 if (activeCategory !== 'All') {
-                    // Placeholder client-side filter
-                    // filteredProducts = data.data.filter(p => p.category === activeCategory)
+                    filteredProducts = data.data.filter(p =>
+                        p.category && p.category.name === activeCategory
+                    )
                 }
                 setProducts(filteredProducts)
                 setTotalPages(data.pagination.pages)
@@ -87,7 +119,7 @@ const Shop = () => {
     }
 
     return (
-        <div className='min-h-screen pt-20 bg-[#f8faf9]'>
+        <div className='min-h-screen bg-[#f8faf9]'>
             <Navbar />
 
             {/* Premium Hero Section */}
@@ -95,12 +127,12 @@ const Shop = () => {
                 {/* Background Image with Darker Overlay */}
                 <div className='absolute inset-0 z-0'>
                     <div className='absolute inset-0 bg-black/40 z-10'></div>
-                    <div className='absolute inset-0 bg-gradient-to-t from-[#1e4035] via-transparent to-black/20 z-20'></div>
+                    <div className='absolute inset-0 bg-gradient-to-t from-[#0f1c18] via-transparent to-black/40 z-20'></div>
                     <motion.img
                         initial={{ scale: 1.1 }}
                         animate={{ scale: 1.05 }}
                         transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
-                        src={shopBg}
+                        src={shop_bg}
                         alt='Himalayan Shop'
                         className='w-full h-full object-cover'
                     />
@@ -150,29 +182,39 @@ const Shop = () => {
                             <h3 className='text-xl font-bold text-[#1e4035] mb-6 font-playfair border-b border-gray-100 pb-4'>
                                 Categories
                             </h3>
-                            <ul className='space-y-3'>
-                                {categories.map((category) => (
-                                    <li key={category}>
-                                        <button
-                                            onClick={() => {
-                                                setActiveCategory(category)
-                                                setCurrentPage(1)
-                                            }}
-                                            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
-                                                ? 'bg-[#2d5f4f] text-white shadow-lg shadow-[#2d5f4f]/30'
-                                                : 'text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
-                                                }`}
-                                        >
-                                            <span className='font-medium'>{category}</span>
-                                            {activeCategory === category && (
-                                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                </svg>
-                                            )}
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
+                            {categoriesLoading ? (
+                                <ul className='space-y-3'>
+                                    {[...Array(5)].map((_, i) => (
+                                        <li key={i}>
+                                            <div className='w-full h-12 bg-gray-100 rounded-xl animate-pulse'></div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <ul className='space-y-3'>
+                                    {categories.map((category) => (
+                                        <li key={category}>
+                                            <button
+                                                onClick={() => {
+                                                    setActiveCategory(category)
+                                                    setCurrentPage(1)
+                                                }}
+                                                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
+                                                    ? 'bg-[#1B2B26] text-white shadow-lg shadow-[#2d5f4f]/30'
+                                                    : 'text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
+                                                    }`}
+                                            >
+                                                <span className='font-medium'>{category}</span>
+                                                {activeCategory === category && (
+                                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                    </svg>
+                                                )}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
 
                             {/* Filter Banner */}
                             <div className='mt-8 p-6 bg-[#f4f7f6] rounded-2xl border border-[#2d5f4f]/10'>
@@ -270,6 +312,14 @@ const Shop = () => {
                                                 {/* Product Info */}
                                                 <div className='p-6'>
                                                     <div className='mb-2'>
+                                                        {/* Category Badge */}
+                                                        {product.category && (
+                                                            <div className='mb-2'>
+                                                                <span className='inline-block px-3 py-1 bg-gradient-to-r from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] text-xs font-semibold rounded-full border border-[#2d5f4f]/20'>
+                                                                    {product.category.name}
+                                                                </span>
+                                                            </div>
+                                                        )}
                                                         {/* Star Rating */}
                                                         {product.ratings > 0 && (
                                                             <div className='flex items-center space-x-1 mb-2'>
