@@ -14,9 +14,9 @@ const Home = () => {
 			<Navbar />
 			<HeroSection />
 			<PuritySection />
-			<WellnessRetreat />
 			<FeaturedProducts />
 			<StorySection />
+			<WellnessRetreat />
 			<CTASection />
 			<Footer />
 		</div>

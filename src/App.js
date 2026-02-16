@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
+import About from './pages/About'
+import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Cart from './pages/Cart'
@@ -30,129 +32,148 @@ import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { ReactLenis } from 'lenis/react'
+
+import ScrollToTop from './components/ScrollToTop'
+
 const App = () => {
 	return (
-		<CartProvider>
-			<ToastContainer position='top-right' />
-			<Router>
-				<Routes>
-					{/* Homepage */}
-					<Route
-						path='/'
-						element={<Home />}
-					/>
-
-					{/* Shop Page */}
-					<Route
-						path='/shop'
-						element={<Shop />}
-					/>
-
-					{/* Cart Page */}
-					<Route
-						path='/cart'
-						element={
-							<ProtectedRoute>
-								<Cart />
-							</ProtectedRoute>
-						}
-					/>
-
-					{/* Profile Page */}
-					<Route
-						path='/profile'
-						element={
-							<ProtectedRoute>
-								<Profile />
-							</ProtectedRoute>
-						}
-					/>
-
-					{/* Checkout Page */}
-					<Route
-						path='/checkout'
-						element={<Checkout />}
-					/>
-
-					{/* Order Success Page */}
-					<Route
-						path='/order-success/:orderId'
-						element={<OrderSuccess />}
-					/>
-
-					{/* My Orders Page */}
-					<Route
-						path='/my-orders'
-						element={<MyOrders />}
-					/>
-
-					{/* Login Page */}
-					<Route
-						path='/login'
-						element={<Login />}
-					/>
-
-					{/* Signup Page */}
-					<Route
-						path='/signup'
-						element={<Signup />}
-					/>
-
-					{/* Protected Admin Dashboard with nested routes */}
-					<Route
-						path='/admin'
-						element={
-							<ProtectedAdminRoute>
-								<AdminDashboard />
-							</ProtectedAdminRoute>
-						}>
+		<ReactLenis root>
+			<CartProvider>
+				<ToastContainer position='top-right' />
+				<Router>
+					<ScrollToTop />
+					<Routes>
+						{/* Homepage */}
 						<Route
-							index
-							element={<AdminHome />}
+							path='/'
+							element={<Home />}
 						/>
-						<Route
-							path='products/add'
-							element={<AddProduct />}
-						/>
-						<Route
-							path='products/manage'
-							element={<ManageProducts />}
-						/>
-						<Route
-							path='products/add-category'
-							element={<AddCategory />}
-						/>
-						<Route
-							path='products/manage-categories'
-							element={<ManageCategories />}
-						/>
-						<Route
-							path='blogs/add'
-							element={<AddBlog />}
-						/>
-						<Route
-							path='blogs/manage'
-							element={<ManageBlogs />}
-						/>
-						<Route
-							path='users'
-							element={<Users />}
-						/>
-					</Route>
 
-					{/* Catch all - redirect to home */}
-					<Route
-						path='*'
-						element={
-							<Navigate
-								to='/'
-								replace
+						{/* Shop Page */}
+						<Route
+							path='/shop'
+							element={<Shop />}
+						/>
+
+						{/* About Page */}
+						<Route
+							path='/about'
+							element={<About />}
+						/>
+
+						{/* Contact Page */}
+						<Route
+							path='/contact'
+							element={<Contact />}
+						/>
+
+						{/* Cart Page */}
+						<Route
+							path='/cart'
+							element={
+								<ProtectedRoute>
+									<Cart />
+								</ProtectedRoute>
+							}
+						/>
+
+						{/* Profile Page */}
+						<Route
+							path='/profile'
+							element={
+								<ProtectedRoute>
+									<Profile />
+								</ProtectedRoute>
+							}
+						/>
+
+						{/* Checkout Page */}
+						<Route
+							path='/checkout'
+							element={<Checkout />}
+						/>
+
+						{/* Order Success Page */}
+						<Route
+							path='/order-success/:orderId'
+							element={<OrderSuccess />}
+						/>
+
+						{/* My Orders Page */}
+						<Route
+							path='/my-orders'
+							element={<MyOrders />}
+						/>
+
+						{/* Login Page */}
+						<Route
+							path='/login'
+							element={<Login />}
+						/>
+
+						{/* Signup Page */}
+						<Route
+							path='/signup'
+							element={<Signup />}
+						/>
+
+						{/* Protected Admin Dashboard with nested routes */}
+						<Route
+							path='/admin'
+							element={
+								<ProtectedAdminRoute>
+									<AdminDashboard />
+								</ProtectedAdminRoute>
+							}>
+							<Route
+								index
+								element={<AdminHome />}
 							/>
-						}
-					/>
-				</Routes>
-			</Router>
-		</CartProvider>
+							<Route
+								path='products/add'
+								element={<AddProduct />}
+							/>
+							<Route
+								path='products/manage'
+								element={<ManageProducts />}
+							/>
+							<Route
+								path='products/add-category'
+								element={<AddCategory />}
+							/>
+							<Route
+								path='products/manage-categories'
+								element={<ManageCategories />}
+							/>
+							<Route
+								path='blogs/add'
+								element={<AddBlog />}
+							/>
+							<Route
+								path='blogs/manage'
+								element={<ManageBlogs />}
+							/>
+							<Route
+								path='users'
+								element={<Users />}
+							/>
+						</Route>
+
+						{/* Catch all - redirect to home */}
+						<Route
+							path='*'
+							element={
+								<Navigate
+									to='/'
+									replace
+								/>
+							}
+						/>
+					</Routes>
+				</Router>
+			</CartProvider>
+		</ReactLenis>
 	)
 }
 

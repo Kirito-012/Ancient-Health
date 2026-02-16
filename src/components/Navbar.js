@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import logo from "../assets/logo.png"
 import { useCart } from '../context/CartContext'
+import { motion, AnimatePresence } from 'framer-motion'
+import { User, LogOut, ShoppingBag, Search, Menu, X, ChevronRight } from 'lucide-react'
 
 const Navbar = () => {
     const { cart, token, logout } = useCart()
@@ -10,11 +11,11 @@ const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const location = useLocation()
-    const isHome = location.pathname === '/'
+
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 20)
+            setIsScrolled(window.scrollY > 30) // Trigger slightly later for better feel
         }
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
@@ -33,329 +34,239 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        { name: 'Shop', path: '/shop' },
         { name: 'About', path: '/about' },
         { name: 'Wellness', path: '/wellness' },
         { name: 'Contact', path: '/contact' },
     ]
 
-    // Navbar should be visible if it's NOT the homepage, OR if we have scrolled on the homepage
-    const isVisible = !isHome || isScrolled
-
     return (
-        <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isVisible
-                ? 'bg-white/95 backdrop-blur-md shadow-lg'
-                : 'hidden'
-                }`}>
-            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='flex items-center justify-between h-20 lg:h-24'>
-                    {/* Logo */}
-                    <Link
-                        to='/'
-                        className='flex items-center space-x-3 group'>
-                        <div className='relative'>
-                            <img
-                                src={logo}
-                                alt='Ancient Health'
-                                className='h-12 lg:h-16 w-auto transition-transform duration-300 group-hover:scale-105'
-                            />
-                            <div className='absolute -inset-2 bg-gradient-to-r from-[#2d5f4f]/20 to-[#3e7a70]/20 rounded-full blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+        <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 pointer-events-none">
+            <motion.nav
+                initial={false}
+                animate={isScrolled ? {
+                    width: '85%',
+                    maxWidth: '1000px',
+                    y: 20,
+                    borderRadius: '9999px',
+                    backgroundColor: 'rgba(15, 28, 24, 0.85)',
+                    backdropFilter: 'blur(24px)', // Heaviest blur for iOS glass feel
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                } : {
+                    width: '100%',
+                    maxWidth: '100%',
+                    y: 0,
+                    borderRadius: '0px',
+                    backgroundColor: 'rgba(15, 28, 24, 0)', // Transparent
+                    backdropFilter: 'blur(0px)',
+                    boxShadow: 'none'
+                }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} // iOS-like spring ease
+                className={`
+                    pointer-events-auto
+                    relative 
+                    border border-transparent
+                    ${isScrolled ? 'border-white/10' : ''}
+                `}
+            >
+                <div className={`mx-auto px-6 lg:px-8 transition-all duration-300 ${isScrolled ? 'h-16' : 'h-20 lg:h-24'}`}>
+                    <div className='relative flex items-center justify-between h-full'>
+
+                        {/* Mobile Menu Button - Left */}
+                        <div className='flex lg:hidden flex-1 justify-start'>
+                            <button
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                className='p-2 text-white/90 hover:text-[#d4a574] transition-colors'
+                            >
+                                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            </button>
                         </div>
-                    </Link>
 
-                    {/* Desktop Navigation */}
-                    <div className='hidden lg:flex items-center space-x-1'>
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`relative px-5 py-2 text-sm font-medium tracking-wide transition-all duration-300 group ${isVisible
-                                    ? 'text-gray-700 hover:text-[#2d5f4f]'
-                                    : 'text-white hover:text-[#d4a574]'
-                                    }`}>
-                                <span className='relative z-10'>{link.name}</span>
-                                <div className='absolute inset-0 bg-gradient-to-r from-[#2d5f4f]/10 to-[#3e7a70]/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                                <div
-                                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-0 group-hover:w-3/4 transition-all duration-300 ${isVisible ? 'bg-[#2d5f4f]' : 'bg-[#d4a574]'
-                                        }`}></div>
-                            </Link>
-                        ))}
-                    </div>
-
-                    {/* Right Side Actions */}
-                    <div className='hidden lg:flex items-center space-x-4'>
-                        {/* Search Icon */}
-                        <button
-                            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${isVisible
-                                ? 'text-gray-700 hover:bg-gray-100'
-                                : 'text-white hover:bg-white/10'
-                                }`}>
-                            <svg
-                                className='w-5 h-5'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'>
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-                                />
-                            </svg>
-                        </button>
-
-                        {/* Cart Icon with Badge */}
-                        <Link
-                            to='/cart'
-                            className={`relative p-2 rounded-full transition-all duration-300 hover:scale-110 ${isVisible
-                                ? 'text-gray-700 hover:bg-gray-100'
-                                : 'text-white hover:bg-white/10'
-                                }`}>
-                            <svg
-                                className='w-5 h-5'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'>
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
-                                />
-                            </svg>
-                            {cart?.totalItems > 0 && (
-                                <span className='absolute -top-1 -right-1 bg-[#d4a574] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>
-                                    {cart.totalItems}
-                                </span>
-                            )}
-                        </Link>
-
-                        {/* Profile Icon / Dropdown */}
-                        {token ? (
-                            <div className="relative profile-dropdown-container">
-                                <button
-                                    onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                    className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${isVisible
-                                        ? 'text-gray-700 hover:bg-gray-100'
-                                        : 'text-white hover:bg-white/10'
-                                        }`}
-                                >
-                                    <svg
-                                        className="w-5 h-5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
+                        {/* Desktop Navigation - Left */}
+                        <div className='hidden lg:flex flex-1 items-center justify-start space-x-1'>
+                            {navLinks.map((link) => {
+                                const isActive = location.pathname === link.path;
+                                return (
+                                    <Link
+                                        key={link.name}
+                                        to={link.path}
+                                        className={`
+                                            relative px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-full
+                                            ${isActive
+                                                ? 'text-[#d4a574] bg-white/5'
+                                                : 'text-white/80 hover:text-white hover:bg-white/5'
+                                            }
+                                        `}
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                        />
-                                    </svg>
-                                </button>
+                                        {link.name}
+                                    </Link>
+                                )
+                            })}
+                        </div>
 
-                                {isProfileOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50">
+                        {/* Logo - Absolute Center */}
+                        <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
+                            <Link to='/' className='block group'>
+                                <div className='relative flex items-center justify-center'>
+                                    <img
+                                        src={logo}
+                                        alt='Ancient Health'
+                                        className={`w-auto transition-all duration-500 filter brightness-110 ${isScrolled ? 'h-8 lg:h-9' : 'h-10 lg:h-14'}`}
+                                    />
+                                    {/* Subtle Glow behind logo */}
+                                    <div className='absolute -inset-4 bg-[#d4a574]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+                                </div>
+                            </Link>
+                        </div>
+
+                        {/* Right Side Actions - Right */}
+                        <div className='flex flex-1 items-center justify-end space-x-2 lg:space-x-4'>
+                            {/* Search - Desktop Only */}
+                            <button className='hidden lg:flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
+                                <Search className="w-4 h-4" />
+                            </button>
+
+                            {/* Profile Dropdown */}
+                            {token ? (
+                                <div className="relative profile-dropdown-container hidden lg:block">
+                                    <button
+                                        onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                        className='flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'
+                                    >
+                                        <User className="w-4 h-4" />
+                                    </button>
+
+                                    <AnimatePresence>
+                                        {isProfileOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute right-0 mt-2 w-56 bg-[#162923]/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden"
+                                            >
+                                                <div className="px-4 py-3 border-b border-white/5">
+                                                    <p className="text-[10px] text-[#d4a574] uppercase tracking-widest font-bold">Account</p>
+                                                </div>
+                                                <Link
+                                                    to="/profile"
+                                                    onClick={() => setIsProfileOpen(false)}
+                                                    className="block px-4 py-3 text-sm text-white/90 hover:bg-white/5 transition-colors"
+                                                >
+                                                    My Profile
+                                                </Link>
+                                                <Link
+                                                    to="/my-orders"
+                                                    onClick={() => setIsProfileOpen(false)}
+                                                    className="block px-4 py-3 text-sm text-white/90 hover:bg-white/5 transition-colors"
+                                                >
+                                                    My Orders
+                                                </Link>
+                                                <div className="border-t border-white/5 mt-1 pt-1">
+                                                    <button
+                                                        onClick={() => {
+                                                            logout();
+                                                            setIsProfileOpen(false);
+                                                        }}
+                                                        className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 transition-colors flex items-center space-x-2"
+                                                    >
+                                                        <LogOut className="w-3 h-3" />
+                                                        <span>Logout</span>
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ) : (
+                                <Link to='/login' className='hidden lg:block px-4 py-2 text-xs font-bold text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all tracking-wide uppercase'>
+                                    Login
+                                </Link>
+                            )}
+
+                            {/* Cart */}
+                            <Link to='/cart' className='group relative flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
+                                <ShoppingBag className="w-4 h-4" />
+                                {cart?.totalItems > 0 && (
+                                    <span className='absolute top-2 right-2 bg-[#d4a574] text-[#0f1c18] text-[8px] font-bold rounded-full h-3 w-3 flex items-center justify-center ring-2 ring-[#0f1c18]'>
+                                        {cart.totalItems}
+                                    </span>
+                                )}
+                            </Link>
+
+                            {/* Shop Button (Capsule Style) */}
+                            <Link
+                                to='/shop'
+                                className={`hidden lg:block ml-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wide transition-all duration-300 ${isScrolled
+                                    ? 'bg-white text-[#0f1c18] hover:bg-[#d4a574]'
+                                    : 'bg-[#d4a574] text-[#0f1c18] hover:bg-white'
+                                    }`}
+                            >
+                                Shop
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile Menu Overlay */}
+                <AnimatePresence>
+                    {isMobileMenuOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            className="lg:hidden absolute top-full left-0 w-full mt-2 mx-4 bg-[#162923]/95 backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
+                            style={{ width: 'calc(100% - 32px)', left: '16px' }} // Float menu as well
+                        >
+                            <div className="flex flex-col p-6 space-y-2">
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.name}
+                                        to={link.path}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="flex items-center justify-between px-4 py-3 rounded-xl text-white/90 hover:bg-white/5 transition-all group"
+                                    >
+                                        <span className="text-sm font-medium">{link.name}</span>
+                                        <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#d4a574] transition-all" />
+                                    </Link>
+                                ))}
+
+                                <div className="h-px bg-white/10 my-2"></div>
+
+                                {token ? (
+                                    <>
                                         <Link
                                             to="/profile"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => setIsProfileOpen(false)}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="block px-4 py-3 rounded-xl text-xs font-bold text-[#d4a574] hover:bg-white/5 uppercase tracking-wide"
                                         >
                                             My Profile
-                                        </Link>
-                                        <Link
-                                            to="/my-orders"
-                                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            onClick={() => setIsProfileOpen(false)}
-                                        >
-                                            My Orders
                                         </Link>
                                         <button
                                             onClick={() => {
                                                 logout();
-                                                setIsProfileOpen(false);
+                                                setIsMobileMenuOpen(false);
                                             }}
-                                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            className="block w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-red-400 hover:bg-white/5 uppercase tracking-wide"
                                         >
                                             Logout
                                         </button>
-                                    </div>
+                                    </>
+                                ) : (
+                                    <Link
+                                        to="/login"
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="block px-4 py-3 rounded-xl text-xs font-bold text-[#d4a574] hover:bg-white/5 uppercase tracking-wide"
+                                    >
+                                        Login
+                                    </Link>
                                 )}
                             </div>
-                        ) : (
-                            <Link
-                                to="/login"
-                                className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${isVisible
-                                    ? 'text-gray-700 hover:bg-gray-100'
-                                    : 'text-white hover:bg-white/10'
-                                    }`}
-                                title="Login"
-                            >
-                                <svg
-                                    className="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                                    />
-                                </svg>
-                            </Link>
-                        )}
-
-
-                        {/* CTA Button */}
-                        <Link
-                            to='/shop'
-                            className='relative px-6 py-2.5 bg-gradient-to-r from-[#2d5f4f] to-[#3e7a70] text-white font-medium rounded-full overflow-hidden group transition-all duration-300 hover:shadow-lg hover:shadow-[#2d5f4f]/30'>
-                            <span className='relative z-10'>Shop Collection</span>
-                            <div className='absolute inset-0 bg-gradient-to-r from-[#1e4035] to-[#2d5f4f] opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
-                        </Link>
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className={`lg:hidden p-2 rounded-lg transition-colors ${isVisible
-                            ? 'text-gray-700 hover:bg-gray-100'
-                            : 'text-white hover:bg-white/10'
-                            }`}>
-                        <svg
-                            className='w-6 h-6'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'>
-                            {isMobileMenuOpen ? (
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M6 18L18 6M6 6l12 12'
-                                />
-                            ) : (
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    strokeWidth={2}
-                                    d='M4 6h16M4 12h16M4 18h16'
-                                />
-                            )}
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            {/* Mobile Menu */}
-            <div
-                className={`lg:hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen
-                    ? 'max-h-screen opacity-100'
-                    : 'max-h-0 opacity-0 overflow-hidden'
-                    }`}>
-                <div className='bg-white/95 backdrop-blur-md border-t border-gray-200 shadow-lg'>
-                    <div className='px-4 py-6 space-y-3'>
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className='block px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gradient-to-r hover:from-[#2d5f4f]/10 hover:to-[#3e7a70]/10 hover:text-[#2d5f4f] transition-all duration-300'>
-                                {link.name}
-                            </Link>
-                        ))}
-                        {token && (
-                            <>
-                                <Link
-                                    to='/profile'
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className='block px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gradient-to-r hover:from-[#2d5f4f]/10 hover:to-[#3e7a70]/10 hover:text-[#2d5f4f] transition-all duration-300'>
-                                    My Profile
-                                </Link>
-                                <Link
-                                    to='/my-orders'
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className='block px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gradient-to-r hover:from-[#2d5f4f]/10 hover:to-[#3e7a70]/10 hover:text-[#2d5f4f] transition-all duration-300'>
-                                    My Orders
-                                </Link>
-                                <button
-                                    onClick={() => {
-                                        logout();
-                                        setIsMobileMenuOpen(false);
-                                    }}
-                                    className='w-full text-left px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-all duration-300'
-                                >
-                                    Logout
-                                </button>
-                            </>
-                        )}
-                        {!token && (
-                            <Link
-                                to='/login'
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className='block px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gradient-to-r hover:from-[#2d5f4f]/10 hover:to-[#3e7a70]/10 hover:text-[#2d5f4f] transition-all duration-300'>
-                                Login
-                            </Link>
-                        )}
-
-                        <div className='pt-4 border-t border-gray-200 space-y-3'>
-                            {/* Mobile Search & Cart same as before */}
-                            <button className='w-full px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-all duration-300 flex items-center justify-between'>
-                                <span>Search</span>
-                                <svg
-                                    className='w-5 h-5'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-                                    />
-                                </svg>
-                            </button>
-                            <Link
-                                to='/cart'
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className='w-full px-4 py-3 text-gray-700 font-medium rounded-lg hover:bg-gray-100 transition-all duration-300 flex items-center justify-between'>
-                                <span>Cart</span>
-                                <div className='flex items-center space-x-2'>
-                                    {cart?.totalItems > 0 && (
-                                        <span className='bg-[#d4a574] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>
-                                            {cart.totalItems}
-                                        </span>
-                                    )}
-                                    <svg
-                                        className='w-5 h-5'
-                                        fill='none'
-                                        stroke='currentColor'
-                                        viewBox='0 0 24 24'>
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            strokeWidth={2}
-                                            d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
-                                        />
-                                    </svg>
-                                </div>
-                            </Link>
-
-                            <Link
-                                to='/shop'
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className='block w-full px-4 py-3 bg-gradient-to-r from-[#2d5f4f] to-[#3e7a70] text-white font-medium rounded-lg text-center hover:shadow-lg transition-all duration-300'>
-                                Shop Collection
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.nav>
+        </div>
     )
 }
 

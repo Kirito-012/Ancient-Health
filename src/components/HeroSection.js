@@ -1,230 +1,162 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import heroBg from '../assets/hero-bg.png'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowRight, Leaf, ShieldCheck, Star, Zap } from 'lucide-react'
 
 const HeroSection = () => {
+    const { scrollY } = useScroll()
+    const y1 = useTransform(scrollY, [0, 500], [0, 200])
+    const y2 = useTransform(scrollY, [0, 500], [0, -150])
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.3, delayChildren: 0.2 }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 1, ease: 'easeOut' }
+        }
+    }
+
     return (
-        <section className='relative min-h-screen flex items-center justify-center overflow-hidden'>
-            {/* Background Image with Overlay */}
-            <div className='absolute inset-0 z-0'>
-                <div className='absolute inset-0 bg-gradient-to-br from-[#1e4035]/80 via-[#2d5f4f]/70 to-[#3e7a70]/60 z-10'></div>
-                <img
-                    src={heroBg}
-                    alt='Himalayan Mountains'
-                    className='w-full h-full object-cover'
+        <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3] selection:bg-[#d4a574] selection:text-[#0f1c18]'>
+
+            {/* Grain Overlay */}
+            <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
+
+            {/* Parallax Background */}
+            <div className='absolute inset-0 z-0 overflow-hidden'>
+                <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
+                <motion.div style={{ y: y1 }} className='absolute inset-0'>
+                    <img
+                        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2500&auto=format&fit=crop"
+                        alt="Ancient Mystical Forest"
+                        className="w-full h-full object-cover opacity-50 scale-110"
+                    />
+                </motion.div>
+
+                {/* Ambient Golden Glows */}
+                <motion.div
+                    animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px]'
                 />
             </div>
 
-            {/* Decorative Elements */}
-            <div className='absolute top-20 left-10 w-72 h-72 bg-[#d4a574]/10 rounded-full blur-3xl animate-float'></div>
-            <div className='absolute bottom-20 right-10 w-96 h-96 bg-[#3e7a70]/10 rounded-full blur-3xl animate-float' style={{ animationDelay: '1s' }}></div>
+            <div className='relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20'>
+                <div className='grid lg:grid-cols-2 gap-16 lg:gap-24 items-center'>
 
-            {/* Content */}
-            <div className='relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40'>
-                <div className='grid lg:grid-cols-2 gap-12 items-center'>
-                    {/* Left Content */}
-                    <div className='text-white space-y-6 animate-fade-in-up'>
+                    {/* Left Column: Narrative */}
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className='space-y-10'
+                    >
                         {/* Tagline */}
-                        <div className='inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2.5'>
-                            <div className='w-2 h-2 bg-[#d4a574] rounded-full animate-pulse'></div>
-                            <span className='text-sm font-medium tracking-widest text-[#e8c9a0] uppercase'>
-                                Sourced from the Himalayas
+                        <motion.div variants={itemVariants}>
+                            <span className='inline-block text-[#d4a574] text-sm tracking-[0.3em] uppercase border border-[#d4a574]/30 px-5 py-2 rounded-full backdrop-blur-sm'>
+                                The Sanctuary
                             </span>
-                        </div>
+                        </motion.div>
 
                         {/* Main Heading */}
-                        <h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight'>
-                            <span className='block'>Himalayan Purity,</span>
-                            <span className='block mt-2 bg-gradient-to-r from-[#d4a574] via-[#e8c9a0] to-[#d4a574] bg-clip-text text-transparent'>
-                                Ancient Wisdom
-                            </span>
-                        </h1>
+                        <motion.h1 variants={itemVariants} className='text-6xl sm:text-7xl lg:text-8xl font-serif font-light leading-[0.95] tracking-tight'>
+                            <span className='block text-white'>Ancient</span>
+                            <span className='block text-[#d4a574] italic'>Wisdom</span>
+                            <span className='block text-white'>Reborn</span>
+                        </motion.h1>
 
                         {/* Description */}
-                        <p className='text-lg sm:text-xl text-gray-200 leading-relaxed max-w-xl'>
-                            Experience nature's finest wellness products, ethically sourced from pristine Himalayan peaks and crafted with time-honored traditions.
-                        </p>
+                        <motion.p variants={itemVariants} className='text-lg md:text-xl text-white/60 font-light leading-relaxed max-w-lg border-l border-[#d4a574]/30 pl-6'>
+                            Experience the purest wellness traditions of the Himalayas. Ethically sourced, spiritually grounded, and crafted for standard of living.
+                        </motion.p>
 
                         {/* CTA Buttons */}
-                        <div className='flex flex-col sm:flex-row gap-4 pt-6'>
-                            <Link
-                                to='/shop'
-                                className='group relative px-8 py-4 bg-gradient-to-r from-[#d4a574] to-[#e8c9a0] text-[#1e4035] font-semibold rounded-full overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-[#d4a574]/50 hover:scale-105'>
-                                <span className='relative z-10 flex items-center justify-center space-x-2'>
-                                    <span>Shop Collection</span>
-                                    <svg
-                                        className='w-5 h-5 transition-transform group-hover:translate-x-1'
-                                        fill='none'
-                                        stroke='currentColor'
-                                        viewBox='0 0 24 24'>
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            strokeWidth={2}
-                                            d='M17 8l4 4m0 0l-4 4m4-4H3'
-                                        />
-                                    </svg>
+                        <motion.div variants={itemVariants} className='flex flex-wrap gap-6 pt-4'>
+                            <Link to='/shop' className='group relative px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30'>
+                                <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
+                                <span className='relative z-10 flex items-center space-x-3'>
+                                    <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
+                                        Explore Elixirs
+                                    </span>
+                                    <ArrowRight className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
                                 </span>
-                                <div className='absolute inset-0 bg-gradient-to-r from-[#c99563] to-[#d4a574] opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
                             </Link>
 
-                            <Link
-                                to='/about'
-                                className='group px-8 py-4 bg-white/10 backdrop-blur-md border-2 border-white/30 text-white font-semibold rounded-full transition-all duration-300 hover:bg-white/20 hover:border-white/50 hover:scale-105 flex items-center justify-center space-x-2'>
-                                <span>Our Story</span>
-                                <svg
-                                    className='w-5 h-5 transition-transform group-hover:rotate-45'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M13 7l5 5m0 0l-5 5m5-5H6'
-                                    />
-                                </svg>
+                            <Link to='/about' className='group flex items-center space-x-3 px-6 py-4 text-white/60 hover:text-white transition-colors duration-300'>
+                                <span className='uppercase tracking-widest text-xs font-serif border-b border-transparent group-hover:border-[#d4a574] pb-1 transition-all duration-300'>Our Philosophy</span>
                             </Link>
-                        </div>
+                        </motion.div>
+                    </motion.div>
 
-                        {/* Trust Indicators */}
-                        <div className='flex items-center space-x-6 sm:space-x-8 pt-8 border-t border-white/20'>
-                            <div className='text-center'>
-                                <div className='text-2xl sm:text-3xl font-bold text-[#d4a574]'>100%</div>
-                                <div className='text-xs sm:text-sm text-gray-300 mt-1'>Pure & Natural</div>
-                            </div>
-                            <div className='w-px h-12 bg-white/20'></div>
-                            <div className='text-center'>
-                                <div className='text-2xl sm:text-3xl font-bold text-[#d4a574]'>2500+</div>
-                                <div className='text-xs sm:text-sm text-gray-300 mt-1'>Customers</div>
-                            </div>
-                            <div className='w-px h-12 bg-white/20'></div>
-                            <div className='text-center'>
-                                <div className='text-2xl sm:text-3xl font-bold text-[#d4a574]'>30+</div>
-                                <div className='text-xs sm:text-sm text-gray-300 mt-1'>Products</div>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Right Column: Wisdom Tablet */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
+                        className='relative hidden lg:block'
+                    >
+                        {/* Floating Effect Wrapper */}
+                        <motion.div style={{ y: y2 }}>
+                            <div className='relative bg-[#0f1c18]/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-10 overflow-hidden shadow-2xl'>
+                                {/* Glass Glint */}
+                                <div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
+                                <div className='absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/20 to-transparent'></div>
 
-                    {/* Right Content - Feature Cards */}
-                    <div className='hidden lg:grid grid-cols-2 gap-6 animate-fade-in-up' style={{ animationDelay: '0.2s' }}>
-                        {/* Card 1 */}
-                        <div className='group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-xl'>
-                            <div className='w-14 h-14 bg-gradient-to-br from-[#d4a574] to-[#e8c9a0] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
-                                <svg
-                                    className='w-7 h-7 text-[#1e4035]'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className='text-white font-semibold text-lg mb-2'>
-                                Ancient Wisdom
-                            </h3>
-                            <p className='text-gray-300 text-sm'>
-                                Time-tested remedies passed down through generations
-                            </p>
-                        </div>
+                                <div className='space-y-12'>
+                                    <div>
+                                        <h3 className='text-3xl font-serif text-white mb-2'>The Four Pillars</h3>
+                                        <p className='text-white/40 font-light text-sm'>Foundations of our craft</p>
+                                    </div>
 
-                        {/* Card 2 */}
-                        <div className='group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-xl mt-8'>
-                            <div className='w-14 h-14 bg-gradient-to-br from-[#d4a574] to-[#e8c9a0] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
-                                <svg
-                                    className='w-7 h-7 text-[#1e4035]'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className='text-white font-semibold text-lg mb-2'>
-                                Sustainably Sourced
-                            </h3>
-                            <p className='text-gray-300 text-sm'>
-                                Ethically harvested from pristine Himalayan regions
-                            </p>
-                        </div>
+                                    <div className='space-y-8'>
+                                        {[
+                                            { icon: Leaf, title: "Purity", desc: "100% Organic, from soil to soul." },
+                                            { icon: ShieldCheck, title: "Integrity", desc: "Lab-tested for absolute safety." },
+                                            { icon: Star, title: "Tradition", desc: "Recipes passed down for eons." },
+                                            { icon: Zap, title: "Vitality", desc: "Potent formulas for modern life." }
+                                        ].map((item, idx) => (
+                                            <div key={idx} className='group flex items-start space-x-5'>
+                                                <div className='p-3 rounded-full bg-white/5 border border-white/5 group-hover:border-[#d4a574]/30 group-hover:bg-[#d4a574]/10 transition-colors duration-300'>
+                                                    <item.icon className="w-5 h-5 text-white/50 group-hover:text-[#d4a574] transition-colors duration-300" />
+                                                </div>
+                                                <div>
+                                                    <h4 className='text-lg font-serif text-white/90 group-hover:text-white transition-colors'>{item.title}</h4>
+                                                    <p className='text-white/50 text-sm font-light'>{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
 
-                        {/* Card 3 */}
-                        <div className='group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-xl'>
-                            <div className='w-14 h-14 bg-gradient-to-br from-[#d4a574] to-[#e8c9a0] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
-                                <svg
-                                    className='w-7 h-7 text-[#1e4035]'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'
-                                    />
-                                </svg>
+                                    <div className='pt-8 border-t border-white/5 flex items-center justify-between text-white/30 text-xs tracking-widest uppercase'>
+                                        <span>Est. 2024</span>
+                                        <span>Himalaya • Earth</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className='text-white font-semibold text-lg mb-2'>
-                                Lab Tested
-                            </h3>
-                            <p className='text-gray-300 text-sm'>
-                                Certified pure and free from harmful additives
-                            </p>
-                        </div>
+                        </motion.div>
+                    </motion.div>
 
-                        {/* Card 4 */}
-                        <div className='group bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 hover:shadow-xl mt-8'>
-                            <div className='w-14 h-14 bg-gradient-to-br from-[#d4a574] to-[#e8c9a0] rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform'>
-                                <svg
-                                    className='w-7 h-7 text-[#1e4035]'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'>
-                                    <path
-                                        strokeLinecap='round'
-                                        strokeLinejoin='round'
-                                        strokeWidth={2}
-                                        d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
-                                    />
-                                </svg>
-                            </div>
-                            <h3 className='text-white font-semibold text-lg mb-2'>
-                                Holistic Wellness
-                            </h3>
-                            <p className='text-gray-300 text-sm'>
-                                Nurturing body, mind, and spirit naturally
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             {/* Scroll Indicator */}
-            <div className='absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce'>
-                <div className='flex flex-col items-center space-y-2 text-white/60'>
-                    <span className='text-xs font-medium tracking-wider'>SCROLL</span>
-                    <svg
-                        className='w-6 h-6'
-                        fill='none'
-                        stroke='currentColor'
-                        viewBox='0 0 24 24'>
-                        <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            strokeWidth={2}
-                            d='M19 14l-7 7m0 0l-7-7m7 7V3'
-                        />
-                    </svg>
-                </div>
-            </div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 2 }}
+                className='absolute bottom-10 left-1/2 -translate-x-1/2 z-30'
+            >
+                <div className='h-12 w-[1px] bg-gradient-to-b from-transparent via-[#d4a574] to-transparent'></div>
+            </motion.div>
         </section>
     )
 }

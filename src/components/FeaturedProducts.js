@@ -1,151 +1,187 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import productHoney from '../assets/product-honey.png'
-import productTea from '../assets/product-tea.png'
-import productShilajit from '../assets/product-shilajit.png'
-import productSalt from '../assets/product-salt.png'
+import { motion } from 'framer-motion'
+import { ArrowRight, Star } from 'lucide-react'
 
 const FeaturedProducts = () => {
-    const products = [
-        {
-            id: 1,
-            name: 'Himalayan Raw Honey',
-            description: 'Pure, unprocessed honey from high-altitude Himalayan wildflowers',
-            price: '$24.99',
-            image: productHoney,
-            badge: 'Bestseller',
-        },
-        {
-            id: 2,
-            name: 'Herbal Wellness Blend',
-            description: 'Traditional tea blend with ancient healing herbs and flowers',
-            price: '$18.99',
-            image: productTea,
-            badge: 'New',
-        },
-        {
-            id: 3,
-            name: 'Pure Shilajit Resin',
-            description: 'Authentic Himalayan shilajit for vitality and rejuvenation',
-            price: '$34.99',
-            image: productShilajit,
-            badge: 'Premium',
-        },
-        {
-            id: 4,
-            name: 'Pink Himalayan Salt',
-            description: 'Mineral-rich salt crystals from ancient Himalayan deposits',
-            price: '$12.99',
-            image: productSalt,
-            badge: null,
-        },
-    ]
+    const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                // Fetch latest 4 products
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/products?limit=4&sort=-createdAt`)
+                const data = await response.json()
+
+                if (data.success) {
+                    setProducts(data.data)
+                } else {
+                    setError('Failed to load featured products')
+                }
+            } catch (err) {
+                console.error('Error fetching featured products:', err)
+                setError('Failed to load products')
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchProducts()
+    }, [])
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 50 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.6, ease: "easeOut" }
+        }
+    }
 
     return (
-        <section className='relative py-16 lg:py-20 bg-white overflow-hidden'>
+        <section className='relative py-20 lg:py-32 bg-[#0f1c18] text-[#e8e6e3] overflow-hidden'>
+            {/* Grain Overlay */}
+            <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
+
             {/* Decorative background elements */}
-            <div className='absolute top-0 left-0 w-96 h-96 bg-[#d4a574]/5 rounded-full blur-3xl'></div>
-            <div className='absolute bottom-0 right-0 w-80 h-80 bg-[#2d5f4f]/5 rounded-full blur-3xl'></div>
+            <div className='absolute top-0 left-0 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px] pointer-events-none'></div>
+            <div className='absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[120px] pointer-events-none'></div>
 
             <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Section Header */}
-                <div className='text-center mb-16'>
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.6 }}
+                    className='text-center mb-20'
+                >
                     <div className='inline-block mb-4'>
-                        <span className='text-sm font-semibold tracking-widest text-[#2d5f4f] uppercase'>
-                            Our Collection
+                        <span className='text-sm font-serif tracking-[0.2em] text-[#d4a574] uppercase border border-[#d4a574]/30 px-4 py-2 rounded-full'>
+                            Treasury
                         </span>
                     </div>
-                    <h2 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6'>
-                        Featured
-                        <span className='block mt-2 text-gradient'>Products</span>
+                    <h2 className='text-4xl sm:text-5xl lg:text-7xl font-serif font-light text-white mb-6'>
+                        Curated <span className='italic text-[#d4a574]'>Elixirs</span>
                     </h2>
-                    <p className='text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed'>
-                        Discover our most loved wellness essentials, sourced from the pristine Himalayas
+                    <p className='text-lg text-white/60 max-w-2xl mx-auto leading-relaxed font-light'>
+                        Discover our most revered wellness essentials, harvested with reverence from the pristine Himalayas.
                     </p>
-                </div>
+                </motion.div>
 
                 {/* Products Grid */}
-                <div className='grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16'>
-                    {products.map((product) => (
-                        <div
-                            key={product.id}
-                            className='group relative bg-gradient-to-b from-gray-50 to-white rounded-3xl overflow-hidden border border-gray-100 hover:border-[#2d5f4f]/20 hover:shadow-2xl transition-all duration-500'>
-                            {/* Badge */}
-                            {product.badge && (
-                                <div className='absolute top-4 right-4 z-10'>
-                                    <span className='inline-block px-3 py-1 bg-gradient-to-r from-[#2d5f4f] to-[#3e7a70] text-white text-xs font-semibold rounded-full shadow-lg'>
-                                        {product.badge}
-                                    </span>
+                {loading ? (
+                    <div className='flex justify-center items-center h-64'>
+                        <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#d4a574]'></div>
+                    </div>
+                ) : error ? (
+                    <div className='text-center text-red-400 py-10'>
+                        <p>{error}</p>
+                    </div>
+                ) : (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        className='grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-20'
+                    >
+                        {products.map((product) => (
+                            <motion.div
+                                variants={itemVariants}
+                                key={product._id}
+                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-500 hover:transform hover:-translate-y-2'
+                            >
+                                {/* Badge */}
+                                {product.offer > 0 && (
+                                    <div className='absolute top-4 right-4 z-20'>
+                                        <span className='inline-flex items-center space-x-1 px-3 py-1 bg-[#d4a574] text-[#0f1c18] text-[10px] font-bold uppercase tracking-wider rounded-full shadow-lg'>
+                                            <Star className="w-3 h-3 fill-current" />
+                                            <span>{product.offer}% OFF</span>
+                                        </span>
+                                    </div>
+                                )}
+
+                                {/* Product Image Area */}
+                                <div className='relative aspect-[4/5] p-8 overflow-hidden bg-gradient-to-b from-white/5 to-transparent'>
+                                    <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/0 via-[#0f1c18]/0 to-[#0f1c18]/80 z-10'></div>
+
+                                    {product.images && product.images.length > 0 ? (
+                                        <img
+                                            src={product.images[0].url}
+                                            alt={product.title}
+                                            className='relative w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-110 transition-transform duration-700 z-0'
+                                        />
+                                    ) : (
+                                        <div className='w-full h-full flex items-center justify-center bg-white/5 rounded-2xl'>
+                                            <span className='text-white/20'>No Image</span>
+                                        </div>
+                                    )}
+
+                                    {/* Quick Add Button Overlay */}
+                                    <div className='absolute bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500'>
+                                        <Link to={`/products/${product._id}`} className='px-6 py-3 bg-[#d4a574] text-[#0f1c18] text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
+                                            View Details
+                                        </Link>
+                                    </div>
                                 </div>
-                            )}
 
-                            {/* Product Image */}
-                            <div className='relative aspect-square p-8 bg-gradient-to-br from-white to-gray-50 overflow-hidden'>
-                                <div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 group-hover:from-[#2d5f4f]/5 group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
-                                <img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className='relative w-full h-full object-contain group-hover:scale-110 transition-transform duration-500'
-                                />
-                            </div>
+                                {/* Product Info */}
+                                <div className='p-6 pt-0 relative z-20'>
+                                    <h3 className='text-lg font-serif text-white mb-2 group-hover:text-[#d4a574] transition-colors line-clamp-1'>
+                                        {product.title}
+                                    </h3>
+                                    <p className='text-white/40 text-xs mb-4 leading-relaxed line-clamp-2 h-8'>
+                                        {product.description || 'Premium Himalayan wellness product.'}
+                                    </p>
 
-                            {/* Product Info */}
-                            <div className='p-6'>
-                                <h3 className='text-xl font-bold text-gray-900 mb-2 group-hover:text-[#2d5f4f] transition-colors'>
-                                    {product.name}
-                                </h3>
-                                <p className='text-gray-600 text-sm mb-4 leading-relaxed'>
-                                    {product.description}
-                                </p>
-
-                                {/* Price and CTA */}
-                                <div className='flex items-center justify-between'>
-                                    <span className='text-2xl font-bold text-[#2d5f4f]'>
-                                        {product.price}
-                                    </span>
-                                    <button className='p-2 rounded-full bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white transition-all duration-300 hover:scale-110 group/btn'>
-                                        <svg
-                                            className='w-5 h-5'
-                                            fill='none'
-                                            stroke='currentColor'
-                                            viewBox='0 0 24 24'>
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                strokeWidth={2}
-                                                d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
-                                            />
-                                        </svg>
-                                    </button>
+                                    <div className='flex items-center justify-between border-t border-white/5 pt-4'>
+                                        <span className='text-xl font-serif text-[#d4a574]'>
+                                            ₹{product.price}
+                                        </span>
+                                        <Link to={`/products/${product._id}`} className='text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
+                                            Details
+                                        </Link>
+                                    </div>
                                 </div>
-                            </div>
-
-                            {/* Hover overlay */}
-                            <div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
-                        </div>
-                    ))}
-                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
 
                 {/* View All CTA */}
-                <div className='text-center'>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className='text-center'
+                >
                     <Link
                         to='/shop'
-                        className='inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-[#2d5f4f] to-[#3e7a70] text-white font-semibold rounded-full hover:shadow-2xl hover:shadow-[#2d5f4f]/30 transition-all duration-300 hover:scale-105 group'>
-                        <span>View All Products</span>
-                        <svg
-                            className='w-5 h-5 transition-transform group-hover:translate-x-1'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'>
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                strokeWidth={2}
-                                d='M17 8l4 4m0 0l-4 4m4-4H3'
-                            />
-                        </svg>
+                        className='group relative px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 inline-flex'
+                    >
+                        <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
+                        <span className='relative z-10 flex items-center space-x-3'>
+                            <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
+                                Explore Treasury
+                            </span>
+                            <ArrowRight className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
+                        </span>
                     </Link>
-                </div>
+                </motion.div>
             </div>
         </section>
     )

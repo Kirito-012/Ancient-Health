@@ -10,7 +10,6 @@ export const useCart = () => useContext(CartContext)
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState({ items: [], totalItems: 0, totalPrice: 0 })
     const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
     const [token, setToken] = useState(localStorage.getItem('token'))
 
     const [user, setUser] = useState(null)
@@ -88,7 +87,7 @@ export const CartProvider = ({ children }) => {
             )
             if (response.data.success) {
                 setCart(response.data.data)
-                toast.success('Added to cart!')
+
             }
         } catch (err) {
             console.error('Add to cart error:', err)
@@ -167,7 +166,6 @@ export const CartProvider = ({ children }) => {
         cart,
         user,
         loading,
-        error,
         token, // Expose token if needed
         login,
         logout,

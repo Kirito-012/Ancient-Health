@@ -6,16 +6,13 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
-import logo from '../assets/logo.png'
 
 const Checkout = () => {
     const { state } = useLocation()
     const { cart, token, clearCart, user } = useCart()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [selectedAddressId, setSelectedAddressId] = useState('')
     const [address, setAddress] = useState(state?.shippingAddress || null)
-    const [isNewAddress, setIsNewAddress] = useState(false)
 
     useEffect(() => {
         if (!token) {
@@ -26,29 +23,14 @@ const Checkout = () => {
         // Auto-select default address
         if (user && user.addresses && user.addresses.length > 0 && !address) {
             const defaultAddr = user.addresses.find(a => a.isDefault) || user.addresses[0]
-            setSelectedAddressId(defaultAddr._id)
             setAddress(defaultAddr)
         } else if ((!user?.addresses || user.addresses.length === 0) && !address) {
-            // No saved addresses, maybe redirect to add one or show form?
-            // For now, if no address, we show empty state or redirect is handled.
-            // But we changed logic: we want them to pick one.
-            setIsNewAddress(true)
+            // No saved addresses logic
         }
 
-    }, [token, navigate, user])
+    }, [token, navigate, user, address])
 
-    const handleAddressSelect = (addrId) => {
-        if (addrId === 'new') {
-            setIsNewAddress(true)
-            setSelectedAddressId('new')
-            setAddress({ name: '', phone: '', address: '', city: '', state: '', pincode: '' })
-        } else {
-            setIsNewAddress(false)
-            setSelectedAddressId(addrId)
-            const selected = user.addresses.find(a => a._id === addrId)
-            setAddress(selected)
-        }
-    }
+
 
     const loadRazorpay = () => {
         return new Promise((resolve) => {
@@ -100,7 +82,7 @@ const Checkout = () => {
                 currency: 'INR',
                 name: "Ancient Health",
                 description: "Purchase from Ancient Health",
-                // image: logo, // Commented out to prevent Mixed Content Error (HTTP image in HTTPS iframe)
+                // image: 'https://placehold.co/512', // Placeholder to avoid mixed content error with local file
                 order_id: razorpayOrderId,
                 handler: async function (response) {
                     try {
