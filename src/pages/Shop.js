@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import shop_bg from "../assets/shop_bg.png"
-
+import { stripHtml } from '../utils/textUtils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Shop = () => {
@@ -155,13 +155,13 @@ const Shop = () => {
                         </motion.span>
                         <motion.h1
                             variants={heroTextVariants}
-                            className='text-5xl md:text-7xl font-bold text-white mb-6 font-playfair drop-shadow-lg'
+                            className='text-5xl md:text-7xl font-serif text-white mb-6 font-playfair drop-shadow-lg'
                         >
                             Wellness Shop
                         </motion.h1>
                         <motion.p
                             variants={heroTextVariants}
-                            className='text-xl text-gray-100 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md'
+                            className='text-lg text-gray-100 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md'
                         >
                             Hand-harvested remedies from the heart of the Himalayas, delivered to your doorstep.
                         </motion.p>
@@ -333,7 +333,7 @@ const Shop = () => {
                                                     </div>
 
                                                     <p className='text-gray-500 text-sm mb-4 line-clamp-2 min-h-[2.5rem]'>
-                                                        {product.description || 'Premium Ayurvedic formulation for daily wellness.'}
+                                                        {stripHtml(product.description) || 'Premium Ayurvedic formulation for daily wellness.'}
                                                     </p>
 
                                                     {/* Price and CTA */}

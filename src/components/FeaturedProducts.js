@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
-
+import { stripHtml } from '../utils/textUtils'
 const FeaturedProducts = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -36,17 +36,17 @@ const FeaturedProducts = () => {
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2
+                staggerChildren: 0.1 // Stagger faster for better perceived performance
             }
         }
     }
 
     const itemVariants = {
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 30 }, // Reduced travel distance
         visible: {
             opacity: 1,
             y: 0,
-            transition: { duration: 0.6, ease: "easeOut" }
+            transition: { duration: 0.5, ease: "easeOut" }
         }
     }
 
@@ -55,18 +55,18 @@ const FeaturedProducts = () => {
             {/* Grain Overlay */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
-            {/* Decorative background elements */}
-            <div className='absolute top-0 left-0 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px] pointer-events-none'></div>
-            <div className='absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[120px] pointer-events-none'></div>
+            {/* Decorative background elements - Static */}
+            <div className='absolute top-0 left-0 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[100px] pointer-events-none'></div>
+            <div className='absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[100px] pointer-events-none'></div>
 
             <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-10%" }}
                     transition={{ duration: 0.6 }}
-                    className='text-center mb-20'
+                    className='text-center mb-20 will-change-transform'
                 >
                     <div className='inline-block mb-4'>
                         <span className='text-sm font-serif tracking-[0.2em] text-[#d4a574] uppercase border border-[#d4a574]/30 px-4 py-2 rounded-full'>
@@ -95,14 +95,14 @@ const FeaturedProducts = () => {
                         variants={containerVariants}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ once: true, margin: "-50px" }}
+                        viewport={{ once: true, margin: "-10%" }}
                         className='grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-20'
                     >
                         {products.map((product) => (
                             <motion.div
                                 variants={itemVariants}
                                 key={product._id}
-                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-500 hover:transform hover:-translate-y-2'
+                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform hover:transform hover:-translate-y-2'
                             >
                                 {/* Badge */}
                                 {product.offer > 0 && (
@@ -122,7 +122,7 @@ const FeaturedProducts = () => {
                                         <img
                                             src={product.images[0].url}
                                             alt={product.title}
-                                            className='relative w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-110 transition-transform duration-700 z-0'
+                                            className='relative w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-105 transition-transform duration-500 will-change-transform z-0'
                                         />
                                     ) : (
                                         <div className='w-full h-full flex items-center justify-center bg-white/5 rounded-2xl'>
@@ -131,7 +131,7 @@ const FeaturedProducts = () => {
                                     )}
 
                                     {/* Quick Add Button Overlay */}
-                                    <div className='absolute bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500'>
+                                    <div className='absolute bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
                                         <Link to={`/products/${product._id}`} className='px-6 py-3 bg-[#d4a574] text-[#0f1c18] text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
                                             View Details
                                         </Link>
@@ -144,9 +144,8 @@ const FeaturedProducts = () => {
                                         {product.title}
                                     </h3>
                                     <p className='text-white/40 text-xs mb-4 leading-relaxed line-clamp-2 h-8'>
-                                        {product.description || 'Premium Himalayan wellness product.'}
+                                        {stripHtml(product.description) || 'Premium Himalayan wellness product.'}
                                     </p>
-
                                     <div className='flex items-center justify-between border-t border-white/5 pt-4'>
                                         <span className='text-xl font-serif text-[#d4a574]'>
                                             ₹{product.price}
@@ -165,9 +164,9 @@ const FeaturedProducts = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
-                    className='text-center'
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ delay: 0.2 }}
+                    className='text-center will-change-transform'
                 >
                     <Link
                         to='/shop'

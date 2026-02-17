@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -391,7 +391,6 @@ const AddProduct = () => {
 
 			if (response.data.success) {
 				toast.success('Product added successfully!', {
-					position: 'top-right',
 					autoClose: 3000,
 					hideProgressBar: false,
 					closeOnClick: true,
@@ -423,7 +422,6 @@ const AddProduct = () => {
 			const errorMessage =
 				error.response?.data?.message || 'Failed to add product'
 			toast.error(errorMessage, {
-				position: 'top-right',
 				autoClose: 4000,
 			})
 		} finally {
@@ -433,7 +431,6 @@ const AddProduct = () => {
 
 	return (
 		<div className='max-w-5xl mx-auto'>
-			<ToastContainer />
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>Add Product</h1>
@@ -537,8 +534,8 @@ const AddProduct = () => {
 						</label>
 						<div
 							className={`border-2 border-dashed rounded-lg p-8 text-center transition ${isDragging
-									? 'border-blue-500 bg-blue-50'
-									: 'border-slate-300 hover:border-slate-400'
+								? 'border-blue-500 bg-blue-50'
+								: 'border-slate-300 hover:border-slate-400'
 								}`}
 							onDragEnter={handleDragEnter}
 							onDragOver={handleDragOver}
@@ -1048,8 +1045,8 @@ const AddProduct = () => {
 						type='submit'
 						disabled={isSubmitting}
 						className={`px-8 py-3 rounded-lg font-semibold transition ${isSubmitting
-								? 'bg-slate-400 cursor-not-allowed'
-								: 'bg-blue-600 hover:bg-blue-700 text-white'
+							? 'bg-slate-400 cursor-not-allowed'
+							: 'bg-blue-600 hover:bg-blue-700 text-white'
 							}`}>
 						{isSubmitting ? (
 							<span className='flex items-center gap-2'>

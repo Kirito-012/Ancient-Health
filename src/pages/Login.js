@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { motion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
@@ -37,7 +38,6 @@ const Login = () => {
 				login(token)
 
 				toast.success(`Welcome back, ${user.name}!`, {
-					position: 'top-right',
 					autoClose: 2000,
 				})
 
@@ -55,7 +55,6 @@ const Login = () => {
 			const errorMessage =
 				error.response?.data?.message || 'Login failed. Please try again.'
 			toast.error(errorMessage, {
-				position: 'top-right',
 				autoClose: 4000,
 			})
 		} finally {
@@ -65,27 +64,29 @@ const Login = () => {
 
 	return (
 		<section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3]'>
-			<ToastContainer />
+			<Navbar />
 
 			{/* Grain Overlay - Exactly from Hero */}
 			<div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
-			{/* Parallax Background - Exactly from Hero */}
+			{/* Parallax Background - Optimization Applied */}
 			<div className='absolute inset-0 z-0 overflow-hidden'>
 				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 				<div className='absolute inset-0'>
 					<img
-						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2500&auto=format&fit=crop"
+						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1920&auto=format&fit=crop"
 						alt="Ancient Mystical Forest"
-						className="w-full h-full object-cover opacity-50 scale-110"
+						className="w-full h-full object-cover opacity-50 scale-105"
+						style={{ willChange: 'transform' }}
 					/>
 				</div>
 
-				{/* Ambient Golden Glow - Exactly from Hero */}
+				{/* Ambient Golden Glow - Optimized */}
 				<motion.div
-					animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
-					transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-					className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px]'
+					animate={{ opacity: [0.3, 0.5, 0.3] }}
+					transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+					className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[80px]'
+					style={{ willChange: 'opacity' }}
 				/>
 			</div>
 
@@ -93,9 +94,9 @@ const Login = () => {
 			<div className='relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
 				<div className='max-w-md mx-auto'>
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
+						initial={{ opacity: 0, y: 15 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+						transition={{ duration: 0.6, ease: "easeOut" }}
 						style={{ willChange: 'transform, opacity' }}
 					>
 						{/* Card */}

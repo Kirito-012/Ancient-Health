@@ -153,6 +153,7 @@ export const CartProvider = ({ children }) => {
             )
             if (response.data.success) {
                 setCart(response.data.data)
+                toast.success('Cart cleared successfully')
             }
         } catch (err) {
             console.error('Clear cart error:', err)

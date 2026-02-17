@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -506,7 +506,6 @@ const ManageProducts = () => {
 
 	return (
 		<div className='max-w-6xl'>
-			<ToastContainer />
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>
@@ -619,8 +618,8 @@ const ManageProducts = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!selectedCategory
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setSelectedCategory('')
@@ -633,8 +632,8 @@ const ManageProducts = () => {
 													key={cat._id}
 													type='button'
 													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${selectedCategory === cat._id
-															? 'bg-blue-50 text-blue-700 font-medium'
-															: 'text-slate-700 hover:bg-slate-50'
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
 														}`}
 													onClick={() => {
 														setSelectedCategory(cat._id)
@@ -693,8 +692,8 @@ const ManageProducts = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!stockFilter
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setStockFilter('')
@@ -705,8 +704,8 @@ const ManageProducts = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'in_stock'
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setStockFilter('in_stock')
@@ -717,8 +716,8 @@ const ManageProducts = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'low_stock'
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setStockFilter('low_stock')
@@ -729,8 +728,8 @@ const ManageProducts = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'no_stock'
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setStockFilter('no_stock')
@@ -1101,8 +1100,8 @@ const ManageProducts = () => {
 										</label>
 										<div
 											className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${isDragging
-													? 'border-blue-500 bg-blue-50/50 scale-[1.02]'
-													: 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
+												? 'border-blue-500 bg-blue-50/50 scale-[1.02]'
+												: 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
 												}`}
 											onDragEnter={handleDragEnter}
 											onDragOver={handleDragOver}
@@ -1585,8 +1584,8 @@ const ManageProducts = () => {
 								form='edit-product-form'
 								disabled={isSaving}
 								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
-										? 'bg-slate-400 cursor-not-allowed'
-										: 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
+									? 'bg-slate-400 cursor-not-allowed'
+									: 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
 									}`}>
 								{isSaving ? (
 									<>

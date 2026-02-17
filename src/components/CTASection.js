@@ -19,10 +19,11 @@ const CTASection = () => {
 
             <div className='relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    viewport={{ once: true, margin: "-10%" }}
+                    transition={{ duration: 0.6 }}
+                    className='will-change-transform'
                 >
                     <div className='inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#d4a574]/10 border border-[#d4a574]/20 mb-8'>
                         <Star className="w-3 h-3 text-[#d4a574]" />

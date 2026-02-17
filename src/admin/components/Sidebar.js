@@ -1,5 +1,5 @@
-import React, {useState} from 'react'
-import {Link, useLocation} from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 
 const Sidebar = () => {
 	const [openMenu, setOpenMenu] = useState('products')
@@ -31,11 +31,10 @@ const Sidebar = () => {
 				<div className='mb-2'>
 					<Link
 						to='/admin'
-						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-							isActive('/admin')
+						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive('/admin')
 								? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 								: 'hover:bg-slate-700/50'
-						}`}>
+							}`}>
 						<svg
 							className='w-5 h-5 text-green-400'
 							fill='none'
@@ -73,9 +72,8 @@ const Sidebar = () => {
 							<span className='font-medium'>Products</span>
 						</div>
 						<svg
-							className={`w-4 h-4 transition-transform duration-200 ${
-								openMenu === 'products' ? 'rotate-180' : ''
-							}`}
+							className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'products' ? 'rotate-180' : ''
+								}`}
 							fill='none'
 							stroke='currentColor'
 							viewBox='0 0 24 24'>
@@ -92,38 +90,34 @@ const Sidebar = () => {
 						<div className='mt-1 ml-4 space-y-1 animate-fadeIn'>
 							<Link
 								to='/admin/products/add'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/products/add')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/add')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Add Product
 							</Link>
 							<Link
 								to='/admin/products/manage'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/products/manage')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/manage')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Manage Products
 							</Link>
 							<Link
 								to='/admin/products/add-category'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/products/add-category')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/add-category')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Add Category
 							</Link>
 							<Link
 								to='/admin/products/manage-categories'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/products/manage-categories')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/manage-categories')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Manage Categories
 							</Link>
 						</div>
@@ -134,11 +128,10 @@ const Sidebar = () => {
 				<div className='mb-2'>
 					<button
 						onClick={() => toggleMenu('blog')}
-						className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${
-							location.pathname.includes('/admin/blogs')
+						className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.includes('/admin/blogs')
 								? 'bg-slate-700/50'
 								: 'hover:bg-slate-700/50'
-						}`}>
+							}`}>
 						<div className='flex items-center gap-3'>
 							<svg
 								className='w-5 h-5 text-yellow-400'
@@ -155,9 +148,8 @@ const Sidebar = () => {
 							<span className='font-medium'>Blog</span>
 						</div>
 						<svg
-							className={`w-4 h-4 transition-transform duration-200 ${
-								openMenu === 'blog' ? 'rotate-180' : ''
-							}`}
+							className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'blog' ? 'rotate-180' : ''
+								}`}
 							fill='none'
 							stroke='currentColor'
 							viewBox='0 0 24 24'>
@@ -174,20 +166,18 @@ const Sidebar = () => {
 						<div className='mt-1 ml-4 space-y-1 animate-fadeIn'>
 							<Link
 								to='/admin/blogs/add'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/blogs/add')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/blogs/add')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Add Blog
 							</Link>
 							<Link
 								to='/admin/blogs/manage'
-								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${
-									isActive('/admin/blogs/manage')
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/blogs/manage')
 										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
-								}`}>
+									}`}>
 								Manage Blogs
 							</Link>
 						</div>
@@ -198,11 +188,10 @@ const Sidebar = () => {
 				<div className='mb-2'>
 					<Link
 						to='/admin/users'
-						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-							isActive('/admin/users')
+						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive('/admin/users')
 								? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
 								: 'hover:bg-slate-700/50'
-						}`}>
+							}`}>
 						<svg
 							className='w-5 h-5 text-purple-400'
 							fill='none'
@@ -219,6 +208,27 @@ const Sidebar = () => {
 					</Link>
 				</div>
 			</nav>
+
+			{/* Home Link */}
+			<div className='px-3 mb-2'>
+				<Link
+					to='/'
+					className='w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-700/50 transition-all duration-200 text-slate-300 hover:text-white'>
+					<svg
+						className='w-5 h-5 text-teal-400'
+						fill='none'
+						stroke='currentColor'
+						viewBox='0 0 24 24'>
+						<path
+							strokeLinecap='round'
+							strokeLinejoin='round'
+							strokeWidth={2}
+							d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+						/>
+					</svg>
+					<span className='font-medium'>Home</span>
+				</Link>
+			</div>
 
 			{/* Logout Button */}
 			<div className='p-3 border-t border-slate-700/50'>

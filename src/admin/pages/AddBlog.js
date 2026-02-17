@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -184,17 +184,6 @@ const AddBlog = () => {
 
 	return (
 		<div className='max-w-5xl mx-auto'>
-			<ToastContainer
-				position='top-right'
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-			/>
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>Add Blog</h1>

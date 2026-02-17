@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const AddCategory = () => {
@@ -59,7 +59,6 @@ const AddCategory = () => {
 
 			if (response.data.success) {
 				toast.success('Category added successfully!', {
-					position: 'top-right',
 					autoClose: 3000,
 				})
 				setCategoryName('')
@@ -69,7 +68,6 @@ const AddCategory = () => {
 			const errorMessage =
 				error.response?.data?.message || 'Failed to add category'
 			toast.error(errorMessage, {
-				position: 'top-right',
 				autoClose: 4000,
 			})
 		} finally {
@@ -79,7 +77,6 @@ const AddCategory = () => {
 
 	return (
 		<div className='max-w-6xl'>
-			<ToastContainer />
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>Add Category</h1>
@@ -128,8 +125,8 @@ const AddCategory = () => {
 							type='submit'
 							disabled={isSubmitting}
 							className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm transition-all flex items-center gap-2 ${isSubmitting
-									? 'bg-slate-400 cursor-not-allowed'
-									: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
+								? 'bg-slate-400 cursor-not-allowed'
+								: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
 								}`}>
 							{isSubmitting ? (
 								<>

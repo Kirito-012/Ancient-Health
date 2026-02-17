@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -266,7 +266,6 @@ const ManageBlogs = () => {
 
 	return (
 		<div className='max-w-6xl'>
-			<ToastContainer />
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>Manage Blogs</h1>
@@ -348,8 +347,8 @@ const ManageBlogs = () => {
 											<button
 												type='button'
 												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!selectedCategory
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
+													? 'bg-blue-50 text-blue-700 font-medium'
+													: 'text-slate-700 hover:bg-slate-50'
 													}`}
 												onClick={() => {
 													setSelectedCategory('')
@@ -362,8 +361,8 @@ const ManageBlogs = () => {
 													key={cat._id}
 													type='button'
 													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${selectedCategory === cat._id
-															? 'bg-blue-50 text-blue-700 font-medium'
-															: 'text-slate-700 hover:bg-slate-50'
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
 														}`}
 													onClick={() => {
 														setSelectedCategory(cat._id)
@@ -766,8 +765,8 @@ const ManageBlogs = () => {
 									type='submit'
 									disabled={isSaving}
 									className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
-											? 'bg-slate-400 cursor-not-allowed'
-											: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
+										? 'bg-slate-400 cursor-not-allowed'
+										: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
 										}`}>
 									{isSaving ? (
 										<>

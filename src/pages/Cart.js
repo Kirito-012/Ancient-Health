@@ -109,43 +109,43 @@ const Cart = () => {
                             <div className='lg:col-span-2 space-y-4'>
                                 {cart.items.map((item, index) => (
                                     <div key={item.productId}
-                                        className='group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 flex flex-col sm:flex-row items-center gap-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.01] border border-gray-200/50'
+                                        className='group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.01] border border-gray-200/50'
                                         style={{ animationDelay: `${index * 50}ms` }}
                                     >
                                         {/* Product Image */}
-                                        <div className='relative w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow'>
+                                        <div className='relative w-20 h-20 sm:w-28 sm:h-28 flex-shrink-0 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow'>
                                             <div className='absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200'></div>
                                             <img src={item.image} alt={item.title} className='relative w-full h-full object-cover group-hover:scale-110 transition-transform duration-300' />
                                         </div>
 
                                         {/* Product Details */}
-                                        <div className='flex-1 text-center sm:text-left'>
-                                            <h3 className='text-lg font-bold text-gray-900 mb-1 group-hover:text-[#2d5f4f] transition-colors'>{item.title}</h3>
-                                            <p className='text-2xl font-bold text-[#2d5f4f]'>₹{item.price.toFixed(2)}</p>
+                                        <div className='w-[calc(100%-6rem)] sm:w-auto sm:flex-1 text-left'>
+                                            <h3 className='text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[#2d5f4f] transition-colors line-clamp-2'>{item.title}</h3>
+                                            <p className='text-xl sm:text-2xl font-bold text-[#2d5f4f]'>₹{item.price.toFixed(2)}</p>
                                             {item.stock < 10 && (
                                                 <p className='text-xs text-orange-600 font-medium mt-1'>Only {item.stock} left in stock!</p>
                                             )}
                                         </div>
 
-                                        {/* Quantity Controls */}
-                                        <div className='flex items-center gap-4'>
+                                        {/* Quantity Controls - Mobile: Full width bottom row, Desktop: Auto width side */}
+                                        <div className='w-full sm:w-auto flex items-center justify-between sm:justify-end gap-3 sm:gap-4 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 sm:border-none'>
                                             <div className='flex items-center bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-xl shadow-inner'>
                                                 <button
                                                     onClick={() => handleQuantityChange(item.productId, item.quantity - 1)}
-                                                    className='px-4 py-2 hover:bg-white/80 text-gray-700 font-bold transition-all rounded-l-xl disabled:opacity-40 disabled:cursor-not-allowed'
+                                                    className='px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-white/80 text-gray-700 font-bold transition-all rounded-l-xl disabled:opacity-40 disabled:cursor-not-allowed'
                                                     disabled={item.quantity <= 1}
                                                 >
-                                                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <svg className='w-3 h-3 sm:w-4 sm:h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={3} d='M20 12H4' />
                                                     </svg>
                                                 </button>
-                                                <span className='px-5 py-2 font-bold text-gray-900 bg-white border-x-2 border-gray-200 min-w-[4rem] text-center text-lg'>{item.quantity}</span>
+                                                <span className='px-3 sm:px-5 py-1.5 sm:py-2 font-bold text-gray-900 bg-white border-x-2 border-gray-200 min-w-[3rem] sm:min-w-[4rem] text-center text-base sm:text-lg'>{item.quantity}</span>
                                                 <button
                                                     onClick={() => handleQuantityChange(item.productId, item.quantity + 1)}
-                                                    className='px-4 py-2 hover:bg-white/80 text-gray-700 font-bold transition-all rounded-r-xl disabled:opacity-40 disabled:cursor-not-allowed'
+                                                    className='px-3 sm:px-4 py-1.5 sm:py-2 hover:bg-white/80 text-gray-700 font-bold transition-all rounded-r-xl disabled:opacity-40 disabled:cursor-not-allowed'
                                                     disabled={item.quantity >= item.stock}
                                                 >
-                                                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <svg className='w-3 h-4 sm:w-4 sm:h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={3} d='M12 4v16m8-8H4' />
                                                     </svg>
                                                 </button>
@@ -154,7 +154,7 @@ const Cart = () => {
                                             {/* Remove Button */}
                                             <button
                                                 onClick={() => removeFromCart(item.productId)}
-                                                className='group/btn p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all border-2 border-transparent hover:border-red-200 shadow-sm hover:shadow-md'
+                                                className='group/btn p-2 sm:p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all border-2 border-transparent hover:border-red-200 shadow-sm hover:shadow-md'
                                                 title="Remove item"
                                             >
                                                 <svg className='w-5 h-5 group-hover/btn:scale-110 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>

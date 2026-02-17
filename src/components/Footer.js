@@ -10,10 +10,10 @@ const Footer = () => {
             {/* Grain Overlay */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-0 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
-            {/* Subtle Background Elements */}
+            {/* Subtle Background Elements - Optimized Blur */}
             <div className='absolute inset-0 z-0 pointer-events-none overflow-hidden'>
-                <div className='absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-[#2d5f4f]/10 rounded-full blur-[150px]'></div>
-                <div className='absolute -bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-[#d4a574]/5 rounded-full blur-[130px]'></div>
+                <div className='absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-[#2d5f4f]/10 rounded-full blur-[100px] opacity-20'></div>
+                <div className='absolute -bottom-[10%] -right-[10%] w-[500px] h-[500px] bg-[#d4a574]/5 rounded-full blur-[100px] opacity-20'></div>
             </div>
 
             {/* Elegant Top Border */}
@@ -25,9 +25,9 @@ const Footer = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.6 }}
-                        className='lg:col-span-4'
+                        className='lg:col-span-4 will-change-transform'
                     >
                         <Link to='/' className='inline-block mb-4 group'>
                             <img src={logo} alt='Ancient Health' className='h-20 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300' />
@@ -83,9 +83,9 @@ const Footer = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.6, delay: 0.1 }}
-                        className='lg:col-span-2'
+                        className='lg:col-span-2 will-change-transform'
                     >
                         <h3 className='text-white font-serif text-lg mb-6'>Explore</h3>
                         <ul className='space-y-4'>
@@ -109,9 +109,9 @@ const Footer = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.6, delay: 0.2 }}
-                        className='lg:col-span-3'
+                        className='lg:col-span-3 will-change-transform'
                     >
                         <h3 className='text-white font-serif text-lg mb-6'>Support</h3>
                         <ul className='space-y-4'>
@@ -135,9 +135,9 @@ const Footer = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.6, delay: 0.3 }}
-                        className='lg:col-span-3'
+                        className='lg:col-span-3 will-change-transform'
                     >
                         <h3 className='text-white font-serif text-lg mb-6'>Contact</h3>
                         <ul className='space-y-6'>

@@ -33,14 +33,10 @@ const WellnessRetreat = () => {
             {/* Grain Overlay */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.03] bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
-            {/* Background Elements */}
+            {/* Background Elements - Optimization: Removed massive generic blur animation */}
             <div className='absolute inset-0 pointer-events-none'>
-                <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                    className='absolute top-0 right-0 w-[600px] h-[600px] bg-[#d4a574]/10 rounded-full blur-[120px]'
-                ></motion.div>
-                <div className='absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[120px]'></div>
+                <div className='absolute top-0 right-0 w-[600px] h-[600px] bg-[#d4a574]/5 rounded-full blur-[100px] opacity-20'></div>
+                <div className='absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#2d5f4f]/10 rounded-full blur-[100px] opacity-20'></div>
             </div>
 
             <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -48,9 +44,9 @@ const WellnessRetreat = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true, margin: "-10%" }}
                     transition={{ duration: 0.8 }}
-                    className='text-center mb-16'
+                    className='text-center mb-16 will-change-transform'
                 >
                     <div className='inline-block mb-4'>
                         <span className='text-xs font-serif tracking-[0.2em] text-[#d4a574] uppercase border-b border-[#d4a574]/30 pb-1'>
@@ -70,18 +66,18 @@ const WellnessRetreat = () => {
                 <div className='grid lg:grid-cols-2 gap-16 lg:gap-20 items-center mb-16'>
                     {/* Left - Image */}
                     <motion.div
-                        initial={{ opacity: 0, x: -50 }}
+                        initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        viewport={{ once: true, margin: "-10%" }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
-                        className='relative group perspective'
+                        className='relative group perspective will-change-transform'
                     >
                         <div className='absolute -inset-1 bg-gradient-to-r from-[#d4a574]/30 to-[#2d5f4f]/30 rounded-[2rem] blur opacity-30 group-hover:opacity-60 transition duration-700'></div>
-                        <div className='relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl'>
+                        <div className='relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl transform-gpu'>
                             <img
                                 src={retreatImage}
                                 alt='Himalayan Sacred Retreat'
-                                className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90'
+                                className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 will-change-transform'
                             />
                             <div className='absolute inset-0 bg-[#0f1c18]/20 group-hover:bg-transparent transition-colors duration-500'></div>
                         </div>
@@ -90,10 +86,11 @@ const WellnessRetreat = () => {
                     {/* Right - Content */}
                     <div className='space-y-10'>
                         <motion.div
-                            initial={{ opacity: 0, x: 50 }}
+                            initial={{ opacity: 0, x: 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
+                            viewport={{ once: true, margin: "-10%" }}
                             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                            className='will-change-transform'
                         >
                             <h3 className='text-3xl font-serif text-white mb-4'>
                                 Find Your Sanctuary
@@ -111,8 +108,8 @@ const WellnessRetreat = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.5, delay: 0.3 + (0.1 * index) }}
-                                    className='flex items-start space-x-4 group'
+                                    transition={{ duration: 0.5, delay: 0.1 * index }}
+                                    className='flex items-start space-x-4 group will-change-transform'
                                 >
                                     <div className='p-3 bg-white/5 border border-white/5 rounded-full text-[#d4a574] group-hover:bg-[#d4a574]/10 transition-colors duration-300'>
                                         {feature.icon}
@@ -130,8 +127,8 @@ const WellnessRetreat = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: 0.7 }}
-                            className='pt-6'
+                            transition={{ duration: 0.5, delay: 0.4 }}
+                            className='pt-6 will-change-transform'
                         >
                             <Link
                                 to='/shop'
@@ -163,7 +160,7 @@ const WellnessRetreat = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.2 + (0.1 * index) }}
-                            className='text-center'
+                            className='text-center will-change-transform'
                         >
                             <div className='text-3xl font-serif text-[#d4a574] mb-1'>{stat.value}</div>
                             <div className='text-white/40 text-xs tracking-widest uppercase'>{stat.label}</div>

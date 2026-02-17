@@ -39,7 +39,7 @@ const Navbar = () => {
         { name: 'Contact', path: '/contact' },
     ]
 
-    const isDarkPage = ['/profile', '/cart', '/checkout', '/my-orders', '/login', '/signup'].some(path => location.pathname.startsWith(path))
+    const isDarkPage = ['/profile', '/cart', '/checkout', '/my-orders'].some(path => location.pathname.startsWith(path))
     const showDarkNav = isScrolled || isDarkPage
 
     return (
@@ -252,6 +252,16 @@ const Navbar = () => {
                                         <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#d4a574] transition-all" />
                                     </Link>
                                 ))}
+
+                                {/* Shop Link - Mobile Only */}
+                                <Link
+                                    to="/shop"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="flex items-center justify-between px-4 py-3 rounded-xl text-white/90 hover:bg-white/5 transition-all group"
+                                >
+                                    <span className="text-sm font-serif font-medium tracking-wide">Shop</span>
+                                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 text-[#d4a574] transition-all" />
+                                </Link>
 
                                 <div className="h-px bg-white/10 my-2"></div>
 

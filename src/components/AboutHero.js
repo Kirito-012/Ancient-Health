@@ -1,49 +1,75 @@
 import React from 'react'
-
-import aboutBg from '../assets/about_bg.jpg'
+import { motion, useScroll, useTransform } from 'framer-motion'
 
 const AboutHero = () => {
-    return (
-        <section className='relative min-h-[60vh] lg:h-[70vh] flex items-center justify-center overflow-hidden py-20 lg:py-0'>
-            {/* Background Image with Overlay */}
-            <div className='absolute inset-0 z-0'>
-                <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/80 via-[#162923]/70 to-[#0f1c18] z-10'></div>
-                <img
-                    src={aboutBg}
-                    alt='Himalayan Landscape'
-                    className='w-full h-full object-cover scale-110 animate-pulse-slow' // Slow pulse for subtle movement
-                />
-            </div>
+    const { scrollY } = useScroll()
+    const y = useTransform(scrollY, [0, 500], [0, 150])
+    const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
-            {/* Decorative Elements */}
-            <div className='absolute top-20 left-10 w-64 h-64 bg-[#d4a574]/20 rounded-full blur-3xl animate-float hidden sm:block'></div>
-            <div className='absolute bottom-20 right-10 w-80 h-80 bg-[#3e7a70]/20 rounded-full blur-3xl animate-float hidden sm:block' style={{ animationDelay: '1.5s' }}></div>
+    return (
+        <section className='relative h-screen flex items-center justify-center overflow-hidden bg-[#0f1c18]'>
+            {/* Background Image with Parallax */}
+            <motion.div
+                style={{ y }}
+                className='absolute inset-0 z-0'
+            >
+                {/* Heavy gradient overlay for seamless transition */}
+                <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
+
+                {/* Misty Forest Image */}
+                <img
+                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop"
+                    alt='Misty Himalayan Forest'
+                    className='w-full h-full object-cover scale-110 opacity-70'
+                />
+            </motion.div>
 
             {/* Content */}
-            <div className='relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-                <div className='inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 sm:px-5 sm:py-2.5 mb-6 sm:mb-8 animate-fade-in-up'>
-                    <div className='w-2 h-2 bg-[#d4a574] rounded-full animate-pulse'></div>
-                    <span className='text-xs sm:text-sm font-medium tracking-widest text-[#e8c9a0] uppercase'>
+            <motion.div
+                style={{ opacity }}
+                className='relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center'
+            >
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className='mb-8'
+                >
+                    <span className='inline-block text-[#d4a574] text-sm tracking-[0.3em] uppercase border border-[#d4a574]/30 px-5 py-2 rounded-full backdrop-blur-sm'>
                         Since 1985
                     </span>
-                </div>
+                </motion.div>
 
-                <h1 className='text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 animate-fade-in-up' style={{ animationDelay: '0.2s' }}>
-                    Rooted in
-                    <span className='block mt-2 text-[#d4a574]'>Ancient Wisdom</span>
-                </h1>
+                <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                    className='text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-8 tracking-tight'
+                >
+                    Guardians of the <br />
+                    <span className='italic text-[#d4a574]'>Ancient Path</span>
+                </motion.h1>
 
-                <p className='text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto animate-fade-in-up' style={{ animationDelay: '0.4s' }}>
-                    We bridge the gap between time-honored Himalayan traditions and modern wellness, bringing you nature's purest remedies.
-                </p>
-            </div>
+                <motion.p
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+                    className='text-lg sm:text-xl md:text-2xl text-white/70 leading-relaxed max-w-3xl mx-auto font-light'
+                >
+                    Bridging the gap between time-honored Himalayan traditions and modern wellness, bringing you nature's purest remedies.
+                </motion.p>
+            </motion.div>
 
             {/* Scroll Indicator */}
-            <div className='absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce'>
-                <div className='w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2'>
-                    <div className='w-1 h-2 bg-[#d4a574] rounded-full animate-scroll-down'></div>
-                </div>
-            </div>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1, y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                className='absolute bottom-10 left-1/2 -translate-x-1/2 z-20'
+            >
+                <div className='text-white/30 text-xs tracking-widest uppercase mb-2'>Scroll</div>
+                <div className='w-[1px] h-12 bg-gradient-to-b from-[#d4a574] to-transparent mx-auto'></div>
+            </motion.div>
         </section>
     )
 }

@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/Navbar'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { useCart } from '../context/CartContext'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Signup = () => {
 	const navigate = useNavigate()
+	const { login } = useCart()
 	const [formData, setFormData] = useState({
 		phone: '',
 		email: '',
@@ -70,7 +73,6 @@ const Signup = () => {
 
 			if (response.data.success) {
 				toast.success('OTP sent to your email!', {
-					position: 'top-right',
 					autoClose: 2000,
 				})
 				setStep(2)
@@ -80,7 +82,6 @@ const Signup = () => {
 			const errorMessage =
 				error.response?.data?.message || 'Failed to send OTP. Please try again.'
 			toast.error(errorMessage, {
-				position: 'top-right',
 				autoClose: 4000,
 			})
 		} finally {
@@ -112,11 +113,10 @@ const Signup = () => {
 			if (response.data.success) {
 				const { token, user } = response.data.data
 
-				// Store token
-				localStorage.setItem('token', token)
+				// Store token using context login
+				login(token)
 
 				toast.success(`Account created successfully! Welcome!`, {
-					position: 'top-right',
 					autoClose: 2000,
 				})
 
@@ -134,7 +134,6 @@ const Signup = () => {
 			const errorMessage =
 				error.response?.data?.message || 'Signup failed. Please try again.'
 			toast.error(errorMessage, {
-				position: 'top-right',
 				autoClose: 4000,
 			})
 		} finally {
@@ -144,7 +143,7 @@ const Signup = () => {
 
 	return (
 		<section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3] py-12'>
-			<ToastContainer />
+			<Navbar />
 
 			{/* Grain Overlay - Exactly from Hero */}
 			<div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
@@ -154,17 +153,19 @@ const Signup = () => {
 				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 				<div className='absolute inset-0'>
 					<img
-						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2500&auto=format&fit=crop"
+						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1920&auto=format&fit=crop"
 						alt="Ancient Mystical Forest"
-						className="w-full h-full object-cover opacity-50 scale-110"
+						className="w-full h-full object-cover opacity-50 scale-105"
+						style={{ willChange: 'transform' }}
 					/>
 				</div>
 
-				{/* Ambient Golden Glow - Exactly from Hero */}
+				{/* Ambient Golden Glow - Optimized */}
 				<motion.div
-					animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.2, 1] }}
-					transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-					className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px]'
+					animate={{ opacity: [0.3, 0.5, 0.3] }}
+					transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+					className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[80px]'
+					style={{ willChange: 'opacity' }}
 				/>
 			</div>
 
@@ -172,14 +173,14 @@ const Signup = () => {
 			<div className='relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full'>
 				<div className='max-w-3xl mx-auto'>
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
+						initial={{ opacity: 0, y: 15 }}
 						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+						transition={{ duration: 0.6, ease: "easeOut" }}
 						style={{ willChange: 'transform, opacity' }}
 					>
 						{/* Card */}
-						<div className='relative bg-[#0f1c18]/60 backdrop-blur-xl border border-white/10 rounded-[2rem] p-12 overflow-hidden shadow-2xl transform-gpu'>
-							{/* Glass Glints */}
+						<div className='relative bg-[#0f1c18]/80 backdrop-blur-md border border-white/10 rounded-[2rem] p-12 overflow-hidden shadow-2xl'>
+							{/* Glass Glints - Static */}
 							<div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
 							<div className='absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/20 to-transparent'></div>
 
@@ -202,7 +203,7 @@ const Signup = () => {
 											initial={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0 }}
-											transition={{ duration: 0.2, ease: "easeInOut" }}
+											transition={{ duration: 0.2 }}
 											className='space-y-6 mb-8'
 										>
 											<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
@@ -225,7 +226,7 @@ const Signup = () => {
 															name='phone'
 															value={formData.phone}
 															onChange={handleChange}
-															className='w-full pl-24 pr-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+															className='w-full pl-24 pr-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
 															placeholder='1234567890'
 															required
 														/>
@@ -242,7 +243,7 @@ const Signup = () => {
 														name='email'
 														value={formData.email}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
 														placeholder='your@email.com'
 														required
 													/>
@@ -258,7 +259,7 @@ const Signup = () => {
 														name='password'
 														value={formData.password}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
 														placeholder='••••••••'
 														minLength='6'
 														required
@@ -275,7 +276,7 @@ const Signup = () => {
 														name='confirmPassword'
 														value={formData.confirmPassword}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
 														placeholder='••••••••'
 														minLength='6'
 														required
@@ -291,7 +292,7 @@ const Signup = () => {
 											initial={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0 }}
-											transition={{ duration: 0.2, ease: "easeInOut" }}
+											transition={{ duration: 0.2 }}
 											className='mb-8'
 										>
 											<label className='block text-sm text-white/60 mb-4 uppercase tracking-widest text-center'>
@@ -302,7 +303,7 @@ const Signup = () => {
 												name='otp'
 												value={formData.otp}
 												onChange={handleChange}
-												className='w-full px-6 py-5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 text-center text-4xl tracking-[0.5em] font-bold text-white'
+												className='w-full px-6 py-5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 text-center text-4xl tracking-[0.5em] font-bold text-white'
 												placeholder='000000'
 												maxLength='6'
 												required
@@ -311,7 +312,8 @@ const Signup = () => {
 												<button
 													type='button'
 													onClick={() => setStep(1)}
-													className='text-sm text-[#d4a574] hover:text-[#d4a574]/80 font-serif transition-colors border-b border-[#d4a574]/30 hover:border-[#d4a574]'>
+													className='text-sm text-[#d4a574] hover:text-[#d4a574]/80 font-serif transition-colors border-b border-[#d4a574]/30 hover:border-[#d4a574]'
+												>
 													← Change Email
 												</button>
 											</div>
@@ -323,14 +325,15 @@ const Signup = () => {
 								<button
 									type='submit'
 									disabled={isLoading}
-									className='group relative w-full px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'>
-									<div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
+									className='group relative w-full px-10 py-4 bg-transparent overflow-hidden rounded-full transition-transform duration-200 hover:scale-[1.02] border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+								>
+									<div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-300 ease-out group-hover:w-full opacity-90'></div>
 									<span className='relative z-10 flex items-center justify-center space-x-3'>
-										<span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
+										<span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-300'>
 											{isLoading ? (step === 1 ? 'Sending OTP...' : 'Verifying...') : (step === 1 ? 'Send OTP' : 'Verify & Sign Up')}
 										</span>
 										{!isLoading && (
-											<svg className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<svg className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
 											</svg>
 										)}
@@ -344,7 +347,8 @@ const Signup = () => {
 									Already have an account?{' '}
 									<a
 										href='/login'
-										className='text-[#d4a574] hover:text-[#d4a574]/80 font-serif transition-colors border-b border-[#d4a574]/30 hover:border-[#d4a574]'>
+										className='text-[#d4a574] hover:text-[#d4a574]/80 font-serif transition-colors border-b border-[#d4a574]/30 hover:border-[#d4a574]'
+									>
 										Sign in
 									</a>
 								</p>

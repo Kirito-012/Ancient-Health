@@ -96,23 +96,23 @@ const StoryJourney = () => {
     }, [steps.length])
 
     return (
-        <section ref={sectionRef} className='relative py-20 bg-[#f8faf9] overflow-hidden'>
+        <section ref={sectionRef} className='relative py-16 md:py-24 bg-[#f8faf9] overflow-hidden'>
             <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-                <div className='text-center mb-16'>
-                    <span className='text-sm font-semibold tracking-widest text-[#2d5f4f] uppercase'>
+                <div className='text-center mb-16 md:mb-24'>
+                    <span className='text-xs md:text-sm font-semibold tracking-widest text-[#2d5f4f] uppercase'>
                         From Origins to You
                     </span>
-                    <h2 className='text-4xl sm:text-5xl font-bold text-gray-900 mt-2 mb-4'>
+                    <h2 className='text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mt-2 mb-4'>
                         Our Journey
                     </h2>
-                    <p className='text-gray-600 max-w-2xl mx-auto'>
+                    <p className='text-gray-600 max-w-2xl mx-auto text-base md:text-lg'>
                         A timeline of passion, purity, and perseverance.
                     </p>
                 </div>
 
                 <div className='relative'>
                     {/* Vertical Line Container */}
-                    <div className='absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-[#2d5f4f]/20 via-[#d4a574]/50 to-[#2d5f4f]/20 hidden md:block'>
+                    <div className='absolute left-4 md:left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-[#2d5f4f]/20 via-[#d4a574]/50 to-[#2d5f4f]/20 block'>
                         {/* Active Progress Line */}
                         <div
                             ref={lineRef}
@@ -128,27 +128,29 @@ const StoryJourney = () => {
                         </div>
                     </div>
 
-                    <div className='space-y-12 md:space-y-24'>
+                    <div className='space-y-20 md:space-y-32'>
                         {steps.map((step, index) => (
-                            <div key={index} className={`relative flex items-center justify-between md:flex-row ${index % 2 === 0 ? 'flex-col' : 'flex-col-reverse md:flex-row-reverse'}`}>
+                            <div key={index} className={`relative flex items-start md:items-center justify-between flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
                                 {/* Content Box */}
-                                <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'text-center md:text-right pr-0 md:pr-12' : 'text-center md:text-left pl-0 md:pl-12'}`}>
+                                <div className={`w-full md:w-5/12 pl-16 md:pl-0 ${index % 2 === 0 ? 'text-left md:text-right md:pr-12' : 'text-left md:pl-12'}`}>
                                     <div className={`transition-all duration-700 transform ${activeStep >= index ? 'opacity-100 translate-y-0' : 'opacity-30 translate-y-4 blur-sm'}`}>
-                                        <span className='text-6xl font-bold text-[#d4a574]/10 absolute -top-10 left-1/2 transform -translate-x-1/2 md:left-auto md:translate-x-0 md:relative md:top-auto block mb-2'>
+                                        <span className={`text-5xl md:text-6xl font-bold text-[#d4a574]/10 absolute -top-10 left-16 md:left-auto transform md:translate-x-0 block mb-2 ${index % 2 === 0 ? 'md:right-12' : 'md:left-12'}`}>
                                             {step.year}
                                         </span>
-                                        <h3 className={`text-2xl font-bold mb-3 relative z-10 transition-colors duration-500 ${activeStep >= index ? 'text-[#2d5f4f]' : 'text-gray-400'}`}>
+                                        <h3 className={`text-2xl md:text-3xl font-bold mb-3 md:mb-4 relative z-10 transition-colors duration-500 ${activeStep >= index ? 'text-[#2d5f4f]' : 'text-gray-400'}`}>
                                             {step.title}
                                         </h3>
-                                        <p className={`leading-relaxed relative z-10 transition-colors duration-500 ${activeStep >= index ? 'text-gray-600' : 'text-gray-400'}`}>
+                                        <p className={`text-base md:text-lg leading-relaxed relative z-10 transition-colors duration-500 ${activeStep >= index ? 'text-gray-600' : 'text-gray-400'}`}>
                                             {step.description}
                                         </p>
                                     </div>
                                 </div>
 
                                 {/* Center Icon */}
-                                <div className={`hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-12 h-12 border-2 rounded-full items-center justify-center z-10 shadow-lg transition-all duration-500 ${activeStep >= index ? 'bg-[#d4a574] border-[#d4a574] text-white scale-110' : 'bg-white border-[#2d5f4f] text-[#2d5f4f] scale-100'}`}>
-                                    {step.icon}
+                                <div className={`absolute left-4 md:left-1/2 transform -translate-x-1/2 w-8 h-8 md:w-12 md:h-12 border-2 rounded-full flex items-center justify-center z-10 shadow-lg transition-all duration-500 ${activeStep >= index ? 'bg-[#d4a574] border-[#d4a574] text-white scale-110' : 'bg-white border-[#2d5f4f] text-[#2d5f4f] scale-100'}`}>
+                                    <div className="transform scale-75 md:scale-100">
+                                        {step.icon}
+                                    </div>
                                 </div>
 
                                 {/* Empty Space for alternate side */}

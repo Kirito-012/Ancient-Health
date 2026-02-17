@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const ManageCategories = () => {
@@ -102,7 +102,6 @@ const ManageCategories = () => {
 
 	return (
 		<div className='max-w-6xl'>
-			<ToastContainer />
 
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>
@@ -265,8 +264,8 @@ const ManageCategories = () => {
 									type='submit'
 									disabled={isSaving}
 									className={`px-6 py-3 rounded-lg font-semibold transition ${isSaving
-											? 'bg-slate-400 cursor-not-allowed'
-											: 'bg-blue-600 hover:bg-blue-700 text-white'
+										? 'bg-slate-400 cursor-not-allowed'
+										: 'bg-blue-600 hover:bg-blue-700 text-white'
 										}`}>
 									{isSaving ? 'Updating...' : 'Update Category'}
 								</button>

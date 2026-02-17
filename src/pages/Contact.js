@@ -71,7 +71,11 @@ const Contact = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1.2, ease: "easeOut" }}
                     >
-                        <span className='block text-[#d4a574] text-sm md:text-base tracking-[0.3em] uppercase mb-6'>The Sanctuary</span>
+                        <div className='mb-6'>
+                            <span className='inline-block text-[#d4a574] text-sm tracking-[0.3em] uppercase border border-[#d4a574]/30 px-5 py-2 rounded-full backdrop-blur-sm'>
+                                The Sanctuary
+                            </span>
+                        </div>
                         <h1 className='text-5xl md:text-7xl lg:text-8xl font-serif font-light tracking-tight mb-8 text-white'>
                             Connection
                         </h1>
