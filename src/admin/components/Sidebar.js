@@ -32,8 +32,8 @@ const Sidebar = () => {
 					<Link
 						to='/admin'
 						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive('/admin')
-								? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-								: 'hover:bg-slate-700/50'
+							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+							: 'hover:bg-slate-700/50'
 							}`}>
 						<svg
 							className='w-5 h-5 text-green-400'
@@ -91,32 +91,32 @@ const Sidebar = () => {
 							<Link
 								to='/admin/products/add'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/add')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Add Product
 							</Link>
 							<Link
 								to='/admin/products/manage'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/manage')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Manage Products
 							</Link>
 							<Link
 								to='/admin/products/add-category'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/add-category')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Add Category
 							</Link>
 							<Link
 								to='/admin/products/manage-categories'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/products/manage-categories')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Manage Categories
 							</Link>
@@ -129,8 +129,8 @@ const Sidebar = () => {
 					<button
 						onClick={() => toggleMenu('blog')}
 						className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.includes('/admin/blogs')
-								? 'bg-slate-700/50'
-								: 'hover:bg-slate-700/50'
+							? 'bg-slate-700/50'
+							: 'hover:bg-slate-700/50'
 							}`}>
 						<div className='flex items-center gap-3'>
 							<svg
@@ -167,18 +167,78 @@ const Sidebar = () => {
 							<Link
 								to='/admin/blogs/add'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/blogs/add')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Add Blog
 							</Link>
 							<Link
 								to='/admin/blogs/manage'
 								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/blogs/manage')
-										? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-										: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
 									}`}>
 								Manage Blogs
+							</Link>
+						</div>
+					)}
+				</div>
+
+				{/* Orders Menu */}
+				<div className='mb-2'>
+					<button
+						onClick={() => toggleMenu('orders')}
+						className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${location.pathname.includes('/admin/orders')
+							? 'bg-slate-700/50'
+							: 'hover:bg-slate-700/50'
+							}`}>
+						<div className='flex items-center gap-3'>
+							<svg
+								className='w-5 h-5 text-orange-400'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									strokeWidth={2}
+									d='M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'
+								/>
+							</svg>
+							<span className='font-medium'>Orders</span>
+						</div>
+						<svg
+							className={`w-4 h-4 transition-transform duration-200 ${openMenu === 'orders' ? 'rotate-180' : ''
+								}`}
+							fill='none'
+							stroke='currentColor'
+							viewBox='0 0 24 24'>
+							<path
+								strokeLinecap='round'
+								strokeLinejoin='round'
+								strokeWidth={2}
+								d='M19 9l-7 7-7-7'
+							/>
+						</svg>
+					</button>
+
+					{openMenu === 'orders' && (
+						<div className='mt-1 ml-4 space-y-1 animate-fadeIn'>
+							<Link
+								to='/admin/orders/all'
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/orders/all')
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									}`}>
+								All Orders
+							</Link>
+							<Link
+								to='/admin/orders/completed'
+								className={`block px-4 py-2.5 rounded-lg text-sm transition-all duration-200 ${isActive('/admin/orders/completed')
+									? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+									: 'text-slate-300 hover:bg-slate-700/50 hover:text-white hover:translate-x-1'
+									}`}>
+								Completed
 							</Link>
 						</div>
 					)}
@@ -189,8 +249,8 @@ const Sidebar = () => {
 					<Link
 						to='/admin/users'
 						className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive('/admin/users')
-								? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-								: 'hover:bg-slate-700/50'
+							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+							: 'hover:bg-slate-700/50'
 							}`}>
 						<svg
 							className='w-5 h-5 text-purple-400'

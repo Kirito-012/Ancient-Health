@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const CartContext = createContext()
 
@@ -11,6 +12,7 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState({ items: [], totalItems: 0, totalPrice: 0 })
     const [loading, setLoading] = useState(false)
     const [token, setToken] = useState(localStorage.getItem('token'))
+    const navigate = useNavigate()
 
     const [user, setUser] = useState(null)
 
@@ -76,7 +78,8 @@ export const CartProvider = ({ children }) => {
     const addToCart = async (productId, quantity = 1) => {
         if (!token) {
             toast.error('Please login to add items to cart')
-            return
+            navigate('/login')
+            return false
         }
         try {
             setLoading(true)
@@ -87,12 +90,13 @@ export const CartProvider = ({ children }) => {
             )
             if (response.data.success) {
                 setCart(response.data.data)
-
+                return true
             }
         } catch (err) {
             console.error('Add to cart error:', err)
             const msg = err.response?.data?.message || 'Failed to add to cart'
             toast.error(msg)
+            return false
         } finally {
             setLoading(false)
         }

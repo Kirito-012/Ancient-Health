@@ -6,11 +6,16 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { formatPrice } from '../utils/formatPrice'
+import AddressForm from '../components/AddressForm'
+import axios from 'axios'
 
 const Cart = () => {
-    const { cart, loading, updateQuantity, removeFromCart, clearCart, user } = useCart()
+    const { cart, loading, updateQuantity, removeFromCart, clearCart, user, fetchUser, token } = useCart()
     const navigate = useNavigate()
     const [selectedAddressId, setSelectedAddressId] = useState('')
+    const [showAddressModal, setShowAddressModal] = useState(false)
+    const [addressLoading, setAddressLoading] = useState(false)
 
     // Set default address when user data loads
     React.useEffect(() => {
@@ -23,6 +28,38 @@ const Cart = () => {
     const handleQuantityChange = (productId, newQuantity) => {
         if (newQuantity < 1) return
         updateQuantity(productId, newQuantity)
+    }
+
+    const handleAddNewAddress = async (formData) => {
+        setAddressLoading(true)
+        try {
+            const res = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses`,
+                formData,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+
+            if (res.data.success) {
+                toast.success('Address added successfully!')
+                // Update global user
+                if (typeof fetchUser === 'function') {
+                    await fetchUser()
+                }
+
+                // Select the new address
+                const updatedAddresses = res.data.data.addresses
+                const newAddr = updatedAddresses[updatedAddresses.length - 1]
+                if (newAddr) {
+                    setSelectedAddressId(newAddr._id)
+                }
+                setShowAddressModal(false)
+            }
+        } catch (error) {
+            console.error('Add address error:', error)
+            toast.error(error.response?.data?.message || 'Failed to add address')
+        } finally {
+            setAddressLoading(false)
+        }
     }
 
     const handleCheckout = () => {
@@ -121,7 +158,7 @@ const Cart = () => {
                                         {/* Product Details */}
                                         <div className='w-[calc(100%-6rem)] sm:w-auto sm:flex-1 text-left'>
                                             <h3 className='text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[#2d5f4f] transition-colors line-clamp-2'>{item.title}</h3>
-                                            <p className='text-xl sm:text-2xl font-bold text-[#2d5f4f]'>₹{item.price.toFixed(2)}</p>
+                                            <p className='text-xl sm:text-2xl font-bold text-[#2d5f4f]'>₹{formatPrice(item.price)}</p>
                                             {item.stock < 10 && (
                                                 <p className='text-xs text-orange-600 font-medium mt-1'>Only {item.stock} left in stock!</p>
                                             )}
@@ -200,7 +237,7 @@ const Cart = () => {
                                         </div>
                                         <div className='flex justify-between items-center text-gray-600'>
                                             <span className='font-medium'>Subtotal</span>
-                                            <span className='font-semibold text-gray-900'>₹{cart.totalPrice.toFixed(2)}</span>
+                                            <span className='font-semibold text-gray-900'>₹{formatPrice(cart.totalPrice)}</span>
                                         </div>
                                         <div className='flex justify-between items-center'>
                                             <span className='font-medium text-gray-600'>Shipping</span>
@@ -216,7 +253,7 @@ const Cart = () => {
                                     {/* Total */}
                                     <div className='flex justify-between items-center mb-8 p-4 bg-gradient-to-br from-[#2d5f4f]/5 to-green-50/50 rounded-xl'>
                                         <span className='text-lg font-bold text-gray-900'>Total Amount</span>
-                                        <span className='text-3xl font-bold text-[#2d5f4f]'>₹{cart.totalPrice.toFixed(2)}</span>
+                                        <span className='text-3xl font-bold text-[#2d5f4f]'>₹{formatPrice(cart.totalPrice)}</span>
                                     </div>
 
                                     {/* Shipping Address Selection */}
@@ -230,17 +267,17 @@ const Cart = () => {
                                                 <h3 className='font-bold text-gray-900'>Delivery Address</h3>
                                             </div>
                                             {user && user.addresses && user.addresses.length > 0 && (
-                                                <Link
-                                                    to="/profile"
+                                                <button
+                                                    onClick={() => setShowAddressModal(true)}
                                                     className="text-xs font-bold text-[#2d5f4f] hover:text-[#1e4035] hover:underline transition-colors"
                                                 >
                                                     + Add New
-                                                </Link>
+                                                </button>
                                             )}
                                         </div>
 
                                         {user && user.addresses && user.addresses.length > 0 ? (
-                                            <div className="space-y-2 max-h-64 overflow-y-auto pr-2">
+                                            <div data-lenis-prevent className="space-y-2 max-h-80 overflow-y-auto pr-2 overscroll-contain [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                                                 {user.addresses.map((addr) => (
                                                     <div
                                                         key={addr._id}
@@ -285,15 +322,15 @@ const Cart = () => {
                                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
                                                 </svg>
                                                 <p className="text-sm text-gray-600 font-medium mb-3">No addresses found</p>
-                                                <Link
-                                                    to="/profile"
+                                                <button
+                                                    onClick={() => setShowAddressModal(true)}
                                                     className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] text-white text-sm font-semibold rounded-lg hover:from-[#1e4035] hover:to-[#2d5f4f] transition-all shadow-md hover:shadow-lg"
                                                 >
                                                     <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
                                                     </svg>
                                                     Add Address
-                                                </Link>
+                                                </button>
                                             </div>
                                         )}
                                     </div>
@@ -329,6 +366,32 @@ const Cart = () => {
                 </div>
             </div>
 
+            {/* Address Modal Overlay */}
+            {showAddressModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div
+                        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                        onClick={() => setShowAddressModal(false)} // Close when clicking outside
+                    ></div>
+                    <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
+                        <AddressForm
+                            onCancel={() => setShowAddressModal(false)}
+                            onSubmit={handleAddNewAddress}
+                            loading={addressLoading}
+                            title="Add New Shipping Address"
+                            submitLabel="Deliver Here"
+                        />
+                        <button
+                            onClick={() => setShowAddressModal(false)}
+                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
             <Footer />
         </div>
     )

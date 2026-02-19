@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
 import { stripHtml } from '../utils/textUtils'
+import { formatPrice } from '../utils/formatPrice'
 const FeaturedProducts = () => {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -147,9 +148,12 @@ const FeaturedProducts = () => {
                                         {stripHtml(product.description) || 'Premium Himalayan wellness product.'}
                                     </p>
                                     <div className='flex items-center justify-between border-t border-white/5 pt-4'>
-                                        <span className='text-xl font-serif text-[#d4a574]'>
-                                            ₹{product.price}
-                                        </span>
+                                        <div className="flex gap-2 items-baseline flex-wrap">
+                                            <span className="text-xl font-bold text-[#2d5f4f]">₹{formatPrice(product.price)}</span>
+                                            {product.originalPrice && (
+                                                <span className="text-sm text-gray-400 line-through">₹{formatPrice(product.originalPrice)}</span>
+                                            )}
+                                        </div>
                                         <Link to={`/products/${product._id}`} className='text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
                                             Details
                                         </Link>

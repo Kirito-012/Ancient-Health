@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useCart } from '../context/CartContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import ProfileEditForm from '../components/ProfileEditForm'
+import AddressForm from '../components/AddressForm'
+import { formatPrice } from '../utils/formatPrice'
+
+
 
 const Profile = () => {
     const { user, logout, fetchUser, token } = useCart()
     const [view, setView] = useState('default') // 'default' or 'editProfile'
     const [orders, setOrders] = useState([])
     const [loadingOrders, setLoadingOrders] = useState(false)
+    // AddressForm logic extracted to component
     const [addressForm, setAddressForm] = useState(false)
     const [editingAddressId, setEditingAddressId] = useState(null)
     const [loadingUpdate, setLoadingUpdate] = useState(false)
@@ -46,33 +51,25 @@ const Profile = () => {
         }
     }, [user, fetchOrders])
 
-    const handleAddAddress = async (e) => {
-        e.preventDefault()
+    const handleAddAddress = async (formData) => {
         setLoadingUpdate(true)
 
         try {
-            let updatedAddresses
             if (editingAddressId) {
-                // Update existing address - preserve all original fields
-                updatedAddresses = user.addresses.map(addr =>
-                    addr._id === editingAddressId ? { ...addr, ...newAddress } : addr
+                await axios.put(
+                    `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses/${editingAddressId}`,
+                    formData,
+                    { headers: { Authorization: `Bearer ${token}` } }
                 )
                 toast.success('Address updated successfully!')
             } else {
-                // Add new address (backend will assign _id)
-                const newAddr = {
-                    ...newAddress,
-                    isDefault: user.addresses.length === 0 // First address is default
-                }
-                updatedAddresses = [...user.addresses, newAddr]
+                await axios.post(
+                    `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses`,
+                    formData,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                )
                 toast.success('Address added successfully!')
             }
-
-            await axios.put(
-                `${process.env.REACT_APP_API_URL}/api/auth/profile`,
-                { addresses: updatedAddresses },
-                { headers: { Authorization: `Bearer ${token}` } }
-            )
 
             fetchUser()
             resetForm()
@@ -101,11 +98,8 @@ const Profile = () => {
         if (!window.confirm('Are you sure you want to delete this address?')) return
 
         try {
-            const updatedAddresses = user.addresses.filter(addr => addr._id !== addressId)
-
-            await axios.put(
-                `${process.env.REACT_APP_API_URL}/api/auth/profile`,
-                { addresses: updatedAddresses },
+            await axios.delete(
+                `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses/${addressId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -118,10 +112,9 @@ const Profile = () => {
 
     const handleSetDefault = async (addressId) => {
         try {
-            // Let backend handle isDefault flags based on defaultAddressId
-            await axios.put(
-                `${process.env.REACT_APP_API_URL}/api/auth/profile`,
-                { defaultAddressId: addressId },
+            await axios.patch(
+                `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses/${addressId}/default`,
+                {},
                 { headers: { Authorization: `Bearer ${token}` } }
             )
 
@@ -328,123 +321,25 @@ const Profile = () => {
                                 </div>
 
                                 {addressForm && (
-                                    <form onSubmit={handleAddAddress} className="mb-8 bg-gradient-to-br from-gray-50 to-green-50/20 border-2 border-[#2d5f4f]/20 rounded-2xl p-8 shadow-inner">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                            <div className="h-8 w-8 rounded-lg bg-[#2d5f4f] flex items-center justify-center">
-                                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </div>
-                                            {editingAddressId ? 'Edit Address' : 'Add New Address'}
-                                        </h3>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="md:col-span-1">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="e.g. John Doe"
-                                                    required
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                    value={newAddress.name}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, name: e.target.value })}
-                                                />
-                                            </div>
-                                            <div className="md:col-span-1">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-                                                <div className="relative">
-                                                    <span className="absolute left-4 top-3.5 text-gray-500 font-medium">+91</span>
-                                                    <input
-                                                        type="tel"
-                                                        placeholder="9876543210"
-                                                        required
-                                                        maxLength="10"
-                                                        className="w-full pl-14 pr-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                        value={newAddress.phone}
-                                                        onChange={(e) => setNewAddress({ ...newAddress, phone: e.target.value.replace(/\D/g, '') })}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="md:col-span-2">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
-                                                <textarea
-                                                    rows="3"
-                                                    placeholder="Flat No, Building, Street Area"
-                                                    required
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 resize-none hover:border-gray-300"
-                                                    value={newAddress.address}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, address: e.target.value })}
-                                                />
-                                            </div>
-                                            <div className="md:col-span-2">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Landmark (Optional)</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Near..."
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                    value={newAddress.landmark}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, landmark: e.target.value })}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="City"
-                                                    required
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                    value={newAddress.city}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">State</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="State"
-                                                    required
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                    value={newAddress.state}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                                                />
-                                            </div>
-                                            <div className="md:col-span-2 sm:col-span-1">
-                                                <label className="block text-sm font-semibold text-gray-700 mb-2">Pincode</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder="123456"
-                                                    required
-                                                    maxLength="6"
-                                                    className="w-full px-4 py-3 bg-white border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#2d5f4f] focus:border-[#2d5f4f] outline-none transition-all placeholder-gray-400 hover:border-gray-300"
-                                                    value={newAddress.pincode}
-                                                    onChange={(e) => setNewAddress({ ...newAddress, pincode: e.target.value.replace(/\D/g, '') })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="mt-8 flex justify-end gap-4 border-t-2 border-gray-200 pt-6">
-                                            <button
-                                                type="button"
-                                                onClick={resetForm}
-                                                className="px-6 py-3 text-gray-700 hover:bg-gray-100 font-semibold rounded-xl transition-all border-2 border-gray-200 hover:border-gray-300"
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button
-                                                type="submit"
-                                                disabled={loadingUpdate}
-                                                className="px-8 py-3 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] text-white font-semibold rounded-xl hover:from-[#1e4035] hover:to-[#2d5f4f] shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                                            >
-                                                {loadingUpdate ? (
-                                                    <span className="flex items-center gap-2">
-                                                        <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                                        </svg>
-                                                        Saving...
-                                                    </span>
-                                                ) : (editingAddressId ? 'Update Address' : 'Save Address')}
-                                            </button>
-                                        </div>
-                                    </form>
+                                    <AddressForm
+                                        initialData={editingAddressId ? newAddress : undefined}
+                                        onSubmit={(data) => {
+                                            // Adapt the data structure if needed, or just pass it
+                                            // The component passes {name, phone, address, ...}
+                                            // which matches existing newAddress structure
+                                            setNewAddress(data)
+                                            // We need to trigger the actual API call. 
+                                            // Since handleAddAddress uses the 'newAddress' state which might not be updated yet due to closure,
+                                            // we should update handleAddAddress to accept data as argument or use a useEffect.
+                                            // EXCEPT: The component's onSubmit is called *after* validation.
+                                            // Let's modify handleAddAddress to accept 'data' and use that instead of state.
+                                            handleAddAddress(data)
+                                        }}
+                                        onCancel={resetForm}
+                                        submitLabel={editingAddressId ? 'Update Address' : 'Save Address'}
+                                        title={editingAddressId ? 'Edit Address' : 'Add New Address'}
+                                        loading={loadingUpdate}
+                                    />
                                 )}
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -526,16 +421,24 @@ const Profile = () => {
 
                             {/* My Orders Section */}
                             <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-gray-200/50 hover:shadow-2xl transition-shadow duration-300">
-                                <div className="flex items-center gap-4 mb-8">
-                                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg">
-                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                        </svg>
+                                <div className="flex items-center justify-between mb-8">
+                                    <div className="flex items-center gap-4">
+                                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg">
+                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
+                                            <p className="text-sm text-gray-500">Track your order history</p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
-                                        <p className="text-sm text-gray-500">Track your order history</p>
-                                    </div>
+                                    <a
+                                        href="/my-orders"
+                                        className="group relative px-6 py-3 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] hover:from-[#1e4035] hover:to-[#2d5f4f] text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
+                                    >
+                                        View Detailed Orders
+                                    </a>
                                 </div>
 
                                 {loadingOrders ? (
@@ -582,14 +485,14 @@ const Profile = () => {
                                                     {order.items.map((item, idx) => (
                                                         <div key={idx} className="flex justify-between items-center text-sm">
                                                             <span className="text-gray-700 font-medium">{item.title} <span className="text-gray-400">× {item.quantity}</span></span>
-                                                            <span className="font-bold text-gray-900">₹{item.price * item.quantity}</span>
+                                                            <span className="font-bold text-gray-900">₹{formatPrice(item.price * item.quantity)}</span>
                                                         </div>
                                                     ))}
                                                 </div>
 
                                                 <div className="flex justify-between items-center pt-4 border-t-2 border-gray-200">
                                                     <span className="text-sm font-semibold text-gray-600">Total Amount</span>
-                                                    <span className="text-2xl font-bold text-[#2d5f4f]">₹{order.totalAmount}</span>
+                                                    <span className="text-2xl font-bold text-[#2d5f4f]">₹{formatPrice(order.totalAmount)}</span>
                                                 </div>
                                             </div>
                                         ))}

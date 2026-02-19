@@ -84,9 +84,11 @@ const Shop = () => {
         }
     }
 
-    const handleAddToCart = (product) => {
-        addToCart(product._id, 1)
-        toast.success(`${product.title} added to cart!`)
+    const handleAddToCart = async (product) => {
+        const success = await addToCart(product._id, 1)
+        if (success) {
+            toast.success(`${product.title} added to cart!`)
+        }
     }
 
     // Animation Variants

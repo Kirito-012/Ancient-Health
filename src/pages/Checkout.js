@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+import { formatPrice } from '../utils/formatPrice'
 
 const Checkout = () => {
     const { state } = useLocation()
@@ -254,7 +255,7 @@ const Checkout = () => {
                                                 <h3 className='font-bold text-gray-900'>{item.title}</h3>
                                                 <p className='text-gray-600 text-sm mt-0.5'>Quantity: <span className='font-semibold text-gray-900'>{item.quantity}</span></p>
                                             </div>
-                                            <p className='text-xl font-bold text-[#2d5f4f]'>₹{(item.price * item.quantity).toFixed(2)}</p>
+                                            <p className='text-xl font-bold text-[#2d5f4f]'>₹{formatPrice(item.price * item.quantity)}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -279,7 +280,7 @@ const Checkout = () => {
                                 <div className='space-y-4 mb-6 pb-6 border-b-2 border-gray-100'>
                                     <div className='flex justify-between items-center text-gray-600'>
                                         <span className='font-medium'>Subtotal</span>
-                                        <span className='font-semibold text-gray-900'>₹{cart.totalPrice.toFixed(2)}</span>
+                                        <span className='font-semibold text-gray-900'>₹{formatPrice(cart.totalPrice)}</span>
                                     </div>
                                     <div className='flex justify-between items-center'>
                                         <span className='font-medium text-gray-600'>Shipping</span>
@@ -295,7 +296,7 @@ const Checkout = () => {
                                 {/* Total */}
                                 <div className='flex justify-between items-center mb-8 p-4 bg-gradient-to-br from-[#2d5f4f]/5 to-green-50/50 rounded-xl'>
                                     <span className='text-lg font-bold text-gray-900'>Total Amount</span>
-                                    <span className='text-3xl font-bold text-[#2d5f4f]'>₹{cart.totalPrice.toFixed(2)}</span>
+                                    <span className='text-3xl font-bold text-[#2d5f4f]'>₹{formatPrice(cart.totalPrice)}</span>
                                 </div>
 
                                 {/* Pay Button */}
@@ -319,7 +320,7 @@ const Checkout = () => {
                                                 <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' />
                                                 </svg>
-                                                Pay ₹{cart.totalPrice.toFixed(2)}
+                                                Pay ₹{formatPrice(cart.totalPrice)}
                                             </>
                                         )}
                                     </div>
