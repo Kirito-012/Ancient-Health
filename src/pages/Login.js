@@ -9,7 +9,7 @@ import { useCart } from '../context/CartContext'
 
 const Login = () => {
 	const navigate = useNavigate()
-	const { login } = useCart()
+	const { login, mergeLocalCart } = useCart()
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
@@ -37,13 +37,20 @@ const Login = () => {
 				// Store token using context
 				login(token)
 
+				// Merge guest cart if exists
+				await mergeLocalCart(token)
+
 				toast.success(`Welcome back, ${user.name}!`, {
 					autoClose: 2000,
 				})
 
-				// Redirect based on role
+				// Redirect based on returnUrl or role
 				setTimeout(() => {
-					if (user.role === 'admin') {
+					const returnUrl = localStorage.getItem('returnUrl')
+					if (returnUrl) {
+						localStorage.removeItem('returnUrl')
+						navigate(returnUrl)
+					} else if (user.role === 'admin') {
 						navigate('/admin')
 					} else {
 						navigate('/')

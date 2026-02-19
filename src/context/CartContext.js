@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 
 const CartContext = createContext()
 
@@ -12,20 +11,39 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState({ items: [], totalItems: 0, totalPrice: 0 })
     const [loading, setLoading] = useState(false)
     const [token, setToken] = useState(localStorage.getItem('token'))
-    const navigate = useNavigate()
 
     const [user, setUser] = useState(null)
 
+    // Load initial cart state
     useEffect(() => {
         if (token) {
             fetchCart()
             fetchUser()
         } else {
-            setCart({ items: [], totalItems: 0, totalPrice: 0 })
+            // Load from local storage for guest
+            const savedCart = localStorage.getItem('guestCart')
+            if (savedCart) {
+                try {
+                    const parsedCart = JSON.parse(savedCart)
+                    setCart(parsedCart)
+                } catch (e) {
+                    console.error('Failed to parse guest cart', e)
+                    localStorage.removeItem('guestCart')
+                }
+            } else {
+                setCart({ items: [], totalItems: 0, totalPrice: 0 })
+            }
             setUser(null)
         }
         // eslint-disable-next-line
     }, [token])
+
+    // Save guest cart to local storage whenever it changes (if no token)
+    useEffect(() => {
+        if (!token) {
+            localStorage.setItem('guestCart', JSON.stringify(cart))
+        }
+    }, [cart, token])
 
     const login = (newToken) => {
         localStorage.setItem('token', newToken)
@@ -37,6 +55,9 @@ export const CartProvider = ({ children }) => {
         setToken(null)
         setCart({ items: [], totalItems: 0, totalPrice: 0 })
         setUser(null)
+        // Clear guest cart on logout to start fresh? Or keep it? 
+        // A fresh start seems safer to avoid confusion.
+        localStorage.removeItem('guestCart')
         toast.info('Logged out')
     }
 
@@ -75,12 +96,73 @@ export const CartProvider = ({ children }) => {
         }
     }
 
-    const addToCart = async (productId, quantity = 1) => {
+    const calculateCartTotals = (items) => {
+        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
+        const totalPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        return { items, totalItems, totalPrice }
+    }
+
+    const addToCart = async (productId, quantity = 1, productDetails = null) => {
         if (!token) {
-            toast.error('Please login to add items to cart')
-            navigate('/login')
-            return false
+            // Guest Logic
+            setLoading(true)
+            try {
+                const currentItems = [...cart.items]
+                const existingItemIndex = currentItems.findIndex(item => item.productId === productId)
+
+                let newItems
+                if (existingItemIndex > -1) {
+                    // Check stock if productDetails provided
+                    if (productDetails && currentItems[existingItemIndex].quantity + quantity > productDetails.stock) {
+                        toast.error(`Only ${productDetails.stock} items available`)
+                        return false
+                    }
+
+                    currentItems[existingItemIndex].quantity += quantity
+                    newItems = currentItems
+                } else {
+                    if (!productDetails) {
+                        // Should fetch product details if not provided, but for now fallback or efficient approach
+                        // In a real app we might need to fetch price/image here if not passed.
+                        // For this refactor, we assume Shop passes necessary details or we fetch.
+                        // To keep it simple, we expect basic details if possible, or we fetch.
+                        // Since the existing Shop.js passes ID, we might need to fetch or use what we have.
+                        // Let's try to fetch if we don't have details, OR trust the caller to update context/logic
+                        // But `addToCart` signature in `Shop.js` only passes `product._id`.
+                        // We need to fetch product info for guest cart display.
+
+                        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}`)
+                        if (res.data.success) {
+                            productDetails = res.data.data
+                        }
+                    }
+
+                    if (productDetails) {
+                        newItems = [...currentItems, {
+                            productId: productDetails._id,
+                            title: productDetails.title,
+                            price: productDetails.finalPrice || productDetails.price,
+                            image: productDetails.images?.[0]?.url || '',
+                            quantity,
+                            stock: productDetails.stock
+                        }]
+                    } else {
+                        return false
+                    }
+                }
+
+                setCart(calculateCartTotals(newItems))
+                return true
+            } catch (err) {
+                console.error("Guest add cart error", err)
+                toast.error("Failed to add to cart")
+                return false
+            } finally {
+                setLoading(false)
+            }
         }
+
+        // Logged In Logic
         try {
             setLoading(true)
             const response = await axios.post(
@@ -103,6 +185,21 @@ export const CartProvider = ({ children }) => {
     }
 
     const updateQuantity = async (productId, quantity) => {
+        if (!token) {
+            // Guest Logic
+            const currentItems = [...cart.items]
+            const itemIndex = currentItems.findIndex(item => item.productId === productId)
+            if (itemIndex > -1) {
+                if (quantity > currentItems[itemIndex].stock) {
+                    toast.error("Insufficient stock")
+                    return
+                }
+                currentItems[itemIndex].quantity = quantity
+                setCart(calculateCartTotals(currentItems))
+            }
+            return
+        }
+
         try {
             setLoading(true)
 
@@ -130,6 +227,14 @@ export const CartProvider = ({ children }) => {
     }
 
     const removeFromCart = async (productId) => {
+        if (!token) {
+            // Guest Logic
+            const newItems = cart.items.filter(item => item.productId !== productId)
+            setCart(calculateCartTotals(newItems))
+            toast.success('Item removed from cart')
+            return
+        }
+
         try {
             setLoading(true)
             const response = await axios.delete(
@@ -149,6 +254,13 @@ export const CartProvider = ({ children }) => {
     }
 
     const clearCart = async () => {
+        if (!token) {
+            setCart({ items: [], totalItems: 0, totalPrice: 0 })
+            localStorage.removeItem('guestCart')
+            toast.success('Cart cleared successfully')
+            return
+        }
+
         try {
             setLoading(true)
             const response = await axios.delete(
@@ -167,6 +279,41 @@ export const CartProvider = ({ children }) => {
         }
     }
 
+    const mergeLocalCart = async (currentToken) => {
+        const savedCart = localStorage.getItem('guestCart')
+        if (savedCart) {
+            try {
+                const parsedCart = JSON.parse(savedCart)
+                if (parsedCart.items && parsedCart.items.length > 0) {
+                    // Send items to backend to merge
+                    const response = await axios.post(
+                        `${process.env.REACT_APP_API_URL}/api/cart/merge`,
+                        { items: parsedCart.items },
+                        { headers: { Authorization: `Bearer ${currentToken}` } }
+                    )
+
+                    if (response.data.success) {
+                        setCart(response.data.data)
+                        toast.success("Cart merged successfully")
+                    }
+                }
+                // Clear local guest cart after merge
+                localStorage.removeItem('guestCart')
+            } catch (error) {
+                console.error("Cart merge error", error)
+            }
+        }
+        // Always fetch latest cart after login to be sure
+        // We can just rely on the merge response if successful, but fetchCart is safe too.
+        // If merge wasn't called (no guest cart), we still need to fetch user cart.
+        if (!savedCart) {
+            // If we didn't merge, we still need to load the user's cart
+            // This corresponds to the fetchCart call in the useEffect when token changes,
+            // but calling it explicitly ensures immediate update if needed.
+            // accurate state update will happen via useEffect [token] anyway.
+        }
+    }
+
     const value = {
         cart,
         user,
@@ -179,7 +326,8 @@ export const CartProvider = ({ children }) => {
         updateQuantity,
         removeFromCart,
         clearCart,
-        fetchUser
+        fetchUser,
+        mergeLocalCart
     }
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>

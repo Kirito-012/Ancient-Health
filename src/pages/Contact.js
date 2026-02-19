@@ -4,13 +4,28 @@ import Footer from '../components/Footer'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { Mail, MapPin, Instagram, Twitter, Linkedin, Send } from 'lucide-react'
+import { useCart } from '../context/CartContext'
+
+import axios from 'axios'
 
 const Contact = () => {
+    const { user } = useCart()
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         message: ''
     })
+
+    // Pre-fill form with user details if logged in
+    React.useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                name: user.name || '',
+                email: user.email || ''
+            }))
+        }
+    }, [user])
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [openFaqIndex, setOpenFaqIndex] = useState(null)
     const { scrollY } = useScroll()
@@ -20,14 +35,27 @@ const Contact = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setIsSubmitting(true)
-        setTimeout(() => {
+
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/contact/submit`, formData)
+
+            if (res.data.success) {
+                toast.success('Your message has been received.')
+                setFormData({
+                    name: user?.name || '',
+                    email: user?.email || '',
+                    message: ''
+                })
+            }
+        } catch (error) {
+            console.error('Contact form error:', error)
+            toast.error(error.response?.data?.message || 'Failed to send message. Please try again.')
+        } finally {
             setIsSubmitting(false)
-            toast.success('Your message has been received.')
-            setFormData({ name: '', email: '', message: '' })
-        }, 1500)
+        }
     }
 
     const toggleFaq = (index) => {
@@ -200,10 +228,10 @@ const Contact = () => {
                                             required
                                             rows='6'
                                             className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 resize-none peer'
-                                            placeholder='Your Message'
+                                            placeholder='Type your query'
                                         ></textarea>
                                         <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
-                                            Your Message
+                                            Type your query
                                         </label>
                                         {/* Character hint */}
                                         <div className='mt-2 text-right'>

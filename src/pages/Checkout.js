@@ -1,19 +1,22 @@
-
 import React, { useState, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { toast } from 'react-toastify'
 import axios from 'axios'
 import { formatPrice } from '../utils/formatPrice'
+import AddressForm from '../components/AddressForm'
 
 const Checkout = () => {
-    const { state } = useLocation()
-    const { cart, token, clearCart, user } = useCart()
+    const { cart, token, clearCart, user, fetchUser } = useCart()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    const [address, setAddress] = useState(state?.shippingAddress || null)
+
+    // Address State
+    const [selectedAddressId, setSelectedAddressId] = useState('')
+    const [addressLoading, setAddressLoading] = useState(false)
+    const [formKey, setFormKey] = useState(0) // To reset form after submission
 
     useEffect(() => {
         if (!token) {
@@ -22,16 +25,11 @@ const Checkout = () => {
         }
 
         // Auto-select default address
-        if (user && user.addresses && user.addresses.length > 0 && !address) {
+        if (user && user.addresses && user.addresses.length > 0 && !selectedAddressId) {
             const defaultAddr = user.addresses.find(a => a.isDefault) || user.addresses[0]
-            setAddress(defaultAddr)
-        } else if ((!user?.addresses || user.addresses.length === 0) && !address) {
-            // No saved addresses logic
+            setSelectedAddressId(defaultAddr._id)
         }
-
-    }, [token, navigate, user, address])
-
-
+    }, [token, navigate, user, selectedAddressId])
 
     const loadRazorpay = () => {
         return new Promise((resolve) => {
@@ -47,9 +45,48 @@ const Checkout = () => {
         })
     }
 
+    const handleAddNewAddress = async (formData) => {
+        setAddressLoading(true)
+        try {
+            const res = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses`,
+                formData,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+
+            if (res.data.success) {
+                toast.success('Address added successfully!')
+                // Update global user
+                if (typeof fetchUser === 'function') {
+                    await fetchUser()
+                }
+
+                // Select the new address
+                const updatedAddresses = res.data.data.addresses
+                const newAddr = updatedAddresses[updatedAddresses.length - 1]
+                if (newAddr) {
+                    setSelectedAddressId(newAddr._id)
+                }
+                setFormKey(prev => prev + 1) // Reset form
+            }
+        } catch (error) {
+            console.error('Add address error:', error)
+            toast.error(error.response?.data?.message || 'Failed to add address')
+        } finally {
+            setAddressLoading(false)
+        }
+    }
+
     const handlePayment = async () => {
-        if (!address || !address.address) {
-            toast.error('Please select or add a shipping address')
+        if (!selectedAddressId) {
+            toast.error('Please select a shipping address')
+            return
+        }
+
+        const address = user.addresses.find(a => a._id === selectedAddressId)
+
+        if (!address) {
+            toast.error('Selected address is invalid')
             return
         }
 
@@ -211,32 +248,6 @@ const Checkout = () => {
                         {/* Order Details */}
                         <div className='lg:col-span-2 space-y-6'>
 
-                            {/* Shipping Address Review */}
-                            <div className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-200/50'>
-                                <div className='flex justify-between items-center mb-4'>
-                                    <div className='flex items-center gap-2'>
-                                        <svg className='w-5 h-5 text-[#2d5f4f]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
-                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
-                                        </svg>
-                                        <h2 className='text-xl font-bold text-gray-900'>Shipping Address</h2>
-                                    </div>
-                                    <button
-                                        onClick={() => navigate('/cart')}
-                                        className='text-[#2d5f4f] hover:text-[#1e4035] font-semibold text-sm hover:underline transition-colors'
-                                    >
-                                        Edit
-                                    </button>
-                                </div>
-                                <div className='bg-gradient-to-br from-[#2d5f4f]/5 to-green-50/50 rounded-xl p-4 text-gray-700'>
-                                    <p className='font-bold text-gray-900 mb-1'>{address.name}</p>
-                                    <p className='leading-relaxed'>{address.address}</p>
-                                    {address.landmark && <p className='text-gray-600 text-sm mt-0.5'>📍 Near {address.landmark}</p>}
-                                    <p className='mt-1'>{address.city}, {address.state} - {address.pincode}</p>
-                                    <p className='font-medium mt-1 text-sm'>📞 {address.phone}</p>
-                                </div>
-                            </div>
-
                             {/* Order Items Review */}
                             <div className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-200/50'>
                                 <div className='flex items-center gap-2 mb-4'>
@@ -259,6 +270,90 @@ const Checkout = () => {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/* Shipping Address Selection */}
+                            <div className='bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-200/50'>
+                                <div className='flex justify-between items-center mb-6'>
+                                    <div className='flex items-center gap-2'>
+                                        <svg className='w-5 h-5 text-[#2d5f4f]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
+                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
+                                        </svg>
+                                        <h2 className='text-xl font-bold text-gray-900'>Shipping Address</h2>
+                                    </div>
+                                </div>
+
+                                {/* Address Form - Always Visible */}
+                                <div className="mb-8">
+                                    <AddressForm
+                                        key={formKey}
+                                        onCancel={null}
+                                        onSubmit={handleAddNewAddress}
+                                        loading={addressLoading}
+                                        title="Add New Address"
+                                        submitLabel="Save & Deliver Here"
+                                        compact={true}
+                                    />
+                                </div>
+
+                                {/* Divider */}
+                                <div className="relative flex py-5 items-center">
+                                    <div className="flex-grow border-t border-gray-200"></div>
+                                    <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">OR CHOOSE SAVED ADDRESS</span>
+                                    <div className="flex-grow border-t border-gray-200"></div>
+                                </div>
+
+                                {user && user.addresses && user.addresses.length > 0 ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        {user.addresses.map((addr) => (
+                                            <div
+                                                key={addr._id}
+                                                onClick={() => setSelectedAddressId(addr._id)}
+                                                className={`relative border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 ${selectedAddressId === addr._id
+                                                    ? 'border-[#2d5f4f] bg-gradient-to-br from-[#2d5f4f]/5 to-green-50/50 shadow-md'
+                                                    : 'border-gray-200 hover:border-[#2d5f4f]/30 bg-white hover:shadow-sm'
+                                                    }`}
+                                            >
+                                                <div className="flex items-start gap-4">
+                                                    <div className="mt-1">
+                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedAddressId === addr._id
+                                                            ? 'border-[#2d5f4f] bg-[#2d5f4f]'
+                                                            : 'border-gray-300'
+                                                            }`}>
+                                                            {selectedAddressId === addr._id && (
+                                                                <svg className='w-3 h-3 text-white' fill='currentColor' viewBox='0 0 20 20'>
+                                                                    <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
+                                                                </svg>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <div className="flex justify-between items-start mb-1">
+                                                            <p className="font-bold text-gray-900 text-lg">{addr.name}</p>
+                                                            {addr.isDefault && (
+                                                                <span className="text-[10px] bg-[#2d5f4f] text-white px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">Default</span>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-gray-600 leading-relaxed">{addr.address}</p>
+                                                        {addr.landmark && <p className="text-gray-500 text-sm mt-0.5 flex items-center gap-1"><span className="text-gray-400">Near</span> {addr.landmark}</p>}
+                                                        <p className="text-gray-600 mt-1 font-medium">{addr.city}, {addr.state} - {addr.pincode}</p>
+                                                        <p className="text-gray-700 font-medium mt-2 text-sm flex items-center gap-1">
+                                                            <svg className='w-4 h-4 text-gray-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' />
+                                                            </svg>
+                                                            {addr.phone}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-6 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                                        <p className="text-gray-500 text-sm">No saved addresses yet. Add one above.</p>
+                                    </div>
+                                )}
                             </div>
 
                         </div>
@@ -302,11 +397,12 @@ const Checkout = () => {
                                 {/* Pay Button */}
                                 <button
                                     onClick={handlePayment}
-                                    disabled={loading}
-                                    className={`group relative w-full py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden ${loading
+                                    disabled={loading || !selectedAddressId}
+                                    className={`group relative w-full py-4 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden ${loading || !selectedAddressId
                                         ? 'bg-gray-400 cursor-not-allowed'
                                         : 'bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] hover:scale-[1.02] active:scale-[0.98]'
                                         }`}
+                                    title={!selectedAddressId ? "Please select an address" : ""}
                                 >
                                     {!loading && <div className='absolute inset-0 bg-gradient-to-r from-[#1e4035] to-[#2d5f4f] opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>}
                                     <div className='relative flex items-center gap-2'>
@@ -325,6 +421,9 @@ const Checkout = () => {
                                         )}
                                     </div>
                                 </button>
+                                {!selectedAddressId && (
+                                    <p className="text-center text-red-500 text-sm mt-2 font-medium">Please select a delivery address</p>
+                                )}
 
                                 {/* Security Badge */}
                                 <div className='flex items-center justify-center gap-2 mt-4 text-xs text-gray-500'>

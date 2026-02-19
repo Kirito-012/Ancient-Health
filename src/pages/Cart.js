@@ -1,94 +1,30 @@
-
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { formatPrice } from '../utils/formatPrice'
-import AddressForm from '../components/AddressForm'
-import axios from 'axios'
 
 const Cart = () => {
-    const { cart, loading, updateQuantity, removeFromCart, clearCart, user, fetchUser, token } = useCart()
+    const { cart, loading, updateQuantity, removeFromCart, clearCart, token } = useCart()
     const navigate = useNavigate()
-    const [selectedAddressId, setSelectedAddressId] = useState('')
-    const [showAddressModal, setShowAddressModal] = useState(false)
-    const [addressLoading, setAddressLoading] = useState(false)
-
-    // Set default address when user data loads
-    React.useEffect(() => {
-        if (user && user.addresses && user.addresses.length > 0 && !selectedAddressId) {
-            const defaultAddr = user.addresses.find(a => a.isDefault) || user.addresses[0]
-            setSelectedAddressId(defaultAddr._id)
-        }
-    }, [user, selectedAddressId])
 
     const handleQuantityChange = (productId, newQuantity) => {
         if (newQuantity < 1) return
         updateQuantity(productId, newQuantity)
     }
 
-    const handleAddNewAddress = async (formData) => {
-        setAddressLoading(true)
-        try {
-            const res = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/auth/profile/addresses`,
-                formData,
-                { headers: { Authorization: `Bearer ${token}` } }
-            )
-
-            if (res.data.success) {
-                toast.success('Address added successfully!')
-                // Update global user
-                if (typeof fetchUser === 'function') {
-                    await fetchUser()
-                }
-
-                // Select the new address
-                const updatedAddresses = res.data.data.addresses
-                const newAddr = updatedAddresses[updatedAddresses.length - 1]
-                if (newAddr) {
-                    setSelectedAddressId(newAddr._id)
-                }
-                setShowAddressModal(false)
-            }
-        } catch (error) {
-            console.error('Add address error:', error)
-            toast.error(error.response?.data?.message || 'Failed to add address')
-        } finally {
-            setAddressLoading(false)
-        }
-    }
-
     const handleCheckout = () => {
-        if (!user) {
-            toast.error('Please login to checkout')
+        if (!token) {
+            // Save return URL logic if multiple entry points exist, but for now specific to checkout
+            localStorage.setItem('returnUrl', '/checkout')
             navigate('/login')
             return
         }
 
-        if (!user.addresses || user.addresses.length === 0) {
-            toast.error('Add an Address to proceed')
-            navigate('/profile')
-            return
-        }
-
-        if (!selectedAddressId) {
-            toast.error('Please select a shipping address')
-            return
-        }
-
-        const shippingAddress = user.addresses.find(a => a._id === selectedAddressId)
-
-        if (!shippingAddress) {
-            toast.error('Selected address is invalid')
-            return
-        }
-
-        // Navigate to checkout with the selected address
-        navigate('/checkout', { state: { shippingAddress } })
+        // Navigate to checkout
+        navigate('/checkout')
     }
 
     if (loading && cart.items.length === 0) {
@@ -109,8 +45,8 @@ const Cart = () => {
             <div className='flex-grow pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
                     {/* Simple Header */}
-                    <div className='mb-8 mt-8'>
-                        <div className='flex items-center gap-4 mb-2'>
+                    <div className='mb-8 mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
+                        <div className='flex items-center gap-4'>
                             <div className='h-16 w-16 rounded-2xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg'>
                                 <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' />
@@ -121,6 +57,17 @@ const Cart = () => {
                                 <p className='text-gray-600 mt-0.5'>{cart.items.length} {cart.items.length === 1 ? 'item' : 'items'} in your cart</p>
                             </div>
                         </div>
+
+                        {/* Top Shop More Button */}
+                        <button
+                            onClick={() => navigate('/shop')}
+                            className='group flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-[#2d5f4f]/20 rounded-xl text-[#2d5f4f] font-bold hover:bg-[#2d5f4f] hover:text-white hover:border-[#2d5f4f] transition-all duration-300 shadow-sm hover:shadow-md'
+                        >
+                            <svg className='w-5 h-5 group-hover:-translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 19l-7-7m0 0l7-7m-7 7h18' />
+                            </svg>
+                            Shop More
+                        </button>
                     </div>
 
                     {cart.items.length === 0 ? (
@@ -256,85 +203,6 @@ const Cart = () => {
                                         <span className='text-3xl font-bold text-[#2d5f4f]'>₹{formatPrice(cart.totalPrice)}</span>
                                     </div>
 
-                                    {/* Shipping Address Selection */}
-                                    <div className='space-y-4 mb-8'>
-                                        <div className="flex justify-between items-center">
-                                            <div className='flex items-center gap-2'>
-                                                <svg className='w-5 h-5 text-[#2d5f4f]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
-                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
-                                                </svg>
-                                                <h3 className='font-bold text-gray-900'>Delivery Address</h3>
-                                            </div>
-                                            {user && user.addresses && user.addresses.length > 0 && (
-                                                <button
-                                                    onClick={() => setShowAddressModal(true)}
-                                                    className="text-xs font-bold text-[#2d5f4f] hover:text-[#1e4035] hover:underline transition-colors"
-                                                >
-                                                    + Add New
-                                                </button>
-                                            )}
-                                        </div>
-
-                                        {user && user.addresses && user.addresses.length > 0 ? (
-                                            <div data-lenis-prevent className="space-y-2 max-h-80 overflow-y-auto pr-2 overscroll-contain [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
-                                                {user.addresses.map((addr) => (
-                                                    <div
-                                                        key={addr._id}
-                                                        onClick={() => setSelectedAddressId(addr._id)}
-                                                        className={`relative border-2 rounded-xl p-4 cursor-pointer transition-all duration-200 ${selectedAddressId === addr._id
-                                                            ? 'border-[#2d5f4f] bg-gradient-to-br from-[#2d5f4f]/5 to-green-50/50 shadow-md'
-                                                            : 'border-gray-200 hover:border-[#2d5f4f]/30 bg-white hover:shadow-sm'
-                                                            }`}
-                                                    >
-                                                        <div className="flex items-start gap-3">
-                                                            <div className="mt-0.5">
-                                                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedAddressId === addr._id
-                                                                    ? 'border-[#2d5f4f] bg-[#2d5f4f]'
-                                                                    : 'border-gray-300'
-                                                                    }`}>
-                                                                    {selectedAddressId === addr._id && (
-                                                                        <svg className='w-3 h-3 text-white' fill='currentColor' viewBox='0 0 20 20'>
-                                                                            <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
-                                                                        </svg>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                            <div className="flex-1 text-sm">
-                                                                <div className="flex justify-between items-start mb-1">
-                                                                    <p className="font-bold text-gray-900">{addr.name}</p>
-                                                                    {addr.isDefault && (
-                                                                        <span className="text-[10px] bg-[#2d5f4f] text-white px-2 py-0.5 rounded-full font-bold">Default</span>
-                                                                    )}
-                                                                </div>
-                                                                <p className="text-gray-600 leading-relaxed">{addr.address}</p>
-                                                                {addr.landmark && <p className="text-gray-500 text-xs mt-0.5">📍 {addr.landmark}</p>}
-                                                                <p className="text-gray-600 mt-1">{addr.city}, {addr.state} - {addr.pincode}</p>
-                                                                <p className="text-gray-700 font-medium mt-1 text-xs">📞 {addr.phone}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <div className="text-center py-8 bg-gradient-to-br from-gray-50 to-green-50/20 rounded-xl border-2 border-dashed border-gray-300">
-                                                <svg className='w-12 h-12 text-gray-300 mx-auto mb-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
-                                                </svg>
-                                                <p className="text-sm text-gray-600 font-medium mb-3">No addresses found</p>
-                                                <button
-                                                    onClick={() => setShowAddressModal(true)}
-                                                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] text-white text-sm font-semibold rounded-lg hover:from-[#1e4035] hover:to-[#2d5f4f] transition-all shadow-md hover:shadow-lg"
-                                                >
-                                                    <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' />
-                                                    </svg>
-                                                    Add Address
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-
                                     {/* Checkout Button */}
                                     <button
                                         onClick={handleCheckout}
@@ -352,6 +220,17 @@ const Cart = () => {
                                         </div>
                                     </button>
 
+                                    {/* Shop More Button */}
+                                    <button
+                                        onClick={() => navigate('/shop')}
+                                        className='w-full mt-3 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:border-[#2d5f4f] hover:text-[#2d5f4f] hover:bg-[#2d5f4f]/5 transition-all duration-300 flex items-center justify-center gap-2 group/shop'
+                                    >
+                                        <svg className='w-5 h-5 group-hover/shop:-translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 19l-7-7m0 0l7-7m-7 7h18' />
+                                        </svg>
+                                        Continue Shopping
+                                    </button>
+
                                     {/* Security Badge */}
                                     <div className='flex items-center justify-center gap-2 mt-4 text-xs text-gray-500'>
                                         <svg className='w-4 h-4 text-green-600' fill='currentColor' viewBox='0 0 20 20'>
@@ -365,33 +244,6 @@ const Cart = () => {
                     )}
                 </div>
             </div>
-
-            {/* Address Modal Overlay */}
-            {showAddressModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <div
-                        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-                        onClick={() => setShowAddressModal(false)} // Close when clicking outside
-                    ></div>
-                    <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
-                        <AddressForm
-                            onCancel={() => setShowAddressModal(false)}
-                            onSubmit={handleAddNewAddress}
-                            loading={addressLoading}
-                            title="Add New Shipping Address"
-                            submitLabel="Deliver Here"
-                        />
-                        <button
-                            onClick={() => setShowAddressModal(false)}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            )}
             <Footer />
         </div>
     )

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useCart } from '../context/CartContext'
@@ -9,6 +10,7 @@ import { stripHtml } from '../utils/textUtils'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Shop = () => {
+    const navigate = useNavigate()
     const { addToCart } = useCart()
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -87,7 +89,39 @@ const Shop = () => {
     const handleAddToCart = async (product) => {
         const success = await addToCart(product._id, 1)
         if (success) {
-            toast.success(`${product.title} added to cart!`)
+            toast.success(
+                <div
+                    onClick={() => navigate('/cart')}
+                    className="flex items-center justify-between gap-4 cursor-pointer group"
+                >
+                    <div className="flex flex-col">
+                        <span className="font-serif text-[#1e4035] font-bold text-sm">{product.title}</span>
+                        <span className="text-xs text-[#2d5f4f]/80">Added to your cart</span>
+                    </div>
+
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2d5f4f]/10 group-hover:bg-[#2d5f4f] transition-colors duration-300">
+                        <svg className="w-4 h-4 text-[#2d5f4f] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                </div>,
+                {
+                    icon: "🌿",
+                    style: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(45, 95, 79, 0.15)',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                        padding: '16px',
+                        cursor: 'pointer'
+                    },
+                    progressStyle: {
+                        background: 'linear-gradient(to right, #2d5f4f, #1e4035)',
+                        height: '3px'
+                    },
+                    onClick: () => navigate('/cart')
+                }
+            )
         }
     }
 

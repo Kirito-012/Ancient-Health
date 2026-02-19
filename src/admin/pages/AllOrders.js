@@ -236,65 +236,81 @@ const AllOrders = () => {
                                     <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone</th>
                                     <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Location</th>
                                     <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount</th>
-                                    <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                                    <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Last Changed</th>
                                     <th className="text-center px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {filtered.map(order => (
-                                    <tr key={order._id} className="hover:bg-slate-50/70 transition-colors group">
-                                        <td className="px-6 py-4">
-                                            <span className="font-mono font-semibold text-slate-800 text-sm">
-                                                #{order.orderNumber || order._id.slice(-6).toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <StatusCell order={order} token={token} onUpdate={handleStatusUpdate} />
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-slate-600">
-                                            {order.shippingAddress?.phone || '—'}
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-slate-700 font-medium">{order.shippingAddress?.city || '—'}</div>
-                                            <div className="text-xs text-slate-400">{order.shippingAddress?.state || ''}</div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-slate-800">
-                                            ₹{formatPrice(order.totalAmount)}
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-slate-500">
-                                            {new Date(order.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                        </td>
-                                        <td className="px-6 py-4 text-center">
-                                            {confirmDelete === order._id ? (
-                                                <div className="flex items-center justify-center gap-2">
+                                {filtered.map(order => {
+                                    const lastChange = order.statusHistory && order.statusHistory.length > 0
+                                        ? order.statusHistory[order.statusHistory.length - 1]
+                                        : null
+
+                                    return (
+                                        <tr key={order._id} className="hover:bg-slate-50/70 transition-colors group">
+                                            <td className="px-6 py-4">
+                                                <span className="font-mono font-semibold text-slate-800 text-sm">
+                                                    #{order.orderNumber || order._id.slice(-6).toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <StatusCell order={order} token={token} onUpdate={handleStatusUpdate} />
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-slate-600">
+                                                {order.shippingAddress?.phone || '—'}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="text-sm text-slate-700 font-medium">{order.shippingAddress?.city || '—'}</div>
+                                                <div className="text-xs text-slate-400">{order.shippingAddress?.state || ''}</div>
+                                            </td>
+                                            <td className="px-6 py-4 text-sm font-semibold text-slate-800">
+                                                ₹{formatPrice(order.totalAmount)}
+                                            </td>
+                                            <td className="px-6 py-4 text-xs text-slate-500">
+                                                {lastChange ? (
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium text-slate-700">By <span className="font-semibold">{lastChange.changedBy}</span></span>
+                                                        <span>to <span className="font-semibold">{lastChange.status}</span></span>
+                                                        <span className="text-slate-400">
+                                                            {new Date(lastChange.changedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} • {new Date(lastChange.changedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                                                        </span>
+                                                    </div>
+                                                ) : (
+                                                    <span className="italic text-slate-400">No changes</span>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                {confirmDelete === order._id ? (
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <button
+                                                            onClick={() => handleDelete(order._id)}
+                                                            disabled={deletingId === order._id}
+                                                            className="px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                                        >
+                                                            {deletingId === order._id ? '...' : 'Confirm'}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setConfirmDelete(null)}
+                                                            className="px-3 py-1.5 bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-300 transition-colors"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                ) : (
                                                     <button
-                                                        onClick={() => handleDelete(order._id)}
-                                                        disabled={deletingId === order._id}
-                                                        className="px-3 py-1.5 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                                        onClick={() => setConfirmDelete(order._id)}
+                                                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                                                        title="Delete order"
                                                     >
-                                                        {deletingId === order._id ? '...' : 'Confirm'}
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
                                                     </button>
-                                                    <button
-                                                        onClick={() => setConfirmDelete(null)}
-                                                        className="px-3 py-1.5 bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg hover:bg-slate-300 transition-colors"
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <button
-                                                    onClick={() => setConfirmDelete(order._id)}
-                                                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
-                                                    title="Delete order"
-                                                >
-                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
+                                                )}
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
                             </tbody>
                         </table>
                     </div>

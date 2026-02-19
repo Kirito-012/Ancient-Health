@@ -107,11 +107,7 @@ const App = () => {
 						{/* Cart Page */}
 						<Route
 							path='/cart'
-							element={
-								<ProtectedRoute>
-									<Cart />
-								</ProtectedRoute>
-							}
+							element={<Cart />}
 						/>
 
 						{/* Profile Page */}
