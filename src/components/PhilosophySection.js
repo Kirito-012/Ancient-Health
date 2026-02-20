@@ -112,7 +112,7 @@ const PhilosophySection = () => {
                                 {item.text}
                             </p>
                         </motion.div>
-                        <div></div>
+                        <div className="hidden lg:block"></div>
                     </div>
                 </div>
             ))}

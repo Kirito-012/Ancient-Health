@@ -146,7 +146,7 @@ const FeaturedProducts = () => {
                             <motion.div
                                 variants={itemVariants}
                                 key={product._id}
-                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-2xl lg:rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform hover:transform hover:-translate-y-2'
+                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-2xl lg:rounded-[2rem] overflow-hidden border border-white/5 md:hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform md:hover:transform md:hover:-translate-y-2'
                             >
                                 {/* Badge */}
                                 {product.offer > 0 && (
@@ -166,7 +166,7 @@ const FeaturedProducts = () => {
                                         <img
                                             src={product.images[0].url}
                                             alt={product.title}
-                                            className='relative w-full h-full object-contain filter drop-shadow-2xl group-hover:scale-105 transition-transform duration-500 will-change-transform z-0'
+                                            className='relative w-full h-full object-contain filter drop-shadow-2xl md:group-hover:scale-105 transition-transform duration-500 will-change-transform z-0'
                                         />
                                     ) : (
                                         <div className='w-full h-full flex items-center justify-center bg-white/5 rounded-2xl'>
@@ -175,7 +175,7 @@ const FeaturedProducts = () => {
                                     )}
 
                                     {/* Quick Add Button Overlay */}
-                                    <div className='absolute bottom-3 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
+                                    <div className='absolute bottom-3 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300'>
                                         <Link to={`/products/${product._id}`} className='px-4 py-2 lg:px-6 lg:py-3 bg-[#d4a574] text-[#0f1c18] text-[10px] lg:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
                                             View Details
                                         </Link>
@@ -184,7 +184,7 @@ const FeaturedProducts = () => {
 
                                 {/* Product Info */}
                                 <div className='p-3 pt-0 lg:p-6 lg:pt-0 relative z-20'>
-                                    <h3 className='text-sm lg:text-lg font-serif text-white mb-1 lg:mb-2 group-hover:text-[#d4a574] transition-colors line-clamp-1'>
+                                    <h3 className='text-sm lg:text-lg font-serif text-white mb-1 lg:mb-2 md:group-hover:text-[#d4a574] transition-colors line-clamp-1'>
                                         {product.title}
                                     </h3>
                                     <p className='hidden lg:block text-white/40 text-xs mb-4 leading-relaxed line-clamp-2 h-8'>
@@ -209,7 +209,7 @@ const FeaturedProducts = () => {
                                                 disabled={product.stock <= 0}
                                                 className={`lg:hidden p-2 rounded-full transition-all duration-300 shadow-sm ${product.stock <= 0
                                                     ? 'bg-gray-800 text-gray-400 cursor-not-allowed'
-                                                    : 'bg-[#d4a574]/20 text-[#d4a574] hover:bg-[#d4a574] hover:text-[#0f1c18]'
+                                                    : 'bg-[#d4a574]/20 text-[#d4a574] md:hover:bg-[#d4a574] md:hover:text-[#0f1c18]'
                                                     }`}
                                             >
                                                 <svg

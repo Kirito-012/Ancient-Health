@@ -304,7 +304,7 @@ const Shop = () => {
                                                 key={product._id}
                                                 variants={itemVariants}
                                                 layout
-                                                className='group relative bg-gradient-to-b from-white to-[#f8faf9] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-100 hover:border-[#2d5f4f]/20 hover:shadow-2xl transition-all duration-500'
+                                                className='group relative bg-gradient-to-b from-white to-[#f8faf9] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-100 md:hover:border-[#2d5f4f]/20 md:hover:shadow-2xl transition-all duration-500'
                                             >
                                                 {/* Badge */}
                                                 {product.offer > 0 && (
@@ -324,7 +324,7 @@ const Shop = () => {
 
                                                 {/* Product Image */}
                                                 <div className='relative aspect-square p-4 lg:p-8 bg-white overflow-hidden'>
-                                                    <div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 group-hover:from-[#2d5f4f]/5 group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
+                                                    <div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 md:group-hover:from-[#2d5f4f]/5 md:group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
                                                     {/* Custom Out of Stock Overlay */}
                                                     {product.stock <= 0 && (
                                                         <div className='absolute inset-0 bg-white/60 z-10 backdrop-blur-[1px]'></div>
@@ -334,7 +334,7 @@ const Shop = () => {
                                                         <img
                                                             src={product.images[0].url}
                                                             alt={product.title}
-                                                            className='relative w-full h-full object-contain group-hover:scale-110 transition-transform duration-700'
+                                                            className='relative w-full h-full object-contain md:group-hover:scale-110 transition-transform duration-700'
                                                         />
                                                     ) : (
                                                         <div className='w-full h-full flex items-center justify-center bg-gray-50 rounded-2xl'>
@@ -363,7 +363,7 @@ const Shop = () => {
                                                                 <span className='text-[10px] lg:text-xs font-bold text-gray-500'>{product.ratings.toFixed(1)}</span>
                                                             </div>
                                                         )}
-                                                        <h3 className='text-sm lg:text-lg font-bold text-[#1e4035] leading-tight group-hover:text-[#2d5f4f] transition-colors line-clamp-2 min-h-[2.5rem] lg:min-h-[3rem]'>
+                                                        <h3 className='text-sm lg:text-lg font-bold text-[#1e4035] leading-tight md:group-hover:text-[#2d5f4f] transition-colors line-clamp-2 min-h-[2.5rem] lg:min-h-[3rem]'>
                                                             {product.title}
                                                         </h3>
                                                     </div>
@@ -394,7 +394,7 @@ const Shop = () => {
                                                             disabled={product.stock <= 0}
                                                             className={`p-2 lg:p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${product.stock <= 0
                                                                 ? 'bg-gray-100 text-gray-300 cursor-not-allowed'
-                                                                : 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white hover:scale-110 hover:shadow-[#2d5f4f]/30'
+                                                                : 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] md:hover:from-[#2d5f4f] md:hover:to-[#3e7a70] md:hover:text-white md:hover:scale-110 md:hover:shadow-[#2d5f4f]/30'
                                                                 }`}
                                                         >
                                                             <svg
@@ -414,7 +414,7 @@ const Shop = () => {
                                                 </div>
 
                                                 {/* Hover overlay border */}
-                                                <div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-2xl lg:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
+                                                <div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-2xl lg:rounded-3xl opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
                                             </motion.div>
                                         ))}
                                     </AnimatePresence>
