@@ -81,10 +81,12 @@ const Login = () => {
 				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 				<div className='absolute inset-0'>
 					<img
-						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1920&auto=format&fit=crop"
+						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=60&w=1920&auto=format&fit=crop"
 						alt="Ancient Mystical Forest"
 						className="w-full h-full object-cover opacity-50 scale-105"
 						style={{ willChange: 'transform' }}
+						loading="eager"
+						fetchPriority="high"
 					/>
 				</div>
 
@@ -107,14 +109,14 @@ const Login = () => {
 						style={{ willChange: 'transform, opacity' }}
 					>
 						{/* Card */}
-						<div className='bg-[#0f1c18]/60 backdrop-blur-xl border border-white/10 rounded-[2rem] p-12 overflow-hidden shadow-2xl transform-gpu'>
+						<div className='bg-[#0f1c18]/60 backdrop-blur-xl border border-white/10 rounded-3xl sm:rounded-[2rem] p-6 sm:p-12 overflow-hidden shadow-2xl transform-gpu'>
 							{/* Glass Glints */}
 							<div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
 							<div className='absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/20 to-transparent'></div>
 
 							{/* Header */}
-							<div className='text-center mb-10'>
-								<h1 className='text-5xl font-serif font-light text-white mb-3'>
+							<div className='text-center mb-8 sm:mb-10'>
+								<h1 className='text-3xl sm:text-5xl font-serif font-light text-white mb-2 sm:mb-3'>
 									Welcome Back
 								</h1>
 								<p className='text-white/60 font-light'>Sign in to continue your wellness journey</p>
@@ -124,7 +126,7 @@ const Login = () => {
 							<form onSubmit={handleSubmit} className='space-y-6'>
 								{/* Email Field */}
 								<div>
-									<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+									<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 										Email Address
 									</label>
 									<input
@@ -132,7 +134,7 @@ const Login = () => {
 										name='email'
 										value={formData.email}
 										onChange={handleChange}
-										className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+										className='w-full px-4 py-3 sm:px-6 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white text-sm sm:text-base'
 										placeholder='your@email.com'
 										required
 									/>
@@ -140,7 +142,7 @@ const Login = () => {
 
 								{/* Password Field */}
 								<div>
-									<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+									<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 										Password
 									</label>
 									<input
@@ -148,7 +150,7 @@ const Login = () => {
 										name='password'
 										value={formData.password}
 										onChange={handleChange}
-										className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white'
+										className='w-full px-4 py-3 sm:px-6 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-all duration-300 placeholder:text-white/30 text-white text-sm sm:text-base'
 										placeholder='••••••••'
 										required
 									/>
@@ -158,7 +160,7 @@ const Login = () => {
 								<button
 									type='submit'
 									disabled={isLoading}
-									className='group relative w-full px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'>
+									className='group relative w-full px-6 py-3 sm:px-10 sm:py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'>
 									<div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
 									<span className='relative z-10 flex items-center justify-center space-x-3'>
 										<span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>

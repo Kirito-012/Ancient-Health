@@ -55,13 +55,13 @@ const CTASection = () => {
                             </span>
                         </Link>
                         <Link
-                            to='/retreats'
+                            to='/contact'
                             className='group relative px-10 py-4 bg-transparent overflow-hidden rounded-full transition-all duration-300 transform hover:scale-105 border border-white/20 w-full sm:w-auto justify-center flex'
                         >
                             <div className='absolute inset-0 w-0 bg-white transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
                             <span className='relative z-10 flex items-center space-x-3'>
                                 <span className='uppercase tracking-[0.2em] text-xs font-serif text-white group-hover:text-[#0f1c18] transition-colors duration-500'>
-                                    View Pilgrimages
+                                    Contact Us
                                 </span>
                             </span>
                         </Link>

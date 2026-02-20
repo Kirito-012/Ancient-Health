@@ -214,35 +214,35 @@ const Shop = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className='w-full lg:w-1/4'
                     >
-                        <div className='bg-white rounded-3xl p-8 shadow-xl border border-gray-100 sticky top-36'>
-                            <h3 className='text-xl font-bold text-[#1e4035] mb-6 font-playfair border-b border-gray-100 pb-4'>
+                        <div className='bg-white rounded-2xl lg:rounded-3xl p-4 lg:p-8 shadow-sm lg:shadow-xl border border-gray-100 lg:sticky lg:top-36'>
+                            <h3 className='text-lg lg:text-xl font-bold text-[#1e4035] mb-3 lg:mb-6 font-playfair border-b-0 lg:border-b border-gray-100 lg:pb-4'>
                                 Categories
                             </h3>
                             {categoriesLoading ? (
-                                <ul className='space-y-3'>
+                                <ul className='flex overflow-x-auto pb-4 gap-3 lg:flex-col lg:gap-0 lg:space-y-3 lg:overflow-visible lg:pb-0 scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0'>
                                     {[...Array(5)].map((_, i) => (
-                                        <li key={i}>
-                                            <div className='w-full h-12 bg-gray-100 rounded-xl animate-pulse'></div>
+                                        <li key={i} className='shrink-0 lg:w-full'>
+                                            <div className='w-24 lg:w-full h-10 lg:h-12 bg-gray-100 rounded-full lg:rounded-xl animate-pulse'></div>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <ul className='space-y-3'>
+                                <ul className='flex overflow-x-auto pb-4 gap-3 lg:flex-col lg:gap-0 lg:space-y-3 lg:overflow-visible lg:pb-0 scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0'>
                                     {categories.map((category) => (
-                                        <li key={category}>
+                                        <li key={category} className='shrink-0 lg:w-full'>
                                             <button
                                                 onClick={() => {
                                                     setActiveCategory(category)
                                                     setCurrentPage(1)
                                                 }}
-                                                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
-                                                    ? 'bg-[#1B2B26] text-white shadow-lg shadow-[#2d5f4f]/30'
-                                                    : 'text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
+                                                className={`w-full text-left px-5 py-2 lg:px-4 lg:py-3 rounded-full lg:rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
+                                                    ? 'bg-[#1B2B26] text-white shadow-md lg:shadow-lg shadow-[#2d5f4f]/30 border-transparent'
+                                                    : 'bg-gray-50 border border-gray-200 lg:bg-transparent lg:border-transparent text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
                                                     }`}
                                             >
-                                                <span className='font-medium'>{category}</span>
+                                                <span className='font-medium text-sm lg:text-base whitespace-nowrap'>{category}</span>
                                                 {activeCategory === category && (
-                                                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-5 h-5 text-white hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                     </svg>
                                                 )}
@@ -253,7 +253,7 @@ const Shop = () => {
                             )}
 
                             {/* Filter Banner */}
-                            <div className='mt-8 p-6 bg-[#f4f7f6] rounded-2xl border border-[#2d5f4f]/10'>
+                            <div className='hidden lg:block mt-8 p-6 bg-[#f4f7f6] rounded-2xl border border-[#2d5f4f]/10'>
                                 <p className='text-sm text-gray-500 mb-2 uppercase tracking-wide font-semibold'>Guaranteed</p>
                                 <div className='flex items-center space-x-2 text-[#2d5f4f] font-bold'>
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -296,7 +296,7 @@ const Shop = () => {
                                     variants={containerVariants}
                                     initial="hidden"
                                     animate="visible"
-                                    className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'
+                                    className='grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-8'
                                 >
                                     <AnimatePresence>
                                         {products.map((product) => (
@@ -304,26 +304,26 @@ const Shop = () => {
                                                 key={product._id}
                                                 variants={itemVariants}
                                                 layout
-                                                className='group relative bg-gradient-to-b from-white to-[#f8faf9] rounded-3xl overflow-hidden border border-gray-100 hover:border-[#2d5f4f]/20 hover:shadow-2xl transition-all duration-500'
+                                                className='group relative bg-gradient-to-b from-white to-[#f8faf9] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-100 hover:border-[#2d5f4f]/20 hover:shadow-2xl transition-all duration-500'
                                             >
                                                 {/* Badge */}
                                                 {product.offer > 0 && (
-                                                    <div className='absolute top-4 right-4 z-10'>
-                                                        <span className='inline-block px-3 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full shadow-lg'>
+                                                    <div className='absolute top-2 right-2 lg:top-4 lg:right-4 z-10'>
+                                                        <span className='inline-block px-2 py-0.5 lg:px-3 lg:py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-[10px] lg:text-xs font-bold rounded-full shadow-md lg:shadow-lg'>
                                                             {product.offer}% OFF
                                                         </span>
                                                     </div>
                                                 )}
                                                 {product.stock <= 0 && (
-                                                    <div className='absolute top-4 left-4 z-10'>
-                                                        <span className='inline-block px-3 py-1 bg-gray-800 text-white text-xs font-bold rounded-full shadow-lg'>
+                                                    <div className='absolute top-2 left-2 lg:top-4 lg:left-4 z-10'>
+                                                        <span className='inline-block px-2 py-0.5 lg:px-3 lg:py-1 bg-gray-800 text-white text-[10px] lg:text-xs font-bold rounded-full shadow-md lg:shadow-lg'>
                                                             Out of Stock
                                                         </span>
                                                     </div>
                                                 )}
 
                                                 {/* Product Image */}
-                                                <div className='relative aspect-square p-8 bg-white overflow-hidden'>
+                                                <div className='relative aspect-square p-4 lg:p-8 bg-white overflow-hidden'>
                                                     <div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 group-hover:from-[#2d5f4f]/5 group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
                                                     {/* Custom Out of Stock Overlay */}
                                                     {product.stock <= 0 && (
@@ -346,44 +346,44 @@ const Shop = () => {
                                                 </div>
 
                                                 {/* Product Info */}
-                                                <div className='p-6'>
-                                                    <div className='mb-2'>
+                                                <div className='p-3 lg:p-6'>
+                                                    <div className='mb-1 lg:mb-2'>
                                                         {/* Category Badge */}
                                                         {product.category && (
-                                                            <div className='mb-2'>
-                                                                <span className='inline-block px-3 py-1 bg-gradient-to-r from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] text-xs font-semibold rounded-full border border-[#2d5f4f]/20'>
+                                                            <div className='mb-1 lg:mb-2'>
+                                                                <span className='inline-block px-2 py-0.5 lg:px-3 lg:py-1 bg-gradient-to-r from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] text-[10px] lg:text-xs font-semibold rounded-full border border-[#2d5f4f]/20'>
                                                                     {product.category.name}
                                                                 </span>
                                                             </div>
                                                         )}
                                                         {/* Star Rating */}
                                                         {product.ratings > 0 && (
-                                                            <div className='flex items-center space-x-1 mb-2'>
-                                                                <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>
-                                                                <span className='text-xs font-bold text-gray-500'>{product.ratings.toFixed(1)}</span>
+                                                            <div className='flex items-center space-x-1 mb-1 lg:mb-2'>
+                                                                <svg className="w-3 h-3 lg:w-4 lg:h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>
+                                                                <span className='text-[10px] lg:text-xs font-bold text-gray-500'>{product.ratings.toFixed(1)}</span>
                                                             </div>
                                                         )}
-                                                        <h3 className='text-lg font-bold text-[#1e4035] leading-tight group-hover:text-[#2d5f4f] transition-colors line-clamp-2 min-h-[3rem]'>
+                                                        <h3 className='text-sm lg:text-lg font-bold text-[#1e4035] leading-tight group-hover:text-[#2d5f4f] transition-colors line-clamp-2 min-h-[2.5rem] lg:min-h-[3rem]'>
                                                             {product.title}
                                                         </h3>
                                                     </div>
 
-                                                    <p className='text-gray-500 text-sm mb-4 line-clamp-2 min-h-[2.5rem]'>
+                                                    <p className='hidden lg:block text-gray-500 text-sm mb-4 line-clamp-2 min-h-[2.5rem]'>
                                                         {stripHtml(product.description) || 'Premium Ayurvedic formulation for daily wellness.'}
                                                     </p>
 
                                                     {/* Price and CTA */}
-                                                    <div className='flex items-center justify-between mt-4 border-t border-gray-100 pt-4'>
+                                                    <div className='flex items-center justify-between mt-2 lg:mt-4 border-t border-gray-100 pt-2 lg:pt-4'>
                                                         <div className='flex flex-col'>
                                                             {product.offer > 0 ? (
                                                                 <>
-                                                                    <span className='text-xs text-gray-400 line-through'>₹{product.price.toFixed(2)}</span>
-                                                                    <span className='text-xl font-bold text-[#2d5f4f]'>
+                                                                    <span className='text-[10px] lg:text-xs text-gray-400 line-through'>₹{product.price.toFixed(2)}</span>
+                                                                    <span className='text-sm lg:text-xl font-bold text-[#2d5f4f]'>
                                                                         ₹{(product.price * (1 - product.offer / 100)).toFixed(2)}
                                                                     </span>
                                                                 </>
                                                             ) : (
-                                                                <span className='text-xl font-bold text-[#2d5f4f]'>
+                                                                <span className='text-sm lg:text-xl font-bold text-[#2d5f4f]'>
                                                                     ₹{product.price.toFixed(2)}
                                                                 </span>
                                                             )}
@@ -392,13 +392,13 @@ const Shop = () => {
                                                         <button
                                                             onClick={() => handleAddToCart(product)}
                                                             disabled={product.stock <= 0}
-                                                            className={`p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${product.stock <= 0
+                                                            className={`p-2 lg:p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${product.stock <= 0
                                                                 ? 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                                 : 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white hover:scale-110 hover:shadow-[#2d5f4f]/30'
                                                                 }`}
                                                         >
                                                             <svg
-                                                                className='w-5 h-5'
+                                                                className='w-4 h-4 lg:w-5 lg:h-5'
                                                                 fill='none'
                                                                 stroke='currentColor'
                                                                 viewBox='0 0 24 24'>
@@ -414,7 +414,7 @@ const Shop = () => {
                                                 </div>
 
                                                 {/* Hover overlay border */}
-                                                <div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
+                                                <div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-2xl lg:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
                                             </motion.div>
                                         ))}
                                     </AnimatePresence>

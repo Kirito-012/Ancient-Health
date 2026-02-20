@@ -36,9 +36,11 @@ const HeroSection = () => {
                 <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
                 <motion.div style={{ y: y1 }} className='absolute inset-0'>
                     <img
-                        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=2500&auto=format&fit=crop"
+                        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=60&w=1920&auto=format&fit=crop"
                         alt="Ancient Mystical Forest"
                         className="w-full h-full object-cover opacity-50 scale-110"
+                        loading="eager"
+                        fetchPriority="high"
                     />
                 </motion.div>
 

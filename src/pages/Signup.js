@@ -153,10 +153,12 @@ const Signup = () => {
 				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 				<div className='absolute inset-0'>
 					<img
-						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=80&w=1920&auto=format&fit=crop"
+						src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=60&w=1920&auto=format&fit=crop"
 						alt="Ancient Mystical Forest"
 						className="w-full h-full object-cover opacity-50 scale-105"
 						style={{ willChange: 'transform' }}
+						loading="eager"
+						fetchPriority="high"
 					/>
 				</div>
 
@@ -179,17 +181,17 @@ const Signup = () => {
 						style={{ willChange: 'transform, opacity' }}
 					>
 						{/* Card */}
-						<div className='relative bg-[#0f1c18]/80 backdrop-blur-md border border-white/10 rounded-[2rem] p-12 overflow-hidden shadow-2xl'>
+						<div className='relative bg-[#0f1c18]/80 backdrop-blur-md border border-white/10 rounded-3xl sm:rounded-[2rem] p-6 sm:p-12 overflow-hidden shadow-2xl'>
 							{/* Glass Glints - Static */}
 							<div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
 							<div className='absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/20 to-transparent'></div>
 
 							{/* Header */}
-							<div className='text-center mb-10'>
-								<h1 className='text-5xl font-serif font-light text-white mb-3'>
+							<div className='text-center mb-8 sm:mb-10'>
+								<h1 className='text-3xl sm:text-5xl font-serif font-light text-white mb-2 sm:mb-3'>
 									{step === 1 ? 'Create Account' : 'Verify Email'}
 								</h1>
-								<p className='text-white/60 font-light'>
+								<p className='text-white/60 font-light text-sm sm:text-base'>
 									{step === 1 ? 'Begin your wellness journey today' : `Enter the OTP sent to ${formData.email}`}
 								</p>
 							</div>
@@ -206,27 +208,27 @@ const Signup = () => {
 											transition={{ duration: 0.2 }}
 											className='space-y-6 mb-8'
 										>
-											<div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+											<div className='grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6'>
 												{/* Phone Number */}
 												<div>
-													<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+													<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 														Phone Number
 													</label>
 													<div className="relative">
-														<div className="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none z-10">
+														<div className="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-5 pointer-events-none z-10">
 															<img
 																src="https://flagcdn.com/w20/in.png"
 																alt="IN"
-																className="w-5 h-auto mr-2"
+																className="w-4 sm:w-5 h-auto mr-1.5 sm:mr-2"
 															/>
-															<span className="text-white/80 font-medium">+91</span>
+															<span className="text-white/80 font-medium text-sm sm:text-base">+91</span>
 														</div>
 														<input
 															type='tel'
 															name='phone'
 															value={formData.phone}
 															onChange={handleChange}
-															className='w-full pl-24 pr-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
+															className='w-full pl-20 sm:pl-24 pr-4 sm:pr-6 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white text-sm sm:text-base'
 															placeholder='1234567890'
 															required
 														/>
@@ -235,7 +237,7 @@ const Signup = () => {
 
 												{/* Email */}
 												<div>
-													<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+													<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 														Email Address
 													</label>
 													<input
@@ -243,7 +245,7 @@ const Signup = () => {
 														name='email'
 														value={formData.email}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
+														className='w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white text-sm sm:text-base'
 														placeholder='your@email.com'
 														required
 													/>
@@ -251,7 +253,7 @@ const Signup = () => {
 
 												{/* Password */}
 												<div>
-													<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+													<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 														Password
 													</label>
 													<input
@@ -259,7 +261,7 @@ const Signup = () => {
 														name='password'
 														value={formData.password}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
+														className='w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white text-sm sm:text-base'
 														placeholder='••••••••'
 														minLength='6'
 														required
@@ -268,7 +270,7 @@ const Signup = () => {
 
 												{/* Confirm Password */}
 												<div>
-													<label className='block text-sm text-white/60 mb-2 uppercase tracking-widest'>
+													<label className='block text-xs sm:text-sm text-white/60 mb-2 uppercase tracking-widest'>
 														Confirm Password
 													</label>
 													<input
@@ -276,7 +278,7 @@ const Signup = () => {
 														name='confirmPassword'
 														value={formData.confirmPassword}
 														onChange={handleChange}
-														className='w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white'
+														className='w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 placeholder:text-white/30 text-white text-sm sm:text-base'
 														placeholder='••••••••'
 														minLength='6'
 														required
@@ -295,7 +297,7 @@ const Signup = () => {
 											transition={{ duration: 0.2 }}
 											className='mb-8'
 										>
-											<label className='block text-sm text-white/60 mb-4 uppercase tracking-widest text-center'>
+											<label className='block text-xs sm:text-sm text-white/60 mb-4 uppercase tracking-widest text-center'>
 												One-Time Password
 											</label>
 											<input
@@ -303,7 +305,7 @@ const Signup = () => {
 												name='otp'
 												value={formData.otp}
 												onChange={handleChange}
-												className='w-full px-6 py-5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 text-center text-4xl tracking-[0.5em] font-bold text-white'
+												className='w-full px-4 sm:px-6 py-4 sm:py-5 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-[#d4a574]/50 focus:bg-white/10 transition-colors duration-200 text-center text-3xl sm:text-4xl tracking-[0.3em] sm:tracking-[0.5em] font-bold text-white'
 												placeholder='000000'
 												maxLength='6'
 												required
@@ -325,7 +327,7 @@ const Signup = () => {
 								<button
 									type='submit'
 									disabled={isLoading}
-									className='group relative w-full px-10 py-4 bg-transparent overflow-hidden rounded-full transition-transform duration-200 hover:scale-[1.02] border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
+									className='group relative w-full px-6 py-3 sm:px-10 sm:py-4 bg-transparent overflow-hidden rounded-full transition-transform duration-200 hover:scale-[1.02] border border-[#d4a574]/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
 								>
 									<div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-300 ease-out group-hover:w-full opacity-90'></div>
 									<span className='relative z-10 flex items-center justify-center space-x-3'>

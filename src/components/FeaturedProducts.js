@@ -1,13 +1,56 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
 import { stripHtml } from '../utils/textUtils'
 import { formatPrice } from '../utils/formatPrice'
+import { useCart } from '../context/CartContext'
+import { toast } from 'react-toastify'
 const FeaturedProducts = () => {
+    const navigate = useNavigate()
+    const { addToCart } = useCart()
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+
+    const handleAddToCart = async (product) => {
+        const success = await addToCart(product._id, 1)
+        if (success) {
+            toast.success(
+                <div
+                    onClick={() => navigate('/cart')}
+                    className="flex items-center justify-between gap-4 cursor-pointer group"
+                >
+                    <div className="flex flex-col">
+                        <span className="font-serif text-[#1e4035] font-bold text-sm">{product.title}</span>
+                        <span className="text-xs text-[#2d5f4f]/80">Added to your cart</span>
+                    </div>
+
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#2d5f4f]/10 group-hover:bg-[#2d5f4f] transition-colors duration-300">
+                        <svg className="w-4 h-4 text-[#2d5f4f] group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </div>
+                </div>,
+                {
+                    icon: "🌿",
+                    style: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(45, 95, 79, 0.15)',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                        padding: '16px',
+                        cursor: 'pointer'
+                    },
+                    progressStyle: {
+                        background: 'linear-gradient(to right, #2d5f4f, #1e4035)',
+                        height: '3px'
+                    },
+                    onClick: () => navigate('/cart')
+                }
+            )
+        }
+    }
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -97,26 +140,26 @@ const FeaturedProducts = () => {
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-10%" }}
-                        className='grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-20'
+                        className='grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-10 mb-20'
                     >
                         {products.map((product) => (
                             <motion.div
                                 variants={itemVariants}
                                 key={product._id}
-                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform hover:transform hover:-translate-y-2'
+                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-2xl lg:rounded-[2rem] overflow-hidden border border-white/5 hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform hover:transform hover:-translate-y-2'
                             >
                                 {/* Badge */}
                                 {product.offer > 0 && (
-                                    <div className='absolute top-4 right-4 z-20'>
-                                        <span className='inline-flex items-center space-x-1 px-3 py-1 bg-[#d4a574] text-[#0f1c18] text-[10px] font-bold uppercase tracking-wider rounded-full shadow-lg'>
-                                            <Star className="w-3 h-3 fill-current" />
+                                    <div className='absolute top-2 right-2 lg:top-4 lg:right-4 z-20'>
+                                        <span className='inline-flex items-center space-x-1 px-2 py-0.5 lg:px-3 lg:py-1 bg-[#d4a574] text-[#0f1c18] text-[8px] lg:text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm lg:shadow-lg'>
+                                            <Star className="w-2 h-2 lg:w-3 lg:h-3 fill-current" />
                                             <span>{product.offer}% OFF</span>
                                         </span>
                                     </div>
                                 )}
 
                                 {/* Product Image Area */}
-                                <div className='relative aspect-[4/5] p-8 overflow-hidden bg-gradient-to-b from-white/5 to-transparent'>
+                                <div className='relative aspect-[4/5] p-3 lg:p-8 overflow-hidden bg-gradient-to-b from-white/5 to-transparent'>
                                     <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/0 via-[#0f1c18]/0 to-[#0f1c18]/80 z-10'></div>
 
                                     {product.images && product.images.length > 0 ? (
@@ -132,31 +175,57 @@ const FeaturedProducts = () => {
                                     )}
 
                                     {/* Quick Add Button Overlay */}
-                                    <div className='absolute bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
-                                        <Link to={`/products/${product._id}`} className='px-6 py-3 bg-[#d4a574] text-[#0f1c18] text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
+                                    <div className='absolute bottom-3 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'>
+                                        <Link to={`/products/${product._id}`} className='px-4 py-2 lg:px-6 lg:py-3 bg-[#d4a574] text-[#0f1c18] text-[10px] lg:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
                                             View Details
                                         </Link>
                                     </div>
                                 </div>
 
                                 {/* Product Info */}
-                                <div className='p-6 pt-0 relative z-20'>
-                                    <h3 className='text-lg font-serif text-white mb-2 group-hover:text-[#d4a574] transition-colors line-clamp-1'>
+                                <div className='p-3 pt-0 lg:p-6 lg:pt-0 relative z-20'>
+                                    <h3 className='text-sm lg:text-lg font-serif text-white mb-1 lg:mb-2 group-hover:text-[#d4a574] transition-colors line-clamp-1'>
                                         {product.title}
                                     </h3>
-                                    <p className='text-white/40 text-xs mb-4 leading-relaxed line-clamp-2 h-8'>
+                                    <p className='hidden lg:block text-white/40 text-xs mb-4 leading-relaxed line-clamp-2 h-8'>
                                         {stripHtml(product.description) || 'Premium Himalayan wellness product.'}
                                     </p>
-                                    <div className='flex items-center justify-between border-t border-white/5 pt-4'>
-                                        <div className="flex gap-2 items-baseline flex-wrap">
-                                            <span className="text-xl font-bold text-[#2d5f4f]">₹{formatPrice(product.price)}</span>
+                                    <div className='flex items-center justify-between border-t border-white/5 pt-2 lg:pt-4'>
+                                        <div className="flex gap-1 lg:gap-2 items-baseline flex-wrap">
+                                            <span className="text-sm lg:text-xl font-bold text-[#d4a574]">₹{formatPrice(product.price)}</span>
                                             {product.originalPrice && (
-                                                <span className="text-sm text-gray-400 line-through">₹{formatPrice(product.originalPrice)}</span>
+                                                <span className="text-[10px] lg:text-sm text-gray-400 line-through">₹{formatPrice(product.originalPrice)}</span>
                                             )}
                                         </div>
-                                        <Link to={`/products/${product._id}`} className='text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
-                                            Details
-                                        </Link>
+                                        <div className='flex items-center gap-2'>
+                                            <Link to={`/products/${product._id}`} className='hidden lg:block text-[10px] lg:text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
+                                                Details
+                                            </Link>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    handleAddToCart(product)
+                                                }}
+                                                disabled={product.stock <= 0}
+                                                className={`lg:hidden p-2 rounded-full transition-all duration-300 shadow-sm ${product.stock <= 0
+                                                    ? 'bg-gray-800 text-gray-400 cursor-not-allowed'
+                                                    : 'bg-[#d4a574]/20 text-[#d4a574] hover:bg-[#d4a574] hover:text-[#0f1c18]'
+                                                    }`}
+                                            >
+                                                <svg
+                                                    className='w-4 h-4'
+                                                    fill='none'
+                                                    stroke='currentColor'
+                                                    viewBox='0 0 24 24'>
+                                                    <path
+                                                        strokeLinecap='round'
+                                                        strokeLinejoin='round'
+                                                        strokeWidth={2}
+                                                        d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>

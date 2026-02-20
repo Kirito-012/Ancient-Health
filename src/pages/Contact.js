@@ -86,9 +86,11 @@ const Contact = () => {
                     <motion.div style={{ y: y1 }} className='absolute inset-0'>
                         {/* Placeholder for a high-quality, dark, moody nature image */}
                         <img
-                            src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2727&auto=format&fit=crop"
+                            src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=60&w=1920&auto=format&fit=crop"
                             alt="Misty Forest"
                             className="w-full h-full object-cover opacity-60 scale-110"
+                            loading="eager"
+                            fetchPriority="high"
                         />
                     </motion.div>
                 </div>
@@ -139,13 +141,13 @@ const Contact = () => {
                         <div className='grid lg:grid-cols-12 min-h-[600px] relative z-10'>
 
                             {/* LEFT COLUMN: Context & Info (Span 5) */}
-                            <div className='lg:col-span-5 p-10 lg:p-16 flex flex-col justify-between relative border-b lg:border-b-0 lg:border-r border-white/5 bg-white/[0.01]'>
+                            <div className='lg:col-span-5 p-6 lg:p-16 flex flex-col justify-between relative border-b lg:border-b-0 lg:border-r border-white/5 bg-white/[0.01]'>
                                 <div>
-                                    <span className='inline-block text-[#d4a574] text-xs tracking-[0.3em] uppercase mb-6 border border-[#d4a574]/30 px-4 py-2 rounded-full'>Contact</span>
-                                    <h2 className='text-4xl md:text-5xl font-serif text-white mb-6 leading-tight'>
+                                    <span className='inline-block text-[#d4a574] text-[10px] lg:text-xs tracking-[0.3em] uppercase mb-4 lg:mb-6 border border-[#d4a574]/30 px-3 lg:px-4 py-1.5 lg:py-2 rounded-full'>Contact</span>
+                                    <h2 className='text-3xl md:text-5xl font-serif text-white mb-4 lg:mb-6 leading-tight'>
                                         Start a <br /> Conversation
                                     </h2>
-                                    <p className='text-white/60 font-light leading-relaxed max-w-md'>
+                                    <p className='text-sm lg:text-base text-white/60 font-light leading-relaxed max-w-md'>
                                         Whether you seek guidance on our elixirs or wish to share your journey, our sanctuary is open.
                                     </p>
                                 </div>
@@ -172,20 +174,20 @@ const Contact = () => {
                                     </div>
                                 </div>
 
-                                <div className='mt-12 pt-8 border-t border-white/10'>
+                                <div className='mt-8 lg:mt-12 pt-6 lg:pt-8 border-t border-white/10'>
                                     <div className='flex space-x-6'>
-                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Instagram className="w-5 h-5" /></button>
-                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Twitter className="w-5 h-5" /></button>
-                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Linkedin className="w-5 h-5" /></button>
+                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Instagram className="w-4 h-4 lg:w-5 lg:h-5" /></button>
+                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Twitter className="w-4 h-4 lg:w-5 lg:h-5" /></button>
+                                        <button className='text-white/40 hover:text-[#d4a574] transition-colors'><Linkedin className="w-4 h-4 lg:w-5 lg:h-5" /></button>
                                     </div>
                                 </div>
                             </div>
 
                             {/* RIGHT COLUMN: The Form (Span 7) */}
-                            <div className='lg:col-span-7 p-10 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-white/[0.02] to-white/[0.05]'>
-                                <form onSubmit={handleSubmit} className='space-y-8'>
+                            <div className='lg:col-span-7 p-6 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-white/[0.02] to-white/[0.05]'>
+                                <form onSubmit={handleSubmit} className='space-y-4 lg:space-y-8'>
                                     {/* Name & Email Row */}
-                                    <div className='grid md:grid-cols-2 gap-6'>
+                                    <div className='grid md:grid-cols-2 gap-4 lg:gap-6'>
                                         {/* Name Field */}
                                         <div className='group relative'>
                                             <input
@@ -194,10 +196,10 @@ const Contact = () => {
                                                 value={formData.name}
                                                 onChange={handleChange}
                                                 required
-                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
+                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-4 lg:px-5 py-3 lg:py-4 pt-5 lg:pt-6 text-sm lg:text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
                                                 placeholder='Full Name'
                                             />
-                                            <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
+                                            <label className='absolute left-4 lg:left-5 top-3 lg:top-4 text-white/40 text-sm lg:text-base transition-all duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:lg:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:lg:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
                                                 Full Name
                                             </label>
                                         </div>
@@ -210,10 +212,10 @@ const Contact = () => {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 required
-                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
+                                                className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-4 lg:px-5 py-3 lg:py-4 pt-5 lg:pt-6 text-sm lg:text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 peer'
                                                 placeholder='Email Address'
                                             />
-                                            <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
+                                            <label className='absolute left-4 lg:left-5 top-3 lg:top-4 text-white/40 text-sm lg:text-base transition-all duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:lg:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:lg:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
                                                 Email Address
                                             </label>
                                         </div>
@@ -226,48 +228,21 @@ const Contact = () => {
                                             value={formData.message}
                                             onChange={handleChange}
                                             required
-                                            rows='6'
-                                            className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 pt-6 text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 resize-none peer'
+                                            rows='5'
+                                            className='block w-full bg-white/[0.03] border border-white/10 rounded-2xl px-4 lg:px-5 py-3 lg:py-4 pt-5 lg:pt-6 text-sm lg:text-base text-white placeholder-transparent focus:border-[#d4a574]/50 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-[#d4a574]/20 transition-all duration-300 resize-none peer'
                                             placeholder='Type your query'
                                         ></textarea>
-                                        <label className='absolute left-5 top-4 text-white/40 text-base transition-all duration-200 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
+                                        <label className='absolute left-4 lg:left-5 top-3 lg:top-4 text-white/40 text-sm lg:text-base transition-all duration-200 peer-placeholder-shown:top-3 peer-placeholder-shown:lg:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:lg:text-base peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-[#d4a574] peer-focus:tracking-wider peer-valid:top-1.5 peer-valid:text-[10px] peer-valid:text-[#d4a574]/70 peer-valid:tracking-wider pointer-events-none uppercase'>
                                             Type your query
                                         </label>
                                         {/* Character hint */}
-                                        <div className='mt-2 text-right'>
-                                            <span className='text-xs text-white/30'>{formData.message.length} characters</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Info Cards */}
-                                    <div className='grid md:grid-cols-2 gap-4 pt-4'>
-                                        <div className='flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
-                                            <div className='mt-0.5'>
-                                                <svg className='w-5 h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h4 className='text-white text-sm font-medium mb-0.5'>Response Time</h4>
-                                                <p className='text-white/50 text-xs font-light'>We typically respond within 24 hours</p>
-                                            </div>
-                                        </div>
-
-                                        <div className='flex items-start gap-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
-                                            <div className='mt-0.5'>
-                                                <svg className='w-5 h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' />
-                                                </svg>
-                                            </div>
-                                            <div>
-                                                <h4 className='text-white text-sm font-medium mb-0.5'>Privacy First</h4>
-                                                <p className='text-white/50 text-xs font-light'>Your data is encrypted and secure</p>
-                                            </div>
+                                        <div className='mt-1.5 lg:mt-2 text-right'>
+                                            <span className='text-[10px] lg:text-xs text-white/30'>{formData.message.length} characters</span>
                                         </div>
                                     </div>
 
                                     {/* Submit Button */}
-                                    <div className='pt-6'>
+                                    <div className='pt-2'>
                                         <button
                                             type='submit'
                                             disabled={isSubmitting}
@@ -277,18 +252,45 @@ const Contact = () => {
                                             <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
 
                                             {/* Content */}
-                                            <span className='relative z-10 flex items-center justify-center space-x-3 px-10 py-4'>
-                                                <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
+                                            <span className='relative z-10 flex items-center justify-center space-x-3 px-6 lg:px-10 py-3 lg:py-4'>
+                                                <span className='uppercase tracking-[0.2em] text-[10px] lg:text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
                                                     {isSubmitting ? 'Sending...' : 'Send Message'}
                                                 </span>
-                                                <Send className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
+                                                <Send className="w-3 h-3 lg:w-4 lg:h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
                                             </span>
                                         </button>
 
                                         {/* Additional Info */}
-                                        <p className='text-center text-xs text-white/40 mt-4 font-light'>
+                                        <p className='text-center text-[10px] lg:text-xs text-white/40 mt-3 lg:mt-4 font-light'>
                                             By submitting, you agree to our communication terms
                                         </p>
+                                    </div>
+
+                                    {/* Info Cards (Moved below submit for mobile UX) */}
+                                    <div className='grid md:grid-cols-2 gap-3 lg:gap-4 pt-4 border-t border-white/5'>
+                                        <div className='flex items-start gap-3 p-3 lg:p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
+                                            <div className='mt-0.5'>
+                                                <svg className='w-4 h-4 lg:w-5 lg:h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className='text-white text-xs lg:text-sm font-medium mb-0.5 lg:mb-1'>Response Time</h4>
+                                                <p className='text-white/50 text-[10px] lg:text-xs font-light'>We typically respond within 24 hours</p>
+                                            </div>
+                                        </div>
+
+                                        <div className='flex items-start gap-3 p-3 lg:p-4 bg-white/[0.02] border border-white/5 rounded-xl'>
+                                            <div className='mt-0.5'>
+                                                <svg className='w-4 h-4 lg:w-5 lg:h-5 text-[#d4a574]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z' />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 className='text-white text-xs lg:text-sm font-medium mb-0.5 lg:mb-1'>Privacy First</h4>
+                                                <p className='text-white/50 text-[10px] lg:text-xs font-light'>Your data is encrypted and secure</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>

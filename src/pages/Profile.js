@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useCart } from '../context/CartContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -277,17 +277,17 @@ const Profile = () => {
 
                             {/* Saved Addresses Section */}
                             <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-gray-200/50 hover:shadow-2xl transition-shadow duration-300">
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg">
-                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg shrink-0">
+                                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                             </svg>
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-bold text-gray-900">Saved Addresses</h2>
-                                            <p className="text-sm text-gray-500">Manage your delivery locations</p>
+                                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">Saved Addresses</h2>
+                                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Manage your delivery locations</p>
                                         </div>
                                     </div>
                                     <button
@@ -298,19 +298,19 @@ const Profile = () => {
                                                 setAddressForm(true)
                                             }
                                         }}
-                                        className="group relative px-6 py-3 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] hover:from-[#1e4035] hover:to-[#2d5f4f] text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                                        className="w-full sm:w-auto group relative px-6 py-2.5 sm:py-3 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] hover:from-[#1e4035] hover:to-[#2d5f4f] text-white font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center"
                                     >
                                         <span className="flex items-center gap-2">
                                             {addressForm ? (
                                                 <>
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                     Cancel
                                                 </>
                                             ) : (
                                                 <>
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                                                     </svg>
                                                     Add New
@@ -421,24 +421,18 @@ const Profile = () => {
 
                             {/* My Orders Section */}
                             <div className="bg-white/80 backdrop-blur-sm shadow-xl rounded-2xl p-8 border border-gray-200/50 hover:shadow-2xl transition-shadow duration-300">
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg">
-                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0 mb-6 sm:mb-8">
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg shrink-0">
+                                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                             </svg>
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
-                                            <p className="text-sm text-gray-500">Track your order history</p>
+                                            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">My Recent Orders</h2>
+                                            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">Track your order history</p>
                                         </div>
                                     </div>
-                                    <a
-                                        href="/my-orders"
-                                        className="group relative px-6 py-3 bg-gradient-to-r from-[#2d5f4f] to-[#1e4035] hover:from-[#1e4035] hover:to-[#2d5f4f] text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm"
-                                    >
-                                        View Detailed Orders
-                                    </a>
                                 </div>
 
                                 {loadingOrders ? (
@@ -451,7 +445,7 @@ const Profile = () => {
                                     </div>
                                 ) : orders.length > 0 ? (
                                     <div className="space-y-4">
-                                        {orders.map(order => (
+                                        {orders.slice(0, 3).map(order => (
                                             <div
                                                 key={order._id}
                                                 className="group bg-gradient-to-br from-white to-gray-50/50 border-2 border-gray-200 rounded-2xl p-6 hover:border-[#2d5f4f]/30 hover:shadow-lg transition-all duration-300"
@@ -496,6 +490,20 @@ const Profile = () => {
                                                 </div>
                                             </div>
                                         ))}
+
+                                        {orders.length > 3 && (
+                                            <div className="mt-8 text-center border-t border-gray-100 pt-6">
+                                                <a
+                                                    href="/my-orders"
+                                                    className="inline-flex items-center justify-center gap-2 group px-8 py-3 bg-white border-2 border-gray-200 text-gray-600 font-semibold rounded-xl hover:text-[#2d5f4f] hover:border-[#2d5f4f] hover:bg-[#2d5f4f]/5 transition-all duration-300 shadow-sm hover:shadow-md"
+                                                >
+                                                    View All Orders
+                                                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="text-center py-16 bg-gradient-to-br from-gray-50 to-green-50/20 rounded-2xl border-2 border-dashed border-gray-300">

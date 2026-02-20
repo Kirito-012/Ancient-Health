@@ -44,24 +44,24 @@ const Cart = () => {
 
             <div className='flex-grow pt-24 pb-16 px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-7xl mx-auto'>
-                    {/* Simple Header */}
-                    <div className='mb-8 mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
-                        <div className='flex items-center gap-4'>
-                            <div className='h-16 w-16 rounded-2xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg'>
-                                <svg className='w-8 h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    {/* Responsive Header */}
+                    <div className='mb-6 sm:mb-8 mt-4 sm:mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 bg-white/50 sm:bg-transparent p-4 sm:p-0 rounded-2xl sm:rounded-none border border-gray-100 sm:border-transparent'>
+                        <div className='flex items-center gap-3 sm:gap-4'>
+                            <div className='h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center shadow-lg shrink-0'>
+                                <svg className='w-6 h-6 sm:w-8 sm:h-8 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z' />
                                 </svg>
                             </div>
                             <div>
-                                <h1 className='text-3xl font-bold text-gray-900'>Shopping Cart</h1>
-                                <p className='text-gray-600 mt-0.5'>{cart.items.length} {cart.items.length === 1 ? 'item' : 'items'} in your cart</p>
+                                <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 leading-tight'>Shopping Cart</h1>
+                                <p className='text-sm sm:text-base text-gray-600 mt-0.5'>{cart.items.length} {cart.items.length === 1 ? 'item' : 'items'} in your cart</p>
                             </div>
                         </div>
 
                         {/* Top Shop More Button */}
                         <button
                             onClick={() => navigate('/shop')}
-                            className='group flex items-center justify-center gap-2 px-6 py-3 bg-white border-2 border-[#2d5f4f]/20 rounded-xl text-[#2d5f4f] font-bold hover:bg-[#2d5f4f] hover:text-white hover:border-[#2d5f4f] transition-all duration-300 shadow-sm hover:shadow-md'
+                            className='group flex items-center justify-center gap-2 px-6 py-3 w-full sm:w-auto bg-white border-2 border-[#2d5f4f]/20 rounded-xl text-[#2d5f4f] font-bold hover:bg-[#2d5f4f] hover:text-white hover:border-[#2d5f4f] transition-all duration-300 shadow-sm hover:shadow-md'
                         >
                             <svg className='w-5 h-5 group-hover:-translate-x-1 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 19l-7-7m0 0l7-7m-7 7h18' />

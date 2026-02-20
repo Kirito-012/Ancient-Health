@@ -37,11 +37,13 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ReactLenis } from 'lenis/react'
 
 import ScrollToTop from './components/ScrollToTop'
+import GlobalLoader from './components/GlobalLoader'
 import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react'
 
 const App = () => {
 	return (
 		<ReactLenis root>
+			<GlobalLoader />
 			<ToastContainer
 				position='bottom-right'
 				autoClose={4000}

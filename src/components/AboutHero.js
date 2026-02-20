@@ -18,9 +18,11 @@ const AboutHero = () => {
 
                 {/* Misty Forest Image */}
                 <img
-                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2560&auto=format&fit=crop"
+                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=60&w=1920&auto=format&fit=crop"
                     alt='Misty Himalayan Forest'
                     className='w-full h-full object-cover scale-110 opacity-70'
+                    loading="eager"
+                    fetchPriority="high"
                 />
             </motion.div>
 
@@ -65,10 +67,10 @@ const AboutHero = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                className='absolute bottom-10 left-1/2 -translate-x-1/2 z-20'
+                className='absolute bottom-10 left-[50vw] -translate-x-1/2 z-20 flex flex-col items-center justify-center'
             >
-                <div className='text-white/30 text-xs tracking-widest uppercase mb-2'>Scroll</div>
-                <div className='w-[1px] h-12 bg-gradient-to-b from-[#d4a574] to-transparent mx-auto'></div>
+                <div className='hidden sm:block text-white/30 text-xs tracking-widest uppercase mb-2 pl-1'>Scroll</div>
+                <div className='hidden sm:block w-[1px] h-12 bg-gradient-to-b from-[#d4a574] to-transparent'></div>
             </motion.div>
         </section>
     )

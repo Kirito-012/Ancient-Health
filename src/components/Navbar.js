@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import logo from "../assets/logo.png"
 import { useCart } from '../context/CartContext'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, LogOut, ShoppingBag, Search, Menu, X, ChevronRight } from 'lucide-react'
+import { User, LogOut, ShoppingBag, Menu, X, ChevronRight } from 'lucide-react'
 
 const Navbar = () => {
     const { cart, token, logout, user } = useCart()
@@ -124,9 +124,9 @@ const Navbar = () => {
                         {/* Right Side Actions - Right */}
                         <div className='flex flex-1 items-center justify-end space-x-2 lg:space-x-4'>
                             {/* Search - Desktop Only */}
-                            <button className='hidden lg:flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
+                            {/* <button className='hidden lg:flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
                                 <Search className="w-4 h-4" />
-                            </button>
+                            </button> */}
 
                             {/* Profile Dropdown */}
                             {token ? (
