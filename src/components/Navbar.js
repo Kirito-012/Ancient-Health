@@ -35,11 +35,12 @@ const Navbar = () => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'About', path: '/about' },
+        { name: 'Blog', path: '/blog' },
         { name: 'Wellness', path: '/wellness' },
         { name: 'Contact', path: '/contact' },
     ]
 
-    const isDarkPage = ['/profile', '/cart', '/checkout', '/my-orders'].some(path => location.pathname.startsWith(path))
+    const isDarkPage = ['/profile', '/cart', '/checkout', '/my-orders', '/blog'].some(path => location.pathname.startsWith(path))
     const showDarkNav = isScrolled || isDarkPage
 
     return (

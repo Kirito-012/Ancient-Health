@@ -29,6 +29,8 @@ import CompletedOrders from './admin/pages/CompletedOrders'
 import Checkout from './pages/Checkout'
 import OrderSuccess from './pages/OrderSuccess'
 import MyOrders from './pages/MyOrders'
+import Blog from './pages/Blog'
+import BlogDetail from './pages/BlogDetail'
 
 import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
@@ -138,6 +140,16 @@ const App = () => {
 						<Route
 							path='/my-orders'
 							element={<MyOrders />}
+						/>
+
+						{/* Blog Pages */}
+						<Route
+							path='/blog'
+							element={<Blog />}
+						/>
+						<Route
+							path='/blog/:id'
+							element={<BlogDetail />}
 						/>
 
 						{/* Login Page */}
