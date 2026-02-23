@@ -40,6 +40,7 @@ import { ReactLenis } from 'lenis/react'
 
 import ScrollToTop from './components/ScrollToTop'
 import GlobalLoader from './components/GlobalLoader'
+import ChatBot from './components/ChatBot'
 import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react'
 
 const App = () => {
@@ -83,6 +84,7 @@ const App = () => {
 			<Router>
 				<CartProvider>
 					<ScrollToTop />
+					<ChatBot />
 					<Routes>
 						{/* Homepage */}
 						<Route
