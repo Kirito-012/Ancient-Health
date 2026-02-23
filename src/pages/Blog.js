@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Calendar, User, Tag, ArrowRight, Search, BookOpen } from 'lucide-react'
+import { Calendar, User, ArrowRight, Search, BookOpen } from 'lucide-react'
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([])
@@ -145,8 +145,8 @@ const Blog = () => {
                                     key={cat}
                                     onClick={() => setActiveCategory(cat)}
                                     className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${activeCategory === cat
-                                            ? 'bg-[#1B2B26] text-white shadow-lg'
-                                            : 'bg-white border border-[#d4a574]/30 text-[#1B2B26] hover:border-[#d4a574] hover:bg-[#d4a574]/5'
+                                        ? 'bg-[#1B2B26] text-white shadow-lg'
+                                        : 'bg-white border border-[#d4a574]/30 text-[#1B2B26] hover:border-[#d4a574] hover:bg-[#d4a574]/5'
                                         }`}
                                 >
                                     {cat}
