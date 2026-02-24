@@ -153,6 +153,7 @@ const ManageBlogs = () => {
 		setIsSaving(true)
 
 		try {
+			const token = localStorage.getItem('token')
 			const blogData = {
 				metaTitle: editForm.metaTitle.trim(),
 				metaDescription: editForm.metaDescription.trim(),
@@ -166,7 +167,13 @@ const ManageBlogs = () => {
 
 			const response = await axios.put(
 				`${process.env.REACT_APP_API_URL}/api/blogs/${editModal.blog._id}`,
-				blogData
+				blogData,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+				}
 			)
 
 			if (response.data.success) {
@@ -550,8 +557,8 @@ const ManageBlogs = () => {
 			{/* Edit Modal */}
 			{editModal.isOpen && (
 				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
-					<div className='bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto'>
-						<div className='sticky top-0 bg-white border-b border-slate-200 px-8 py-6 flex justify-between items-center'>
+					<div className='bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col min-h-0'>
+						<div className='flex-shrink-0 bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center rounded-t-2xl'>
 							<h2 className='text-2xl font-bold text-slate-800'>Edit Blog</h2>
 							<button
 								onClick={closeEditModal}
@@ -573,7 +580,7 @@ const ManageBlogs = () => {
 
 						<form
 							onSubmit={handleUpdate}
-							className='p-6 space-y-6 bg-slate-50/50'>
+							className='p-6 space-y-6 bg-slate-50/50 flex-1 overflow-y-auto min-h-0'>
 							{/* Basic Info Card */}
 							<div className='bg-white p-4 rounded-xl border border-slate-200 shadow-sm'>
 								<h3 className='text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2'>
@@ -699,7 +706,7 @@ const ManageBlogs = () => {
 										<label className='block text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider'>
 											Blog Content
 										</label>
-										<div className='h-80'>
+										<div className='min-h-[200px]'>
 											<ReactQuill
 												theme='snow'
 												value={editForm.content}
@@ -708,12 +715,10 @@ const ManageBlogs = () => {
 												}
 												modules={quillModules}
 												formats={quillFormats}
-												className='bg-white rounded-lg h-full'
+												className='bg-white rounded-lg'
 												placeholder='Write your blog content here...'
 											/>
 										</div>
-										<div className='h-12'></div>{' '}
-										{/* Spacer for Quill toolbar */}
 									</div>
 								</div>
 							</div>
