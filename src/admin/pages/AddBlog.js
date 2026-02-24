@@ -135,6 +135,7 @@ const AddBlog = () => {
 		setIsSubmitting(true)
 
 		try {
+			const token = localStorage.getItem('token')
 			const blogData = {
 				metaTitle: formData.metaTitle.trim(),
 				metaDescription: formData.metaDescription.trim(),
@@ -148,7 +149,13 @@ const AddBlog = () => {
 
 			const response = await axios.post(
 				`${process.env.REACT_APP_API_URL}/api/blogs`,
-				blogData
+				blogData,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+						'Content-Type': 'application/json',
+					},
+				}
 			)
 
 			if (
