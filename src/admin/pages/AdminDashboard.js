@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-import { Menu, X } from 'lucide-react'
+import { Menu } from 'lucide-react'
 
 const AdminDashboard = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
