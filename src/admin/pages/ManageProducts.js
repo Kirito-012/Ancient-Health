@@ -27,6 +27,12 @@ const ManageProducts = () => {
 	const [isSaving, setIsSaving] = useState(false)
 	const [isDragging, setIsDragging] = useState(false)
 
+	// New fields in Edit Modal
+	const [editDescriptionDropdowns, setEditDescriptionDropdowns] = useState([])
+	const [editVideoSection, setEditVideoSection] = useState({ heading: '', video: null })
+	const [editVideoPreview, setEditVideoPreview] = useState(null)
+	const [editIsVideoDragging, setEditIsVideoDragging] = useState(false)
+
 	// Variant State for Edit
 	const [hasVariants, setHasVariants] = useState(false)
 	const [variants, setVariants] = useState([])
@@ -194,6 +200,13 @@ const ManageProducts = () => {
 		setEditImages([]) // New images to upload
 		setEditFaqs(product.faqs || [])
 
+		setEditDescriptionDropdowns(product.descriptionDropdowns || [])
+		setEditVideoSection({
+			heading: product.videoSection?.heading || '',
+			video: product.videoSection?.video || null
+		})
+		setEditVideoPreview(product.videoSection?.video?.url || null)
+
 		// Variant linking
 		setHasVariants(product.hasVariants || false)
 		// Ensure variants have necessary fields and migrate legacy single image to images array
@@ -224,6 +237,9 @@ const ManageProducts = () => {
 		setHasVariants(false)
 		setVariants([])
 		setVariantOptions([{ name: '', values: '' }])
+		setEditDescriptionDropdowns([])
+		setEditVideoSection({ heading: '', video: null })
+		setEditVideoPreview(null)
 	}
 
 	const handleImageSelect = (e) => {
@@ -285,6 +301,61 @@ const ManageProducts = () => {
 
 	const handleFaqChange = (index, field, value) => {
 		setEditFaqs((prev) => {
+			const updated = [...prev]
+			updated[index][field] = value
+			return updated
+		})
+	}
+
+	// Video handling in Edit Modal
+	const handleEditVideoSelect = (e) => {
+		if (e.target.files && e.target.files[0]) {
+			processEditVideo(e.target.files[0])
+		}
+	}
+
+	const processEditVideo = (file) => {
+		if (file.type.startsWith('video/')) {
+			const reader = new FileReader()
+			reader.onload = (e) => {
+				const base64 = e.target.result
+				setEditVideoSection(prev => ({ ...prev, video: base64 }))
+
+				const localUrl = URL.createObjectURL(file)
+				setEditVideoPreview(localUrl)
+			}
+			reader.readAsDataURL(file)
+		} else {
+			toast.error('Please select a valid video file')
+		}
+	}
+
+	const handleEditVideoDrop = (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setEditIsVideoDragging(false)
+
+		if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+			processEditVideo(e.dataTransfer.files[0])
+		}
+	}
+
+	const removeEditVideo = () => {
+		setEditVideoSection(prev => ({ ...prev, video: null }))
+		setEditVideoPreview(null)
+	}
+
+	// Description Dropdowns handling in Edit Modal
+	const addEditDescriptionDropdown = () => {
+		setEditDescriptionDropdowns(prev => [...prev, { heading: '', content: '' }])
+	}
+
+	const removeEditDescriptionDropdown = (index) => {
+		setEditDescriptionDropdowns(prev => prev.filter((_, i) => i !== index))
+	}
+
+	const handleEditDescriptionDropdownChange = (index, field, value) => {
+		setEditDescriptionDropdowns(prev => {
 			const updated = [...prev]
 			updated[index][field] = value
 			return updated
@@ -391,6 +462,8 @@ const ManageProducts = () => {
 				faqs: validFaqs,
 				hasVariants,
 				variants: hasVariants ? variants : [],
+				descriptionDropdowns: editDescriptionDropdowns,
+				videoSection: editVideoSection.video ? editVideoSection : undefined,
 			}
 
 			// Only include images if new ones were uploaded
@@ -935,9 +1008,9 @@ const ManageProducts = () => {
 			{editModal.isOpen && (
 				<div className='fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-opacity'>
 					{/* Modal Content - Fixed Height with Scroll */}
-					<div className='bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200'>
+					<div className='bg-white rounded-xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200'>
 						{/* Header - Fixed */}
-						<div className='flex items-center justify-between p-6 border-b border-slate-100 bg-white'>
+						<div className='flex items-center justify-between p-6 border-b border-slate-100 bg-white flex-shrink-0'>
 							<div>
 								<h2 className='text-xl font-bold text-slate-800'>
 									Edit Product
@@ -965,7 +1038,7 @@ const ManageProducts = () => {
 						</div>
 
 						{/* Body - Scrollable */}
-						<div className='flex-1 overflow-y-auto p-6 bg-slate-50/50'>
+						<div className='flex-1 overflow-y-auto p-6 bg-slate-50/50 min-h-0'>
 							<form
 								id='edit-product-form'
 								onSubmit={handleUpdateProduct}
@@ -1174,7 +1247,137 @@ const ManageProducts = () => {
 									</div>
 								</div>
 
-								<div className='bg-white p-4 rounded-xl border border-slate-200 shadow-sm'>
+								{/* Description Dropdowns */}
+								<div className='mb-4 mt-8'>
+									<div className='flex justify-between items-center mb-4'>
+										<label className='block text-xs font-semibold text-slate-600 uppercase tracking-wider'>
+											Description Dropdowns
+										</label>
+										<button
+											type='button'
+											onClick={addEditDescriptionDropdown}
+											className='px-3 py-1.5 text-xs bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-100 transition'>
+											+ Add Another Dropdown
+										</button>
+									</div>
+
+									{editDescriptionDropdowns.length === 0 ? (
+										<p className='text-xs text-slate-500 italic'>No description dropdowns added.</p>
+									) : (
+										<div className='space-y-4'>
+											{editDescriptionDropdowns.map((dropdown, index) => (
+												<div key={index} className='p-4 border border-slate-200 rounded-lg bg-slate-50/50 relative'>
+													<button
+														type='button'
+														onClick={() => removeEditDescriptionDropdown(index)}
+														className='absolute top-3 right-3 text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-full transition'>
+														<svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+															<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+														</svg>
+													</button>
+
+													<div className='mb-3 w-full md:w-3/4 pr-8'>
+														<label className='block text-xs font-semibold text-slate-500 mb-1'>Heading <span className='text-red-500'>*</span></label>
+														<input
+															type='text'
+															value={dropdown.heading}
+															onChange={(e) => handleEditDescriptionDropdownChange(index, 'heading', e.target.value)}
+															className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
+															placeholder='e.g., Product Details'
+															required
+														/>
+													</div>
+
+													<div>
+														<label className='block text-xs font-semibold text-slate-500 mb-1'>Content <span className='text-red-500'>*</span></label>
+														<div className='h-48 mb-10'>
+															<ReactQuill
+																theme='snow'
+																value={dropdown.content}
+																onChange={(val) => handleEditDescriptionDropdownChange(index, 'content', val)}
+																modules={quillModules}
+																formats={quillFormats}
+																className='bg-white rounded-lg h-full'
+															/>
+														</div>
+													</div>
+												</div>
+											))}
+										</div>
+									)}
+								</div>
+
+								{/* Optional Video Section */}
+								<div className='mb-4 mt-8 border-t border-slate-100 pt-6'>
+									<label className='block text-xs font-semibold text-slate-600 mb-4 uppercase tracking-wider flex items-center gap-2'>
+										<svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+										Video Section (Optional)
+									</label>
+
+									<div className='mb-4 w-full md:w-3/4'>
+										<label className='block text-xs font-semibold text-slate-500 mb-1'>Video Heading</label>
+										<input
+											type='text'
+											value={editVideoSection.heading}
+											onChange={(e) => setEditVideoSection({ ...editVideoSection, heading: e.target.value })}
+											className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
+											placeholder='e.g., Watch it in action'
+										/>
+									</div>
+
+									<div>
+										<label className='block text-xs font-semibold text-slate-500 mb-2'>Upload Video</label>
+
+										{editVideoPreview ? (
+											<div className="relative rounded-lg border border-slate-200 overflow-hidden bg-black max-w-md">
+												<video
+													src={editVideoPreview}
+													controls
+													className="w-full h-auto max-h-48 object-contain"
+												/>
+												<button
+													type='button'
+													onClick={removeEditVideo}
+													className='absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition shadow-md'>
+													<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+														<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+													</svg>
+												</button>
+											</div>
+										) : (
+											<div
+												className={`border-2 border-dashed rounded-lg p-4 text-center transition max-w-md ${editIsVideoDragging
+													? 'border-purple-500 bg-purple-50'
+													: 'border-slate-300 hover:border-slate-400'
+													}`}
+												onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setEditIsVideoDragging(true); }}
+												onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+												onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setEditIsVideoDragging(false); }}
+												onDrop={handleEditVideoDrop}>
+												<div className='mb-2'>
+													<svg className="mx-auto h-8 w-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+												</div>
+												<p className='text-xs text-slate-600 mb-2'>
+													Drag & drop a video or click to select
+												</p>
+												<input
+													type='file'
+													accept='video/*'
+													onChange={handleEditVideoSelect}
+													className='hidden'
+													id='edit-video-upload'
+												/>
+												<label
+													htmlFor='edit-video-upload'
+													className='inline-block px-3 py-1.5 bg-purple-50 text-purple-600 font-medium rounded-lg cursor-pointer hover:bg-purple-100 transition text-xs'>
+													Browse Files
+												</label>
+											</div>
+										)}
+									</div>
+								</div>
+
+								<div className='bg-white p-4 rounded-xl border border-slate-200 shadow-sm mt-6'>
 									<h3 className='text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2'>
 										<span className='w-1 h-4 bg-purple-600 rounded-full'></span>
 										Variants

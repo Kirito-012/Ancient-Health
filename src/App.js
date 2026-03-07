@@ -31,6 +31,7 @@ import OrderSuccess from './pages/OrderSuccess'
 import MyOrders from './pages/MyOrders'
 import Blog from './pages/Blog'
 import BlogDetail from './pages/BlogDetail'
+import ProductDetail from './pages/ProductDetail' // NEW
 
 import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
@@ -96,6 +97,12 @@ const App = () => {
 						<Route
 							path='/shop'
 							element={<Shop />}
+						/>
+
+						{/* Product Detail Page */}
+						<Route
+							path='/shop/:slug'
+							element={<ProductDetail />}
 						/>
 
 						{/* About Page */}

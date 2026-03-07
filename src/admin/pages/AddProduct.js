@@ -25,6 +25,12 @@ const AddProduct = () => {
 	const [isDragging, setIsDragging] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 
+	// New fields
+	const [descriptionDropdowns, setDescriptionDropdowns] = useState([])
+	const [videoSection, setVideoSection] = useState({ heading: '', video: null })
+	const [videoPreview, setVideoPreview] = useState(null)
+	const [isVideoDragging, setIsVideoDragging] = useState(false)
+
 	// Variant State
 	const [hasVariants, setHasVariants] = useState(false)
 	const [variants, setVariants] = useState([])
@@ -139,6 +145,62 @@ const AddProduct = () => {
 	const removeImage = (index) => {
 		setImages((prev) => prev.filter((_, i) => i !== index))
 		setImagePreviews((prev) => prev.filter((_, i) => i !== index))
+	}
+
+	// Video handling
+	const handleVideoSelect = (e) => {
+		if (e.target.files && e.target.files[0]) {
+			processVideo(e.target.files[0])
+		}
+	}
+
+	const processVideo = (file) => {
+		if (file.type.startsWith('video/')) {
+			const reader = new FileReader()
+			reader.onload = (e) => {
+				const base64 = e.target.result
+				setVideoSection(prev => ({ ...prev, video: base64 }))
+
+				// Create a local object URL for immediate preview (better performance than base64 in src)
+				const localUrl = URL.createObjectURL(file)
+				setVideoPreview(localUrl)
+			}
+			reader.readAsDataURL(file)
+		} else {
+			toast.error('Please select a valid video file')
+		}
+	}
+
+	const handleVideoDrop = (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setIsVideoDragging(false)
+
+		if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+			processVideo(e.dataTransfer.files[0])
+		}
+	}
+
+	const removeVideo = () => {
+		setVideoSection(prev => ({ ...prev, video: null }))
+		setVideoPreview(null)
+	}
+
+	// Description Dropdowns handling
+	const addDescriptionDropdown = () => {
+		setDescriptionDropdowns(prev => [...prev, { heading: '', content: '' }])
+	}
+
+	const removeDescriptionDropdown = (index) => {
+		setDescriptionDropdowns(prev => prev.filter((_, i) => i !== index))
+	}
+
+	const handleDescriptionDropdownChange = (index, field, value) => {
+		setDescriptionDropdowns(prev => {
+			const updated = [...prev]
+			updated[index][field] = value
+			return updated
+		})
 	}
 
 	// Handle FAQ operations
@@ -373,6 +435,8 @@ const AddProduct = () => {
 				faqs: validFaqs,
 				hasVariants,
 				variants: hasVariants ? variants : [],
+				descriptionDropdowns,
+				videoSection: videoSection.video ? videoSection : undefined,
 			}
 
 			// Get token from localStorage
@@ -416,6 +480,9 @@ const AddProduct = () => {
 				setHasVariants(false)
 				setVariants([])
 				setVariantOptions([{ name: '', values: '' }])
+				setDescriptionDropdowns([])
+				setVideoSection({ heading: '', video: null })
+				setVideoPreview(null)
 			}
 		} catch (error) {
 			console.error('Error adding product:', error)
@@ -627,6 +694,137 @@ const AddProduct = () => {
 							className='bg-white rounded-lg'
 							placeholder='Enter product description...'
 						/>
+					</div>
+
+					{/* Description Dropdowns */}
+					<div className='mb-4 mt-8'>
+						<div className='flex justify-between items-center mb-4'>
+							<label className='block text-sm font-semibold text-slate-700'>
+								Description Dropdowns
+							</label>
+							<button
+								type='button'
+								onClick={addDescriptionDropdown}
+								className='px-3 py-1.5 text-sm bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-100 transition'>
+								+ Add Another Dropdown
+							</button>
+						</div>
+
+						{descriptionDropdowns.length === 0 ? (
+							<p className='text-sm text-slate-500 italic'>No description dropdowns added. Click the button above to add one.</p>
+						) : (
+							<div className='space-y-6'>
+								{descriptionDropdowns.map((dropdown, index) => (
+									<div key={index} className='p-4 border border-slate-200 rounded-lg bg-slate-50 relative'>
+										<button
+											type='button'
+											onClick={() => removeDescriptionDropdown(index)}
+											className='absolute top-4 right-4 text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-full transition'>
+											<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+												<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+											</svg>
+										</button>
+
+										<div className='mb-4 w-full md:w-3/4 pr-10'>
+											<label className='block text-xs font-semibold text-slate-600 mb-1'>Heading <span className='text-red-500'>*</span></label>
+											<input
+												type='text'
+												value={dropdown.heading}
+												onChange={(e) => handleDescriptionDropdownChange(index, 'heading', e.target.value)}
+												className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
+												placeholder='e.g., Product Details, Benefits'
+												required
+											/>
+										</div>
+
+										<div>
+											<label className='block text-xs font-semibold text-slate-600 mb-1'>Content <span className='text-red-500'>*</span></label>
+											<ReactQuill
+												theme='snow'
+												value={dropdown.content}
+												onChange={(val) => handleDescriptionDropdownChange(index, 'content', val)}
+												modules={quillModules}
+												formats={quillFormats}
+												className='bg-white rounded-lg'
+											/>
+										</div>
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+
+					{/* Optional Video Section */}
+					<div className='mb-4 mt-8 pt-6 border-t border-slate-200'>
+						<h4 className='text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2'>
+							<svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+							Video Section <span className='text-slate-400 font-normal text-xs ml-2'>(Optional)</span>
+						</h4>
+
+						<div className='mb-4 w-full md:w-3/4'>
+							<label className='block text-xs font-semibold text-slate-600 mb-1'>Video Heading</label>
+							<input
+								type='text'
+								value={videoSection.heading}
+								onChange={(e) => setVideoSection({ ...videoSection, heading: e.target.value })}
+								className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
+								placeholder='e.g., Watch it in action'
+							/>
+						</div>
+
+						<div>
+							<label className='block text-xs font-semibold text-slate-600 mb-2'>Upload Video</label>
+
+							{videoPreview ? (
+								<div className="relative rounded-lg border border-slate-200 overflow-hidden bg-black max-w-xl">
+									<video
+										src={videoPreview}
+										controls
+										className="w-full h-auto max-h-64 object-contain"
+									/>
+									<button
+										type='button'
+										onClick={removeVideo}
+										className='absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition shadow-md'>
+										<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+											<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+										</svg>
+									</button>
+								</div>
+							) : (
+								<div
+									className={`border-2 border-dashed rounded-lg p-6 text-center transition max-w-xl ${isVideoDragging
+										? 'border-purple-500 bg-purple-50'
+										: 'border-slate-300 hover:border-slate-400'
+										}`}
+									onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsVideoDragging(true); }}
+									onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+									onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setIsVideoDragging(false); }}
+									onDrop={handleVideoDrop}>
+									<div className='mb-3'>
+										<svg className="mx-auto h-10 w-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+									</div>
+									<p className='text-sm text-slate-600 mb-2'>
+										Drag and drop a video here, or click to select
+									</p>
+									<p className='text-xs text-slate-400 mb-3'>
+										MP4, WebM up to 50MB (max 1 video)
+									</p>
+									<input
+										type='file'
+										accept='video/*'
+										onChange={handleVideoSelect}
+										className='hidden'
+										id='video-upload'
+									/>
+									<label
+										htmlFor='video-upload'
+										className='inline-block px-4 py-2 bg-purple-50 text-purple-600 font-medium rounded-lg cursor-pointer hover:bg-purple-100 transition text-sm'>
+										Browse Files
+									</label>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 

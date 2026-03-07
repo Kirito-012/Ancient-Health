@@ -436,133 +436,135 @@ const ManageBlogs = () => {
 						<p className='text-slate-500'>No blogs found</p>
 					</div>
 				) : (
-					<table className='w-full divide-y divide-slate-200'>
-						<thead className='bg-slate-50'>
-							<tr>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-16'>
-									S No
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-20'>
-									Image
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider max-w-48'>
-									Meta Title
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
-									Category
-								</th>
+					<div className='overflow-x-auto w-full'>
+						<table className='w-full divide-y divide-slate-200 min-w-[800px]'>
+							<thead className='bg-slate-50'>
+								<tr>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-16'>
+										S No
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-20'>
+										Image
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider max-w-48'>
+										Meta Title
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
+										Category
+									</th>
 
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider max-w-64'>
-									Meta Desc
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
-									Author
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
-									Date
-								</th>
-								<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-32'>
-									Actions
-								</th>
-							</tr>
-						</thead>
-						<tbody className='bg-white divide-y divide-slate-200'>
-							{blogs
-								.filter((blog) => blog !== null)
-								.map((blog, index) => (
-									<tr
-										key={blog._id}
-										className='hover:bg-slate-50 transition'>
-										<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
-											{index + 1}
-										</td>
-										<td className='px-4 py-4 whitespace-nowrap'>
-											<img
-												src={blog.image}
-												alt={blog.metaTitle}
-												className='w-16 h-16 object-cover rounded-lg border-2 border-slate-200'
-											/>
-										</td>
-										<td className='px-4 py-4 text-sm font-medium text-slate-900'>
-											<div
-												className='max-w-48 truncate'
-												title={blog.metaTitle}>
-												{blog.metaTitle}
-											</div>
-										</td>
-										<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
-											<span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>
-												{blog.category?.name || 'Uncategorized'}
-											</span>
-										</td>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider max-w-64'>
+										Meta Desc
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
+										Author
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-24'>
+										Date
+									</th>
+									<th className='px-4 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider w-32'>
+										Actions
+									</th>
+								</tr>
+							</thead>
+							<tbody className='bg-white divide-y divide-slate-200'>
+								{blogs
+									.filter((blog) => blog !== null)
+									.map((blog, index) => (
+										<tr
+											key={blog._id}
+											className='hover:bg-slate-50 transition'>
+											<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
+												{index + 1}
+											</td>
+											<td className='px-4 py-4 whitespace-nowrap'>
+												<img
+													src={blog.image}
+													alt={blog.metaTitle}
+													className='w-16 h-16 object-cover rounded-lg border-2 border-slate-200'
+												/>
+											</td>
+											<td className='px-4 py-4 text-sm font-medium text-slate-900'>
+												<div
+													className='max-w-48 truncate'
+													title={blog.metaTitle}>
+													{blog.metaTitle}
+												</div>
+											</td>
+											<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
+												<span className='inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800'>
+													{blog.category?.name || 'Uncategorized'}
+												</span>
+											</td>
 
-										<td className='px-4 py-4 text-sm text-slate-600'>
-											<div
-												className='max-w-64 truncate'
-												title={blog.metaDescription}>
-												{blog.metaDescription}
-											</div>
-										</td>
-										<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
-											{blog.author}
-										</td>
-										<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
-											{formatDate(blog.date)}
-										</td>
-										<td className='px-4 py-4 whitespace-nowrap text-sm'>
-											<div className='flex items-center gap-3'>
-												<button
-													onClick={() => handleEdit(blog)}
-													className='text-blue-600 hover:text-blue-800 transition'
-													title='Edit'>
-													<svg
-														className='w-5 h-5'
-														fill='none'
-														stroke='currentColor'
-														viewBox='0 0 24 24'>
-														<path
-															strokeLinecap='round'
-															strokeLinejoin='round'
-															strokeWidth={2}
-															d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
-														/>
-													</svg>
-												</button>
-												<button
-													onClick={() => handleDelete(blog._id)}
-													className='text-red-600 hover:text-red-800 transition'
-													title='Delete'>
-													<svg
-														className='w-5 h-5'
-														fill='none'
-														stroke='currentColor'
-														viewBox='0 0 24 24'>
-														<path
-															strokeLinecap='round'
-															strokeLinejoin='round'
-															strokeWidth={2}
-															d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
-														/>
-													</svg>
-												</button>
-											</div>
-										</td>
-									</tr>
-								))}
-						</tbody>
-					</table>
+											<td className='px-4 py-4 text-sm text-slate-600'>
+												<div
+													className='max-w-64 truncate'
+													title={blog.metaDescription}>
+													{blog.metaDescription}
+												</div>
+											</td>
+											<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
+												{blog.author}
+											</td>
+											<td className='px-4 py-4 whitespace-nowrap text-sm text-slate-700'>
+												{formatDate(blog.date)}
+											</td>
+											<td className='px-4 py-4 whitespace-nowrap text-sm'>
+												<div className='flex items-center gap-3'>
+													<button
+														onClick={() => handleEdit(blog)}
+														className='text-blue-600 hover:text-blue-800 transition'
+														title='Edit'>
+														<svg
+															className='w-5 h-5'
+															fill='none'
+															stroke='currentColor'
+															viewBox='0 0 24 24'>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
+															/>
+														</svg>
+													</button>
+													<button
+														onClick={() => handleDelete(blog._id)}
+														className='text-red-600 hover:text-red-800 transition'
+														title='Delete'>
+														<svg
+															className='w-5 h-5'
+															fill='none'
+															stroke='currentColor'
+															viewBox='0 0 24 24'>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+															/>
+														</svg>
+													</button>
+												</div>
+											</td>
+										</tr>
+									))}
+							</tbody>
+						</table>
+					</div>
 				)}
 			</div>
 
 			{/* Edit Modal */}
 			{editModal.isOpen && (
 				<div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
-					<div className='bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col min-h-0'>
-						<div className='flex-shrink-0 bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center rounded-t-2xl'>
+					<div className='bg-white rounded-2xl shadow-2xl w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200'>
+						<div className='flex items-center justify-between p-6 border-b border-slate-100 bg-white flex-shrink-0'>
 							<h2 className='text-2xl font-bold text-slate-800'>Edit Blog</h2>
 							<button
 								onClick={closeEditModal}
-								className='text-slate-400 hover:text-slate-600 transition'>
+								className='p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 transition-colors'>
 								<svg
 									className='w-6 h-6'
 									fill='none'
@@ -579,8 +581,9 @@ const ManageBlogs = () => {
 						</div>
 
 						<form
+							id='edit-blog-form'
 							onSubmit={handleUpdate}
-							className='p-6 space-y-6 bg-slate-50/50 flex-1 overflow-y-auto min-h-0'>
+							className='flex-1 overflow-y-auto p-6 bg-slate-50/50 min-h-0 space-y-6'>
 							{/* Basic Info Card */}
 							<div className='bg-white p-4 rounded-xl border border-slate-200 shadow-sm'>
 								<h3 className='text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2'>
@@ -758,50 +761,52 @@ const ManageBlogs = () => {
 								</div>
 							</div>
 
-							{/* Buttons - Sticky Bottom (Optional, but kept inline here per structure) */}
-							<div className='flex justify-end gap-3 pt-4 border-t border-slate-200'>
-								<button
-									type='button'
-									onClick={closeEditModal}
-									className='px-5 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all shadow-sm'>
-									Cancel
-								</button>
-								<button
-									type='submit'
-									disabled={isSaving}
-									className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
-										? 'bg-slate-400 cursor-not-allowed'
-										: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-										}`}>
-									{isSaving ? (
-										<>
-											<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
-											Saving...
-										</>
-									) : (
-										<>
-											<span>Save Changes</span>
-											<svg
-												className='w-4 h-4'
-												fill='none'
-												viewBox='0 0 24 24'
-												stroke='currentColor'>
-												<path
-													strokeLinecap='round'
-													strokeLinejoin='round'
-													strokeWidth={2}
-													d='M5 13l4 4L19 7'
-												/>
-											</svg>
-										</>
-									)}
-								</button>
-							</div>
 						</form>
+
+						{/* Buttons - Fixed Footer */}
+						<div className='flex-shrink-0 p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-2xl'>
+							<button
+								type='button'
+								onClick={closeEditModal}
+								className='px-5 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 transition-all shadow-sm'>
+								Cancel
+							</button>
+							<button
+								type='submit'
+								form='edit-blog-form'
+								disabled={isSaving}
+								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
+									? 'bg-slate-400 cursor-not-allowed'
+									: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
+									}`}>
+								{isSaving ? (
+									<>
+										<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
+										Saving...
+									</>
+								) : (
+									<>
+										<span>Save Changes</span>
+										<svg
+											className='w-4 h-4'
+											fill='none'
+											viewBox='0 0 24 24'
+											stroke='currentColor'>
+											<path
+												strokeLinecap='round'
+												strokeLinejoin='round'
+												strokeWidth={2}
+												d='M5 13l4 4L19 7'
+											/>
+										</svg>
+									</>
+								)}
+							</button>
+						</div>
 					</div>
-				</div>
+				</div >
 			)}
-		</div>
+		</div >
 	)
 }
 

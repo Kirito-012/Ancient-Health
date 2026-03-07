@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, LogOut, ShoppingBag, Menu, X, ChevronRight } from 'lucide-react'
 
-const Navbar = () => {
+const Navbar = ({ forceDarkNav = false }) => {
     const { cart, token, logout, user } = useCart()
     const [isScrolled, setIsScrolled] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -41,7 +41,7 @@ const Navbar = () => {
     ]
 
     const isDarkPage = ['/profile', '/cart', '/checkout', '/my-orders', '/blog'].some(path => location.pathname.startsWith(path))
-    const showDarkNav = isScrolled || isDarkPage
+    const showDarkNav = forceDarkNav || isScrolled || isDarkPage
 
     return (
         <div className="fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 pointer-events-none">

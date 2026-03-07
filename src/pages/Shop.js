@@ -323,7 +323,10 @@ const Shop = () => {
                                                 )}
 
                                                 {/* Product Image */}
-                                                <div className='relative aspect-square p-4 lg:p-8 bg-white overflow-hidden'>
+                                                <div
+                                                    className='relative aspect-square p-4 lg:p-8 bg-white overflow-hidden cursor-pointer'
+                                                    onClick={() => navigate(`/shop/${product.slug || product._id}`)}
+                                                >
                                                     <div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 md:group-hover:from-[#2d5f4f]/5 md:group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
                                                     {/* Custom Out of Stock Overlay */}
                                                     {product.stock <= 0 && (
@@ -347,7 +350,7 @@ const Shop = () => {
 
                                                 {/* Product Info */}
                                                 <div className='p-3 lg:p-6'>
-                                                    <div className='mb-1 lg:mb-2'>
+                                                    <div className='mb-1 lg:mb-2 cursor-pointer' onClick={() => navigate(`/shop/${product.slug || product._id}`)}>
                                                         {/* Category Badge */}
                                                         {product.category && (
                                                             <div className='mb-1 lg:mb-2'>
@@ -368,7 +371,7 @@ const Shop = () => {
                                                         </h3>
                                                     </div>
 
-                                                    <p className='hidden lg:block text-gray-500 text-sm mb-4 line-clamp-2 min-h-[2.5rem]'>
+                                                    <p className='hidden lg:block text-gray-500 text-sm mb-4 line-clamp-2 min-h-[2.5rem] cursor-pointer' onClick={() => navigate(`/shop/${product.slug || product._id}`)}>
                                                         {stripHtml(product.description) || 'Premium Ayurvedic formulation for daily wellness.'}
                                                     </p>
 

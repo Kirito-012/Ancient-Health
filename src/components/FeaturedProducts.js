@@ -175,10 +175,34 @@ const FeaturedProducts = () => {
                                     )}
 
                                     {/* Quick Add Button Overlay */}
-                                    <div className='absolute bottom-3 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300'>
-                                        <Link to={`/products/${product._id}`} className='px-4 py-2 lg:px-6 lg:py-3 bg-[#d4a574] text-[#0f1c18] text-[10px] lg:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
+                                    <div className='absolute bottom-3 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 translate-y-20 opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 transition-all duration-300 flex items-center gap-2'>
+                                        <Link to={`/shop/${product.slug || product._id}`} className='px-4 py-2 lg:px-5 lg:py-2.5 bg-[#d4a574] text-[#0f1c18] text-[10px] lg:text-xs font-bold uppercase tracking-widest rounded-full hover:bg-white transition-colors shadow-lg whitespace-nowrap inline-block'>
                                             View Details
                                         </Link>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                handleAddToCart(product)
+                                            }}
+                                            disabled={product.stock <= 0}
+                                            className={`p-2 lg:p-2.5 rounded-full transition-all duration-300 shadow-lg ${product.stock <= 0
+                                                ? 'bg-gray-800/60 text-gray-500 cursor-not-allowed'
+                                                : 'bg-gradient-to-br from-[#2d5f4f]/80 to-[#3e7a70]/80 text-white hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:scale-110'
+                                                }`}
+                                        >
+                                            <svg
+                                                className='w-3.5 h-3.5 lg:w-4 lg:h-4'
+                                                fill='none'
+                                                stroke='currentColor'
+                                                viewBox='0 0 24 24'>
+                                                <path
+                                                    strokeLinecap='round'
+                                                    strokeLinejoin='round'
+                                                    strokeWidth={2}
+                                                    d='M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z'
+                                                />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -198,7 +222,7 @@ const FeaturedProducts = () => {
                                             )}
                                         </div>
                                         <div className='flex items-center gap-2'>
-                                            <Link to={`/products/${product._id}`} className='hidden lg:block text-[10px] lg:text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
+                                            <Link to={`/shop/${product.slug || product._id}`} className='hidden lg:block text-[10px] lg:text-xs text-white/60 hover:text-white uppercase tracking-wider transition-colors'>
                                                 Details
                                             </Link>
                                             <button
