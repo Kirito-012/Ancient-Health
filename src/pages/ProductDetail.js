@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
-import {useParams, useNavigate} from 'react-router-dom'
-import {motion} from 'framer-motion'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
 	ArrowLeft,
 	Star,
@@ -13,16 +13,16 @@ import {
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import {useCart} from '../context/CartContext'
-import {toast} from 'react-toastify'
-import {formatPrice} from '../utils/formatPrice'
-import {stripHtml} from '../utils/textUtils'
+import { useCart } from '../context/CartContext'
+import { toast } from 'react-toastify'
+import { formatPrice } from '../utils/formatPrice'
+import { stripHtml } from '../utils/textUtils'
 import HTMLContent from '../components/HTMLContent'
 
 const ProductDetail = () => {
-	const {slug} = useParams()
+	const { slug } = useParams()
 	const navigate = useNavigate()
-	const {addToCart} = useCart()
+	const { addToCart } = useCart()
 
 	// State definitions
 	const [product, setProduct] = useState(null)
@@ -286,7 +286,7 @@ const ProductDetail = () => {
 	const displayImages =
 		currentImages?.length > 0
 			? currentImages
-			: [{url: '/placeholder-image.png'}] // Default empty state later
+			: [{ url: '/placeholder-image.png' }] // Default empty state later
 
 	// Calculates discounted price if offer exists
 	const discount = product.offer || 0
@@ -318,15 +318,15 @@ const ProductDetail = () => {
 								{displayImages[activeImageIndex] && (
 									<motion.img
 										key={activeImageIndex} // forces re-render animation when index changes
-										initial={{opacity: 0, scale: 1.05}}
-										animate={{opacity: 1, scale: 1}}
-										transition={{duration: 0.5}}
+										initial={{ opacity: 0, scale: 1.05 }}
+										animate={{ opacity: 1, scale: 1 }}
+										transition={{ duration: 0.5 }}
 										src={
 											displayImages[activeImageIndex].url ||
 											displayImages[activeImageIndex]
 										}
 										alt={product.title}
-										className='relative z-10 w-full h-full object-contain filter drop-shadow-xl'
+										className='relative z-10 w-full h-full object-contain filter drop-shadow-xl transform-gpu will-change-transform backface-visibility-hidden'
 									/>
 								)}
 							</div>
@@ -338,11 +338,10 @@ const ProductDetail = () => {
 										<button
 											key={idx}
 											onClick={() => setActiveImageIndex(idx)}
-											className={`relative shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 transition-all duration-300 flex items-center justify-center p-2 ${
-												activeImageIndex === idx
+											className={`relative shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 transition-all duration-300 flex items-center justify-center p-2 ${activeImageIndex === idx
 													? 'border-[#2d5f4f] shadow-md ring-2 ring-[#2d5f4f]/20 ring-offset-1'
 													: 'border-gray-100 hover:border-gray-300 hover:shadow-sm opacity-70 hover:opacity-100'
-											}`}>
+												}`}>
 											<img
 												src={img.url || img}
 												alt={`${product.title} thumbnail ${idx + 1}`}
@@ -360,7 +359,7 @@ const ProductDetail = () => {
 								{/* Category Badge */}
 								{product.category && (
 									<div className='mb-4'>
-										<span className='inline-block px-3 py-1 bg-[#2d5f4f]/10 text-[#2d5f4f] text-xs font-bold uppercase tracking-widest rounded-full border border-[#2d5f4f]/20 backdrop-blur-sm'>
+										<span className='inline-block px-3 py-1 bg-[#2d5f4f]/10 text-[#2d5f4f] text-xs font-bold uppercase tracking-widest rounded-full border border-[#2d5f4f]/20'>
 											{product.category.name}
 										</span>
 									</div>
@@ -420,11 +419,10 @@ const ProductDetail = () => {
 														setSelectedVariant(variant)
 														setQuantity(1) // Reset quantity on variant swap
 													}}
-													className={`px-5 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-300 ${
-														selectedVariant?._id === variant._id
+													className={`px-5 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-300 ${selectedVariant?._id === variant._id
 															? 'border-[#2d5f4f] bg-[#2d5f4f]/5 text-[#2d5f4f] shadow-sm ring-4 ring-[#2d5f4f]/10'
 															: 'border-gray-200 bg-white text-gray-600 hover:border-[#2d5f4f]/50 hover:bg-gray-50'
-													}`}>
+														}`}>
 													{variant.attributes.map((a) => a.value).join(' / ')}
 												</button>
 											))}
@@ -475,11 +473,10 @@ const ProductDetail = () => {
 									<button
 										onClick={handleAddToCart}
 										disabled={currentStock <= 0 || isAddingToCart}
-										className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-[#2d5f4f]/20 transition-all duration-300 ${
-											currentStock <= 0
+										className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-[#2d5f4f]/20 transition-all duration-300 ${currentStock <= 0
 												? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
 												: 'bg-[#2d5f4f] text-white hover:bg-[#1e4035] hover:-translate-y-1'
-										}`}>
+											}`}>
 										{isAddingToCart ? (
 											<div className='w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
 										) : (
@@ -506,7 +503,7 @@ const ProductDetail = () => {
 								<div className='grid grid-cols-3 gap-3 mb-10'>
 									{/* Free Shipping */}
 									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-[#d4a574]/10 via-white to-[#d4a574]/5 border border-[#d4a574]/25 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-4 -right-4 w-16 h-16 bg-[#d4a574]/10 rounded-full blur-xl pointer-events-none'></div>
+										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#d4a574]/20 to-transparent pointer-events-none'></div>
 										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#d4a574] to-[#c4905e] flex items-center justify-center text-white shadow-md shadow-[#d4a574]/30 mb-1'>
 											<Truck className='w-5 h-5' />
 										</div>
@@ -520,7 +517,7 @@ const ProductDetail = () => {
 
 									{/* Easy Returns */}
 									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-[#2d5f4f]/10 via-white to-[#2d5f4f]/5 border border-[#2d5f4f]/20 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-4 -right-4 w-16 h-16 bg-[#2d5f4f]/10 rounded-full blur-xl pointer-events-none'></div>
+										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#2d5f4f]/20 to-transparent pointer-events-none'></div>
 										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center text-white shadow-md shadow-[#2d5f4f]/30 mb-1'>
 											<RefreshCw className='w-5 h-5' />
 										</div>
@@ -534,7 +531,7 @@ const ProductDetail = () => {
 
 									{/* 100% Organic */}
 									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-white to-emerald-500/5 border border-emerald-500/20 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-4 -right-4 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl pointer-events-none'></div>
+										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-emerald-500/20 to-transparent pointer-events-none'></div>
 										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-md shadow-emerald-500/30 mb-1'>
 											<ShieldCheck className='w-5 h-5' />
 										</div>
@@ -589,15 +586,15 @@ const ProductDetail = () => {
 					product.videoSection.video.url && (
 						<div className='w-full bg-[#1e4035] py-20 lg:py-32 my-12 relative overflow-hidden'>
 							{/* Motif Backgrounds */}
-							<div className='absolute top-0 right-0 w-96 h-96 bg-[#2d5f4f] blur-[150px] opacity-50 rounded-full pointer-events-none'></div>
-							<div className='absolute bottom-0 left-0 w-96 h-96 bg-[#d4a574]/20 blur-[150px] opacity-50 rounded-full pointer-events-none'></div>
+							<div className='absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(45,95,79,0.3)_0%,_transparent_60%)] pointer-events-none transform-gpu'></div>
+							<div className='absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(212,165,116,0.1)_0%,_transparent_60%)] pointer-events-none transform-gpu'></div>
 
 							<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
 								<motion.div
-									initial={{opacity: 0, y: 30}}
-									whileInView={{opacity: 1, y: 0}}
-									viewport={{once: true, margin: '-10%'}}
-									transition={{duration: 0.8}}
+									initial={{ opacity: 0, y: 30 }}
+									whileInView={{ opacity: 1, y: 0 }}
+									viewport={{ once: true, margin: '-10%' }}
+									transition={{ duration: 0.8 }}
 									className='text-center mb-12'>
 									<span className='text-sm font-serif tracking-[0.2em] text-[#d4a574] uppercase mb-4 inline-block drop-shadow-md'>
 										Visual Experience
@@ -608,18 +605,18 @@ const ProductDetail = () => {
 								</motion.div>
 
 								<motion.div
-									initial={{opacity: 0, scale: 0.95}}
-									whileInView={{opacity: 1, scale: 1}}
-									viewport={{once: true}}
-									transition={{duration: 0.8, delay: 0.2}}
-									className='max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-white/10 aspect-video bg-black flex items-center justify-center relative group'>
+									initial={{ opacity: 0, scale: 0.95 }}
+									whileInView={{ opacity: 1, scale: 1 }}
+									viewport={{ once: true }}
+									transition={{ duration: 0.8, delay: 0.2 }}
+									className='max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-white/10 aspect-video bg-black flex items-center justify-center relative group transform-gpu'>
 									<video
 										src={product.videoSection.video.url}
 										autoPlay
 										loop
 										muted
 										playsInline
-										className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-[20s] ease-out'></video>
+										className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-[20s] ease-out transform-gpu will-change-transform backface-visibility-hidden'></video>
 									<div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
 								</motion.div>
 							</div>
@@ -631,10 +628,10 @@ const ProductDetail = () => {
 					<div className='absolute inset-0 bg-gradient-to-b from-white via-[#f0f5f3] to-white opacity-50 z-0 pointer-events-none'></div>
 
 					<motion.div
-						initial={{opacity: 0, y: 30}}
-						whileInView={{opacity: 1, y: 0}}
-						viewport={{once: true}}
-						transition={{duration: 0.8}}
+						initial={{ opacity: 0, y: 30 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: true }}
+						transition={{ duration: 0.8 }}
 						className='relative z-10 max-w-4xl mx-auto text-center'>
 						<ShieldCheck className='w-16 h-16 mx-auto text-[#d4a574] mb-8 opacity-80' />
 						<h2 className='text-4xl lg:text-5xl font-serif text-[#1e4035] mb-8 font-playfair'>
@@ -659,8 +656,8 @@ const ProductDetail = () => {
 									title: 'Cold Pressed',
 									desc: 'Preserving bio-active nutrients',
 								},
-								{title: 'Lab Certified', desc: 'Tested for maximum purity'},
-								{title: 'Cruelty Free', desc: 'Never tested on animals'},
+								{ title: 'Lab Certified', desc: 'Tested for maximum purity' },
+								{ title: 'Cruelty Free', desc: 'Never tested on animals' },
 								{
 									title: 'Eco Conscious',
 									desc: 'Sustainable harvesting practices',
@@ -705,10 +702,10 @@ const ProductDetail = () => {
 								{relatedProducts.map((relProduct) => (
 									<motion.div
 										key={relProduct._id}
-										initial={{opacity: 0, y: 20}}
-										whileInView={{opacity: 1, y: 0}}
-										viewport={{once: true}}
-										transition={{duration: 0.5, ease: 'easeOut'}}
+										initial={{ opacity: 0, y: 20 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										viewport={{ once: true }}
+										transition={{ duration: 0.5, ease: 'easeOut' }}
 										className='group relative bg-gradient-to-b from-white to-[#f8faf9] rounded-2xl lg:rounded-3xl overflow-hidden border border-gray-100 hover:border-[#2d5f4f]/20 hover:shadow-2xl transition-all duration-500'>
 										{/* Discount Badge */}
 										{relProduct.offer > 0 && (
@@ -734,7 +731,7 @@ const ProductDetail = () => {
 											}>
 											<div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 group-hover:from-[#2d5f4f]/5 group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
 											{relProduct.stock <= 0 && (
-												<div className='absolute inset-0 bg-white/60 z-10 backdrop-blur-[1px]'></div>
+												<div className='absolute inset-0 bg-white/60 z-10'></div>
 											)}
 											{relProduct.images && relProduct.images.length > 0 ? (
 												<img
@@ -829,11 +826,10 @@ const ProductDetail = () => {
 														handleAddToCartRelated(relProduct)
 													}}
 													disabled={relProduct.stock <= 0}
-													className={`p-2 lg:p-3 rounded-full transition-all duration-300 shadow-sm ${
-														relProduct.stock <= 0
+													className={`p-2 lg:p-3 rounded-full transition-all duration-300 shadow-sm ${relProduct.stock <= 0
 															? 'bg-gray-100 text-gray-300 cursor-not-allowed'
 															: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white hover:scale-110 hover:shadow-[#2d5f4f]/30'
-													}`}>
+														}`}>
 													<svg
 														className='w-4 h-4 lg:w-5 lg:h-5'
 														fill='none'

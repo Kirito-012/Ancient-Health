@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react'
-import {useNavigate} from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import {useCart} from '../context/CartContext'
-import {toast} from 'react-toastify'
+import { useCart } from '../context/CartContext'
+import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import shop_bg from '../assets/shop_bg.png'
-import {stripHtml} from '../utils/textUtils'
-import {motion, AnimatePresence} from 'framer-motion'
+import { stripHtml } from '../utils/textUtils'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Shop = () => {
 	const navigate = useNavigate()
-	const {addToCart} = useCart()
+	const { addToCart } = useCart()
 	const [products, setProducts] = useState([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
@@ -139,7 +139,7 @@ const Shop = () => {
 
 	// Animation Variants
 	const containerVariants = {
-		hidden: {opacity: 0},
+		hidden: { opacity: 0 },
 		visible: {
 			opacity: 1,
 			transition: {
@@ -149,20 +149,20 @@ const Shop = () => {
 	}
 
 	const itemVariants = {
-		hidden: {opacity: 0, y: 20},
+		hidden: { opacity: 0, y: 20 },
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: {duration: 0.5, ease: 'easeOut'},
+			transition: { duration: 0.5, ease: 'easeOut' },
 		},
 	}
 
 	const heroTextVariants = {
-		hidden: {opacity: 0, y: 30},
+		hidden: { opacity: 0, y: 30 },
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: {duration: 0.8, ease: 'easeOut'},
+			transition: { duration: 0.8, ease: 'easeOut' },
 		},
 	}
 
@@ -177,12 +177,12 @@ const Shop = () => {
 					<div className='absolute inset-0 bg-black/40 z-10'></div>
 					<div className='absolute inset-0 bg-gradient-to-t from-[#0f1c18] via-transparent to-black/40 z-20'></div>
 					<motion.img
-						initial={{scale: 1.1}}
-						animate={{scale: 1.05}}
-						transition={{duration: 10, repeat: Infinity, repeatType: 'reverse'}}
+						initial={{ scale: 1.1 }}
+						animate={{ scale: 1.05 }}
+						transition={{ duration: 10, repeat: Infinity, repeatType: 'reverse' }}
 						src={shop_bg}
 						alt='Himalayan Shop'
-						className='w-full h-full object-cover'
+						className='w-full h-full object-cover transform-gpu will-change-transform'
 					/>
 				</div>
 
@@ -191,12 +191,12 @@ const Shop = () => {
 						initial='hidden'
 						animate='visible'
 						variants={{
-							hidden: {opacity: 0, y: 20},
-							visible: {opacity: 1, y: 0, transition: {staggerChildren: 0.2}},
+							hidden: { opacity: 0, y: 20 },
+							visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } },
 						}}>
 						<motion.span
 							variants={heroTextVariants}
-							className='inline-block py-1 px-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#e8c9a0] text-xs font-bold tracking-[0.2em] uppercase mb-6 shadow-sm'>
+							className='inline-block py-1 px-4 rounded-full bg-white/10 border border-white/20 text-[#e8c9a0] text-xs font-bold tracking-[0.2em] uppercase mb-6 shadow-sm'>
 							Pure & Potent
 						</motion.span>
 						<motion.h1
@@ -218,9 +218,9 @@ const Shop = () => {
 				<div className='flex flex-col lg:flex-row gap-12'>
 					{/* Sidebar - Category Selection */}
 					<motion.div
-						initial={{opacity: 0, x: -20}}
-						animate={{opacity: 1, x: 0}}
-						transition={{duration: 0.6, delay: 0.2}}
+						initial={{ opacity: 0, x: -20 }}
+						animate={{ opacity: 1, x: 0 }}
+						transition={{ duration: 0.6, delay: 0.2 }}
 						className='w-full lg:w-1/4'>
 						<div className='bg-white rounded-2xl lg:rounded-3xl p-4 lg:p-8 shadow-sm lg:shadow-xl border border-gray-100 lg:sticky lg:top-36'>
 							<h3 className='text-lg lg:text-xl font-bold text-[#1e4035] mb-3 lg:mb-6 font-playfair border-b-0 lg:border-b border-gray-100 lg:pb-4'>
@@ -247,11 +247,10 @@ const Shop = () => {
 													setActiveCategory(category)
 													setCurrentPage(1)
 												}}
-												className={`w-full text-left px-5 py-2 lg:px-4 lg:py-3 rounded-full lg:rounded-xl transition-all duration-300 flex items-center justify-between group ${
-													activeCategory === category
+												className={`w-full text-left px-5 py-2 lg:px-4 lg:py-3 rounded-full lg:rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
 														? 'bg-[#1B2B26] text-white shadow-md lg:shadow-lg shadow-[#2d5f4f]/30 border-transparent'
 														: 'bg-gray-50 border border-gray-200 lg:bg-transparent lg:border-transparent text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
-												}`}>
+													}`}>
 												<span className='font-medium text-sm lg:text-base whitespace-nowrap'>
 													{category}
 												</span>
@@ -379,14 +378,14 @@ const Shop = () => {
 													<div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/0 to-[#3e7a70]/0 md:group-hover:from-[#2d5f4f]/5 md:group-hover:to-[#3e7a70]/5 transition-all duration-500'></div>
 													{/* Custom Out of Stock Overlay */}
 													{product.stock <= 0 && (
-														<div className='absolute inset-0 bg-white/60 z-10 backdrop-blur-[1px]'></div>
+														<div className='absolute inset-0 bg-white/60 z-10'></div>
 													)}
 
 													{product.images && product.images.length > 0 ? (
 														<img
 															src={product.images[0].url}
 															alt={product.title}
-															className='relative w-full h-full object-contain md:group-hover:scale-110 transition-transform duration-700'
+															className='relative w-full h-full object-contain md:group-hover:scale-110 transition-transform duration-700 transform-gpu will-change-transform'
 														/>
 													) : (
 														<div className='w-full h-full flex items-center justify-center bg-gray-50 rounded-2xl'>
@@ -474,11 +473,10 @@ const Shop = () => {
 														<button
 															onClick={() => handleAddToCart(product)}
 															disabled={product.stock <= 0}
-															className={`p-2 lg:p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${
-																product.stock <= 0
+															className={`p-2 lg:p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${product.stock <= 0
 																	? 'bg-gray-100 text-gray-300 cursor-not-allowed'
 																	: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] md:hover:from-[#2d5f4f] md:hover:to-[#3e7a70] md:hover:text-white md:hover:scale-110 md:hover:shadow-[#2d5f4f]/30'
-															}`}>
+																}`}>
 															<svg
 																className='w-4 h-4 lg:w-5 lg:h-5'
 																fill='none'
@@ -510,11 +508,10 @@ const Shop = () => {
 												setCurrentPage((prev) => Math.max(prev - 1, 1))
 											}
 											disabled={currentPage === 1}
-											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-												currentPage === 1
+											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === 1
 													? 'text-gray-300 cursor-not-allowed'
 													: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
-											}`}>
+												}`}>
 											<svg
 												className='w-5 h-5'
 												fill='none'
@@ -534,11 +531,10 @@ const Shop = () => {
 												<button
 													key={index + 1}
 													onClick={() => setCurrentPage(index + 1)}
-													className={`w-10 h-10 rounded-full font-bold transition-all ${
-														currentPage === index + 1
+													className={`w-10 h-10 rounded-full font-bold transition-all ${currentPage === index + 1
 															? 'bg-[#2d5f4f] text-white shadow-lg shadow-[#2d5f4f]/30'
 															: 'bg-white text-gray-500 hover:text-[#2d5f4f]'
-													}`}>
+														}`}>
 													{index + 1}
 												</button>
 											))}
@@ -549,11 +545,10 @@ const Shop = () => {
 												setCurrentPage((prev) => Math.min(prev + 1, totalPages))
 											}
 											disabled={currentPage === totalPages}
-											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
-												currentPage === totalPages
+											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === totalPages
 													? 'text-gray-300 cursor-not-allowed'
 													: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
-											}`}>
+												}`}>
 											<svg
 												className='w-5 h-5'
 												fill='none'
