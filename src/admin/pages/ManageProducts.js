@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import axios from 'axios'
-import { toast } from 'react-toastify'
+import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import ReactQuill from 'react-quill-new'
 import 'react-quill-new/dist/quill.snow.css'
@@ -9,7 +9,7 @@ const ManageProducts = () => {
 	const [products, setProducts] = useState([])
 	const [categories, setCategories] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const [editModal, setEditModal] = useState({ isOpen: false, product: null })
+	const [editModal, setEditModal] = useState({isOpen: false, product: null})
 	const [editForm, setEditForm] = useState({
 		title: '',
 		brand: '',
@@ -29,14 +29,17 @@ const ManageProducts = () => {
 
 	// New fields in Edit Modal
 	const [editDescriptionDropdowns, setEditDescriptionDropdowns] = useState([])
-	const [editVideoSection, setEditVideoSection] = useState({ heading: '', video: null })
+	const [editVideoSection, setEditVideoSection] = useState({
+		heading: '',
+		video: null,
+	})
 	const [editVideoPreview, setEditVideoPreview] = useState(null)
 	const [editIsVideoDragging, setEditIsVideoDragging] = useState(false)
 
 	// Variant State for Edit
 	const [hasVariants, setHasVariants] = useState(false)
 	const [variants, setVariants] = useState([])
-	const [variantOptions, setVariantOptions] = useState([{ name: '', values: '' }])
+	const [variantOptions, setVariantOptions] = useState([{name: '', values: ''}])
 
 	// Search state
 	const [searchText, setSearchText] = useState('')
@@ -82,14 +85,23 @@ const ManageProducts = () => {
 		return () => document.removeEventListener('mousedown', handleClickOutside)
 	}, [])
 
+	useEffect(() => {
+		if (editModal.isOpen) {
+			document.body.style.overflow = 'hidden'
+		}
+		return () => {
+			document.body.style.overflow = ''
+		}
+	}, [editModal.isOpen])
+
 	// Rich text editor modules configuration
 	const quillModules = {
 		toolbar: [
-			[{ header: [1, 2, 3, false] }],
+			[{header: [1, 2, 3, false]}],
 			['bold', 'italic', 'underline', 'strike'],
-			[{ list: 'ordered' }, { list: 'bullet' }],
-			[{ indent: '-1' }, { indent: '+1' }],
-			[{ align: [] }],
+			[{list: 'ordered'}, {list: 'bullet'}],
+			[{indent: '-1'}, {indent: '+1'}],
+			[{align: []}],
 			['link'],
 			['clean'],
 		],
@@ -116,7 +128,9 @@ const ManageProducts = () => {
 
 	const fetchCategories = useCallback(async () => {
 		try {
-			const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`)
+			const response = await axios.get(
+				`${process.env.REACT_APP_API_URL}/api/categories`,
+			)
 			if (response.data.success) {
 				setCategories(response.data.data)
 			}
@@ -184,7 +198,7 @@ const ManageProducts = () => {
 	}
 
 	const handleEdit = (product) => {
-		setEditModal({ isOpen: true, product })
+		setEditModal({isOpen: true, product})
 		setEditForm({
 			title: product.title,
 			brand: product.brand || '',
@@ -203,7 +217,7 @@ const ManageProducts = () => {
 		setEditDescriptionDropdowns(product.descriptionDropdowns || [])
 		setEditVideoSection({
 			heading: product.videoSection?.heading || '',
-			video: product.videoSection?.video || null
+			video: product.videoSection?.video || null,
 		})
 		setEditVideoPreview(product.videoSection?.video?.url || null)
 
@@ -212,14 +226,14 @@ const ManageProducts = () => {
 		// Ensure variants have necessary fields and migrate legacy single image to images array
 		const loadedVariants = (product.variants || []).map((v) => ({
 			...v,
-			images: v.images || (v.image ? [{ url: v.image, key: v.image }] : []),
+			images: v.images || (v.image ? [{url: v.image, key: v.image}] : []),
 		}))
 		setVariants(loadedVariants)
-		setVariantOptions([{ name: '', values: '' }]) // Clean slate for generator
+		setVariantOptions([{name: '', values: ''}]) // Clean slate for generator
 	}
 
 	const handleCloseModal = () => {
-		setEditModal({ isOpen: false, product: null })
+		setEditModal({isOpen: false, product: null})
 		setEditForm({
 			title: '',
 			brand: '',
@@ -236,9 +250,9 @@ const ManageProducts = () => {
 		setEditFaqs([])
 		setHasVariants(false)
 		setVariants([])
-		setVariantOptions([{ name: '', values: '' }])
+		setVariantOptions([{name: '', values: ''}])
 		setEditDescriptionDropdowns([])
-		setEditVideoSection({ heading: '', video: null })
+		setEditVideoSection({heading: '', video: null})
 		setEditVideoPreview(null)
 	}
 
@@ -292,7 +306,7 @@ const ManageProducts = () => {
 	}
 
 	const addFaq = () => {
-		setEditFaqs((prev) => [...prev, { question: '', answer: '' }])
+		setEditFaqs((prev) => [...prev, {question: '', answer: ''}])
 	}
 
 	const removeFaq = (index) => {
@@ -319,7 +333,7 @@ const ManageProducts = () => {
 			const reader = new FileReader()
 			reader.onload = (e) => {
 				const base64 = e.target.result
-				setEditVideoSection(prev => ({ ...prev, video: base64 }))
+				setEditVideoSection((prev) => ({...prev, video: base64}))
 
 				const localUrl = URL.createObjectURL(file)
 				setEditVideoPreview(localUrl)
@@ -341,21 +355,21 @@ const ManageProducts = () => {
 	}
 
 	const removeEditVideo = () => {
-		setEditVideoSection(prev => ({ ...prev, video: null }))
+		setEditVideoSection((prev) => ({...prev, video: null}))
 		setEditVideoPreview(null)
 	}
 
 	// Description Dropdowns handling in Edit Modal
 	const addEditDescriptionDropdown = () => {
-		setEditDescriptionDropdowns(prev => [...prev, { heading: '', content: '' }])
+		setEditDescriptionDropdowns((prev) => [...prev, {heading: '', content: ''}])
 	}
 
 	const removeEditDescriptionDropdown = (index) => {
-		setEditDescriptionDropdowns(prev => prev.filter((_, i) => i !== index))
+		setEditDescriptionDropdowns((prev) => prev.filter((_, i) => i !== index))
 	}
 
 	const handleEditDescriptionDropdownChange = (index, field, value) => {
-		setEditDescriptionDropdowns(prev => {
+		setEditDescriptionDropdowns((prev) => {
 			const updated = [...prev]
 			updated[index][field] = value
 			return updated
@@ -370,7 +384,7 @@ const ManageProducts = () => {
 	}
 
 	const addVariantOption = () => {
-		setVariantOptions([...variantOptions, { name: '', values: '' }])
+		setVariantOptions([...variantOptions, {name: '', values: ''}])
 	}
 
 	const removeVariantOption = (index) => {
@@ -389,7 +403,7 @@ const ManageProducts = () => {
 			const next = []
 			generated.forEach((prev) => {
 				values.forEach((value) => {
-					next.push([...prev, { key: option.name, value }])
+					next.push([...prev, {key: option.name, value}])
 				})
 			})
 			generated = next
@@ -446,7 +460,7 @@ const ManageProducts = () => {
 			const imagesToSend = editImages.length > 0 ? editImages : []
 
 			const validFaqs = editFaqs.filter(
-				(faq) => faq.question.trim() && faq.answer.trim()
+				(faq) => faq.question.trim() && faq.answer.trim(),
 			)
 
 			const productData = {
@@ -479,7 +493,7 @@ const ManageProducts = () => {
 						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',
 					},
-				}
+				},
 			)
 
 			if (response.data.success) {
@@ -499,7 +513,7 @@ const ManageProducts = () => {
 
 	const handleDelete = async (product) => {
 		const confirmed = window.confirm(
-			`Are you sure you want to delete "${product.title}"?`
+			`Are you sure you want to delete "${product.title}"?`,
 		)
 
 		if (!confirmed) return
@@ -512,7 +526,7 @@ const ManageProducts = () => {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
-				}
+				},
 			)
 
 			if (response.data.success) {
@@ -579,7 +593,6 @@ const ManageProducts = () => {
 
 	return (
 		<div className='max-w-6xl'>
-
 			<div className='mb-8'>
 				<h1 className='text-3xl font-bold text-slate-800 mb-2'>
 					Manage Products
@@ -662,16 +675,18 @@ const ManageProducts = () => {
 									onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
 									className='w-full pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-left text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-200 text-sm'>
 									<span
-										className={`block truncate ${!selectedCategory ? 'text-slate-400' : ''
-											}`}>
+										className={`block truncate ${
+											!selectedCategory ? 'text-slate-400' : ''
+										}`}>
 										{selectedCategory
 											? categories.find((c) => c._id === selectedCategory)?.name
 											: 'All Categories'}
 									</span>
 									<span className='absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none'>
 										<svg
-											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${showCategoryDropdown ? 'rotate-180' : ''
-												}`}
+											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
+												showCategoryDropdown ? 'rotate-180' : ''
+											}`}
 											fill='none'
 											stroke='currentColor'
 											viewBox='0 0 24 24'>
@@ -690,10 +705,11 @@ const ManageProducts = () => {
 										<div className='max-h-60 overflow-auto p-1'>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!selectedCategory
-													? 'bg-blue-50 text-blue-700 font-medium'
-													: 'text-slate-700 hover:bg-slate-50'
-													}`}
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+													!selectedCategory
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
+												}`}
 												onClick={() => {
 													setSelectedCategory('')
 													setShowCategoryDropdown(false)
@@ -704,10 +720,11 @@ const ManageProducts = () => {
 												<button
 													key={cat._id}
 													type='button'
-													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${selectedCategory === cat._id
-														? 'bg-blue-50 text-blue-700 font-medium'
-														: 'text-slate-700 hover:bg-slate-50'
-														}`}
+													className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+														selectedCategory === cat._id
+															? 'bg-blue-50 text-blue-700 font-medium'
+															: 'text-slate-700 hover:bg-slate-50'
+													}`}
 													onClick={() => {
 														setSelectedCategory(cat._id)
 														setShowCategoryDropdown(false)
@@ -732,8 +749,9 @@ const ManageProducts = () => {
 									onClick={() => setShowStockDropdown(!showStockDropdown)}
 									className='w-full pl-3 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-left text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all duration-200 text-sm'>
 									<span
-										className={`block truncate ${!stockFilter ? 'text-slate-400' : ''
-											}`}>
+										className={`block truncate ${
+											!stockFilter ? 'text-slate-400' : ''
+										}`}>
 										{stockFilter === 'in_stock'
 											? 'In Stock'
 											: stockFilter === 'low_stock'
@@ -744,8 +762,9 @@ const ManageProducts = () => {
 									</span>
 									<span className='absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none'>
 										<svg
-											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${showStockDropdown ? 'rotate-180' : ''
-												}`}
+											className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${
+												showStockDropdown ? 'rotate-180' : ''
+											}`}
 											fill='none'
 											stroke='currentColor'
 											viewBox='0 0 24 24'>
@@ -764,10 +783,11 @@ const ManageProducts = () => {
 										<div className='p-1'>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${!stockFilter
-													? 'bg-blue-50 text-blue-700 font-medium'
-													: 'text-slate-700 hover:bg-slate-50'
-													}`}
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+													!stockFilter
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
+												}`}
 												onClick={() => {
 													setStockFilter('')
 													setShowStockDropdown(false)
@@ -776,10 +796,11 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'in_stock'
-													? 'bg-blue-50 text-blue-700 font-medium'
-													: 'text-slate-700 hover:bg-slate-50'
-													}`}
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+													stockFilter === 'in_stock'
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
+												}`}
 												onClick={() => {
 													setStockFilter('in_stock')
 													setShowStockDropdown(false)
@@ -788,10 +809,11 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'low_stock'
-													? 'bg-blue-50 text-blue-700 font-medium'
-													: 'text-slate-700 hover:bg-slate-50'
-													}`}
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+													stockFilter === 'low_stock'
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
+												}`}
 												onClick={() => {
 													setStockFilter('low_stock')
 													setShowStockDropdown(false)
@@ -800,10 +822,11 @@ const ManageProducts = () => {
 											</button>
 											<button
 												type='button'
-												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${stockFilter === 'no_stock'
-													? 'bg-blue-50 text-blue-700 font-medium'
-													: 'text-slate-700 hover:bg-slate-50'
-													}`}
+												className={`w-full text-left px-4 py-2.5 rounded-lg text-sm transition-colors ${
+													stockFilter === 'no_stock'
+														? 'bg-blue-50 text-blue-700 font-medium'
+														: 'text-slate-700 hover:bg-slate-50'
+												}`}
 												onClick={() => {
 													setStockFilter('no_stock')
 													setShowStockDropdown(false)
@@ -910,11 +933,11 @@ const ManageProducts = () => {
 													className='font-semibold'
 													style={{
 														color: getCategoryColor(
-															product.category._id || product.category
+															product.category._id || product.category,
 														),
 													}}>
 													{getCategoryName(
-														product.category._id || product.category
+														product.category._id || product.category,
 													)}
 												</span>
 											</td>
@@ -1038,7 +1061,9 @@ const ManageProducts = () => {
 						</div>
 
 						{/* Body - Scrollable */}
-						<div className='flex-1 overflow-y-auto p-6 bg-slate-50/50 min-h-0'>
+						<div
+							className='flex-1 overflow-y-auto p-6 bg-slate-50/50 min-h-0'
+							style={{overscrollBehavior: 'contain'}}>
 							<form
 								id='edit-product-form'
 								onSubmit={handleUpdateProduct}
@@ -1127,7 +1152,7 @@ const ManageProducts = () => {
 													type='text'
 													value={editForm.sku}
 													onChange={(e) =>
-														setEditForm({ ...editForm, sku: e.target.value })
+														setEditForm({...editForm, sku: e.target.value})
 													}
 													className='w-full px-3 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all bg-slate-50 hover:bg-white'
 													placeholder='SKU-001'
@@ -1154,7 +1179,7 @@ const ManageProducts = () => {
 												theme='snow'
 												value={editForm.description}
 												onChange={(value) =>
-													setEditForm({ ...editForm, description: value })
+													setEditForm({...editForm, description: value})
 												}
 												modules={quillModules}
 												formats={quillFormats}
@@ -1172,10 +1197,11 @@ const ManageProducts = () => {
 											Images
 										</label>
 										<div
-											className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${isDragging
-												? 'border-blue-500 bg-blue-50/50 scale-[1.02]'
-												: 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
-												}`}
+											className={`border-2 border-dashed rounded-lg p-4 text-center transition-all duration-200 ${
+												isDragging
+													? 'border-blue-500 bg-blue-50/50 scale-[1.02]'
+													: 'border-slate-200 hover:border-blue-400 hover:bg-slate-50'
+											}`}
 											onDragEnter={handleDragEnter}
 											onDragOver={handleDragOver}
 											onDragLeave={handleDragLeave}
@@ -1262,26 +1288,47 @@ const ManageProducts = () => {
 									</div>
 
 									{editDescriptionDropdowns.length === 0 ? (
-										<p className='text-xs text-slate-500 italic'>No description dropdowns added.</p>
+										<p className='text-xs text-slate-500 italic'>
+											No description dropdowns added.
+										</p>
 									) : (
 										<div className='space-y-4'>
 											{editDescriptionDropdowns.map((dropdown, index) => (
-												<div key={index} className='p-4 border border-slate-200 rounded-lg bg-slate-50/50 relative'>
+												<div
+													key={index}
+													className='p-4 border border-slate-200 rounded-lg bg-slate-50/50 relative'>
 													<button
 														type='button'
 														onClick={() => removeEditDescriptionDropdown(index)}
 														className='absolute top-3 right-3 text-red-500 hover:text-red-700 p-1 bg-red-50 rounded-full transition'>
-														<svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-															<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+														<svg
+															className='w-3 h-3'
+															fill='none'
+															stroke='currentColor'
+															viewBox='0 0 24 24'>
+															<path
+																strokeLinecap='round'
+																strokeLinejoin='round'
+																strokeWidth={2}
+																d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
+															/>
 														</svg>
 													</button>
 
 													<div className='mb-3 w-full md:w-3/4 pr-8'>
-														<label className='block text-xs font-semibold text-slate-500 mb-1'>Heading <span className='text-red-500'>*</span></label>
+														<label className='block text-xs font-semibold text-slate-500 mb-1'>
+															Heading <span className='text-red-500'>*</span>
+														</label>
 														<input
 															type='text'
 															value={dropdown.heading}
-															onChange={(e) => handleEditDescriptionDropdownChange(index, 'heading', e.target.value)}
+															onChange={(e) =>
+																handleEditDescriptionDropdownChange(
+																	index,
+																	'heading',
+																	e.target.value,
+																)
+															}
 															className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
 															placeholder='e.g., Product Details'
 															required
@@ -1289,12 +1336,20 @@ const ManageProducts = () => {
 													</div>
 
 													<div>
-														<label className='block text-xs font-semibold text-slate-500 mb-1'>Content <span className='text-red-500'>*</span></label>
+														<label className='block text-xs font-semibold text-slate-500 mb-1'>
+															Content <span className='text-red-500'>*</span>
+														</label>
 														<div className='h-48 mb-10'>
 															<ReactQuill
 																theme='snow'
 																value={dropdown.content}
-																onChange={(val) => handleEditDescriptionDropdownChange(index, 'content', val)}
+																onChange={(val) =>
+																	handleEditDescriptionDropdownChange(
+																		index,
+																		'content',
+																		val,
+																	)
+																}
 																modules={quillModules}
 																formats={quillFormats}
 																className='bg-white rounded-lg h-full'
@@ -1310,52 +1365,102 @@ const ManageProducts = () => {
 								{/* Optional Video Section */}
 								<div className='mb-4 mt-8 border-t border-slate-100 pt-6'>
 									<label className='block text-xs font-semibold text-slate-600 mb-4 uppercase tracking-wider flex items-center gap-2'>
-										<svg className="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+										<svg
+											className='w-4 h-4 text-purple-500'
+											fill='none'
+											stroke='currentColor'
+											viewBox='0 0 24 24'>
+											<path
+												strokeLinecap='round'
+												strokeLinejoin='round'
+												strokeWidth='2'
+												d='M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z'></path>
+										</svg>
 										Video Section (Optional)
 									</label>
 
 									<div className='mb-4 w-full md:w-3/4'>
-										<label className='block text-xs font-semibold text-slate-500 mb-1'>Video Heading</label>
+										<label className='block text-xs font-semibold text-slate-500 mb-1'>
+											Video Heading
+										</label>
 										<input
 											type='text'
 											value={editVideoSection.heading}
-											onChange={(e) => setEditVideoSection({ ...editVideoSection, heading: e.target.value })}
+											onChange={(e) =>
+												setEditVideoSection({
+													...editVideoSection,
+													heading: e.target.value,
+												})
+											}
 											className='w-full px-3 py-2 border border-slate-300 rounded-lg text-sm'
 											placeholder='e.g., Watch it in action'
 										/>
 									</div>
 
 									<div>
-										<label className='block text-xs font-semibold text-slate-500 mb-2'>Upload Video</label>
+										<label className='block text-xs font-semibold text-slate-500 mb-2'>
+											Upload Video
+										</label>
 
 										{editVideoPreview ? (
-											<div className="relative rounded-lg border border-slate-200 overflow-hidden bg-black max-w-md">
+											<div className='relative rounded-lg border border-slate-200 overflow-hidden bg-black max-w-md'>
 												<video
 													src={editVideoPreview}
 													controls
-													className="w-full h-auto max-h-48 object-contain"
+													className='w-full h-auto max-h-48 object-contain'
 												/>
 												<button
 													type='button'
 													onClick={removeEditVideo}
 													className='absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition shadow-md'>
-													<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-														<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+													<svg
+														className='w-4 h-4'
+														fill='none'
+														stroke='currentColor'
+														viewBox='0 0 24 24'>
+														<path
+															strokeLinecap='round'
+															strokeLinejoin='round'
+															strokeWidth={2}
+															d='M6 18L18 6M6 6l12 12'
+														/>
 													</svg>
 												</button>
 											</div>
 										) : (
 											<div
-												className={`border-2 border-dashed rounded-lg p-4 text-center transition max-w-md ${editIsVideoDragging
-													? 'border-purple-500 bg-purple-50'
-													: 'border-slate-300 hover:border-slate-400'
-													}`}
-												onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setEditIsVideoDragging(true); }}
-												onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
-												onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); setEditIsVideoDragging(false); }}
+												className={`border-2 border-dashed rounded-lg p-4 text-center transition max-w-md ${
+													editIsVideoDragging
+														? 'border-purple-500 bg-purple-50'
+														: 'border-slate-300 hover:border-slate-400'
+												}`}
+												onDragEnter={(e) => {
+													e.preventDefault()
+													e.stopPropagation()
+													setEditIsVideoDragging(true)
+												}}
+												onDragOver={(e) => {
+													e.preventDefault()
+													e.stopPropagation()
+												}}
+												onDragLeave={(e) => {
+													e.preventDefault()
+													e.stopPropagation()
+													setEditIsVideoDragging(false)
+												}}
 												onDrop={handleEditVideoDrop}>
 												<div className='mb-2'>
-													<svg className="mx-auto h-8 w-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+													<svg
+														className='mx-auto h-8 w-8 text-slate-400'
+														fill='none'
+														stroke='currentColor'
+														viewBox='0 0 24 24'>
+														<path
+															strokeLinecap='round'
+															strokeLinejoin='round'
+															strokeWidth='2'
+															d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'></path>
+													</svg>
 												</div>
 												<p className='text-xs text-slate-600 mb-2'>
 													Drag & drop a video or click to select
@@ -1396,11 +1501,13 @@ const ManageProducts = () => {
 												}}
 											/>
 											<div
-												className={`block w-12 h-7 rounded-full transition ${hasVariants ? 'bg-blue-600' : 'bg-slate-300'
-													}`}></div>
+												className={`block w-12 h-7 rounded-full transition ${
+													hasVariants ? 'bg-blue-600' : 'bg-slate-300'
+												}`}></div>
 											<div
-												className={`absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform ${hasVariants ? 'translate-x-5' : ''
-													}`}></div>
+												className={`absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition transform ${
+													hasVariants ? 'translate-x-5' : ''
+												}`}></div>
 										</div>
 										<span className='text-sm font-medium text-slate-700'>
 											Has Variants?
@@ -1431,7 +1538,7 @@ const ManageProducts = () => {
 															handleVariantOptionChange(
 																index,
 																'name',
-																e.target.value
+																e.target.value,
 															)
 														}
 														className='w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all'
@@ -1449,7 +1556,7 @@ const ManageProducts = () => {
 															handleVariantOptionChange(
 																index,
 																'values',
-																e.target.value
+																e.target.value,
 															)
 														}
 														className='w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all'
@@ -1529,7 +1636,7 @@ const ManageProducts = () => {
 																		handleVariantChange(
 																			index,
 																			'price',
-																			e.target.value
+																			e.target.value,
 																		)
 																	}
 																	className='w-20 px-2 py-1 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
@@ -1544,7 +1651,7 @@ const ManageProducts = () => {
 																		handleVariantChange(
 																			index,
 																			'stock',
-																			e.target.value
+																			e.target.value,
 																		)
 																	}
 																	className='w-16 px-2 py-1 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
@@ -1559,7 +1666,7 @@ const ManageProducts = () => {
 																		handleVariantChange(
 																			index,
 																			'sku',
-																			e.target.value
+																			e.target.value,
 																		)
 																	}
 																	className='w-24 px-2 py-1 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
@@ -1570,7 +1677,7 @@ const ManageProducts = () => {
 																<div className='flex flex-col gap-2'>
 																	<div className='flex flex-wrap gap-1'>
 																		{variant.images &&
-																			variant.images.length > 0 ? (
+																		variant.images.length > 0 ? (
 																			variant.images.map((img, i) => (
 																				<img
 																					key={i}
@@ -1775,7 +1882,7 @@ const ManageProducts = () => {
 						</div>
 
 						{/* Footer - Fixed */}
-						<div className='p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-xl'>
+						<div className='p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-xl flex-shrink-0'>
 							<button
 								type='button'
 								onClick={handleCloseModal}
@@ -1786,10 +1893,11 @@ const ManageProducts = () => {
 								type='submit'
 								form='edit-product-form'
 								disabled={isSaving}
-								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${isSaving
-									? 'bg-slate-400 cursor-not-allowed'
-									: 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
-									}`}>
+								className={`px-5 py-2.5 text-sm font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all flex items-center gap-2 ${
+									isSaving
+										? 'bg-slate-400 cursor-not-allowed'
+										: 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
+								}`}>
 								{isSaving ? (
 									<>
 										<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
