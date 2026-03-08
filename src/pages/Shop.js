@@ -248,8 +248,8 @@ const Shop = () => {
 													setCurrentPage(1)
 												}}
 												className={`w-full text-left px-5 py-2 lg:px-4 lg:py-3 rounded-full lg:rounded-xl transition-all duration-300 flex items-center justify-between group ${activeCategory === category
-														? 'bg-[#1B2B26] text-white shadow-md lg:shadow-lg shadow-[#2d5f4f]/30 border-transparent'
-														: 'bg-gray-50 border border-gray-200 lg:bg-transparent lg:border-transparent text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
+													? 'bg-[#1B2B26] text-white shadow-md lg:shadow-lg shadow-[#2d5f4f]/30 border-transparent'
+													: 'bg-gray-50 border border-gray-200 lg:bg-transparent lg:border-transparent text-gray-600 hover:bg-[#f4f7f6] hover:text-[#2d5f4f]'
 													}`}>
 												<span className='font-medium text-sm lg:text-base whitespace-nowrap'>
 													{category}
@@ -474,8 +474,8 @@ const Shop = () => {
 															onClick={() => handleAddToCart(product)}
 															disabled={product.stock <= 0}
 															className={`p-2 lg:p-3 rounded-full transition-all duration-300 group/btn shadow-sm ${product.stock <= 0
-																	? 'bg-gray-100 text-gray-300 cursor-not-allowed'
-																	: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] md:hover:from-[#2d5f4f] md:hover:to-[#3e7a70] md:hover:text-white md:hover:scale-110 md:hover:shadow-[#2d5f4f]/30'
+																? 'bg-gray-100 text-gray-300 cursor-not-allowed'
+																: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] md:hover:from-[#2d5f4f] md:hover:to-[#3e7a70] md:hover:text-white md:hover:scale-110 md:hover:shadow-[#2d5f4f]/30'
 																}`}>
 															<svg
 																className='w-4 h-4 lg:w-5 lg:h-5'
@@ -509,8 +509,8 @@ const Shop = () => {
 											}
 											disabled={currentPage === 1}
 											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === 1
-													? 'text-gray-300 cursor-not-allowed'
-													: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
+												? 'text-gray-300 cursor-not-allowed'
+												: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
 												}`}>
 											<svg
 												className='w-5 h-5'
@@ -532,8 +532,8 @@ const Shop = () => {
 													key={index + 1}
 													onClick={() => setCurrentPage(index + 1)}
 													className={`w-10 h-10 rounded-full font-bold transition-all ${currentPage === index + 1
-															? 'bg-[#2d5f4f] text-white shadow-lg shadow-[#2d5f4f]/30'
-															: 'bg-white text-gray-500 hover:text-[#2d5f4f]'
+														? 'bg-[#2d5f4f] text-white shadow-lg shadow-[#2d5f4f]/30'
+														: 'bg-white text-gray-500 hover:text-[#2d5f4f]'
 														}`}>
 													{index + 1}
 												</button>
@@ -546,8 +546,8 @@ const Shop = () => {
 											}
 											disabled={currentPage === totalPages}
 											className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${currentPage === totalPages
-													? 'text-gray-300 cursor-not-allowed'
-													: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
+												? 'text-gray-300 cursor-not-allowed'
+												: 'text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white border border-[#2d5f4f]'
 												}`}>
 											<svg
 												className='w-5 h-5'
