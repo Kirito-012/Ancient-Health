@@ -339,8 +339,8 @@ const ProductDetail = () => {
 											key={idx}
 											onClick={() => setActiveImageIndex(idx)}
 											className={`relative shrink-0 w-24 h-24 rounded-2xl overflow-hidden bg-white border-2 transition-all duration-300 flex items-center justify-center p-2 ${activeImageIndex === idx
-													? 'border-[#2d5f4f] shadow-md ring-2 ring-[#2d5f4f]/20 ring-offset-1'
-													: 'border-gray-100 hover:border-gray-300 hover:shadow-sm opacity-70 hover:opacity-100'
+												? 'border-[#2d5f4f] shadow-md ring-2 ring-[#2d5f4f]/20 ring-offset-1'
+												: 'border-gray-100 hover:border-gray-300 hover:shadow-sm opacity-70 hover:opacity-100'
 												}`}>
 											<img
 												src={img.url || img}
@@ -420,8 +420,8 @@ const ProductDetail = () => {
 														setQuantity(1) // Reset quantity on variant swap
 													}}
 													className={`px-5 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-300 ${selectedVariant?._id === variant._id
-															? 'border-[#2d5f4f] bg-[#2d5f4f]/5 text-[#2d5f4f] shadow-sm ring-4 ring-[#2d5f4f]/10'
-															: 'border-gray-200 bg-white text-gray-600 hover:border-[#2d5f4f]/50 hover:bg-gray-50'
+														? 'border-[#2d5f4f] bg-[#2d5f4f]/5 text-[#2d5f4f] shadow-sm ring-4 ring-[#2d5f4f]/10'
+														: 'border-gray-200 bg-white text-gray-600 hover:border-[#2d5f4f]/50 hover:bg-gray-50'
 														}`}>
 													{variant.attributes.map((a) => a.value).join(' / ')}
 												</button>
@@ -474,8 +474,8 @@ const ProductDetail = () => {
 										onClick={handleAddToCart}
 										disabled={currentStock <= 0 || isAddingToCart}
 										className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-[#2d5f4f]/20 transition-all duration-300 ${currentStock <= 0
-												? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-												: 'bg-[#2d5f4f] text-white hover:bg-[#1e4035] hover:-translate-y-1'
+											? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
+											: 'bg-[#2d5f4f] text-white hover:bg-[#1e4035] hover:-translate-y-1'
 											}`}>
 										{isAddingToCart ? (
 											<div className='w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
@@ -568,7 +568,7 @@ const ProductDetail = () => {
 														className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdownIndex === index ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
 														<HTMLContent
 															content={dropdown.content}
-															className='px-6 pr-10 pb-5 text-gray-600 prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-[#2d5f4f] prose-a:text-[#d4a574]'
+															className='px-6 pr-10 pb-5 text-gray-600 prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-[#2d5f4f] prose-a:text-[#d4a574] break-words whitespace-normal [&_*]:!whitespace-normal [&_*]:!break-words'
 														/>
 													</div>
 												</div>
@@ -827,8 +827,8 @@ const ProductDetail = () => {
 													}}
 													disabled={relProduct.stock <= 0}
 													className={`p-2 lg:p-3 rounded-full transition-all duration-300 shadow-sm ${relProduct.stock <= 0
-															? 'bg-gray-100 text-gray-300 cursor-not-allowed'
-															: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white hover:scale-110 hover:shadow-[#2d5f4f]/30'
+														? 'bg-gray-100 text-gray-300 cursor-not-allowed'
+														: 'bg-gradient-to-br from-[#2d5f4f]/10 to-[#3e7a70]/10 text-[#2d5f4f] hover:from-[#2d5f4f] hover:to-[#3e7a70] hover:text-white hover:scale-110 hover:shadow-[#2d5f4f]/30'
 														}`}>
 													<svg
 														className='w-4 h-4 lg:w-5 lg:h-5'
