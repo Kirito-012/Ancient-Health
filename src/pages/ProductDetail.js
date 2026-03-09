@@ -10,6 +10,8 @@ import {
 	RefreshCw,
 	ShieldCheck,
 	ChevronDown,
+	ChevronLeft,
+	ChevronRight,
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -313,6 +315,31 @@ const ProductDetail = () => {
 											-{discount}%
 										</span>
 									</div>
+								)}
+
+								{displayImages.length > 1 && (
+									<>
+										<button
+											onClick={(e) => {
+												e.stopPropagation()
+												setActiveImageIndex((prev) => (prev === 0 ? displayImages.length - 1 : prev - 1))
+											}}
+											className='absolute left-4 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 ring-2 ring-transparent focus:ring-[#2d5f4f]'
+											aria-label='Previous image'
+										>
+											<ChevronLeft className='w-6 h-6' />
+										</button>
+										<button
+											onClick={(e) => {
+												e.stopPropagation()
+												setActiveImageIndex((prev) => (prev === displayImages.length - 1 ? 0 : prev + 1))
+											}}
+											className='absolute right-4 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-white/90 text-[#2d5f4f] hover:bg-[#2d5f4f] hover:text-white shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:opacity-100 ring-2 ring-transparent focus:ring-[#2d5f4f]'
+											aria-label='Next image'
+										>
+											<ChevronRight className='w-6 h-6' />
+										</button>
+									</>
 								)}
 
 								{displayImages[activeImageIndex] && (
