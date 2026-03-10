@@ -9,6 +9,15 @@ import shop_bg from '../assets/shop_bg.png'
 import { stripHtml } from '../utils/textUtils'
 import { motion, AnimatePresence } from 'framer-motion'
 
+// Module-level cache to prevent re-fetching when navigating back to Shop
+const shopCache = {
+	products: null,
+	totalPages: 1,
+	categories: null,
+	timestamp: null,
+}
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+
 const Shop = () => {
 	const navigate = useNavigate()
 	const { addToCart } = useCart()
@@ -23,11 +32,22 @@ const Shop = () => {
 
 	// Fetch categories on component mount
 	useEffect(() => {
-		fetchCategories()
+		if (shopCache.categories && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+			setCategories(shopCache.categories);
+			setCategoriesLoading(false);
+		} else {
+			fetchCategories();
+		}
 	}, [])
 
 	useEffect(() => {
-		fetchProducts()
+		if (activeCategory === 'All' && shopCache.products && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+			setProducts(shopCache.products);
+			setTotalPages(shopCache.totalPages);
+			setLoading(false);
+		} else {
+			fetchProducts();
+		}
 		// eslint-disable-next-line
 	}, [currentPage, activeCategory]) // Refetch when category changes
 
@@ -42,7 +62,12 @@ const Shop = () => {
 			if (data.success && data.data) {
 				// Extract category names and prepend 'All'
 				const categoryNames = data.data.map((cat) => cat.name)
-				setCategories(['All', ...categoryNames])
+				const newCategories = ['All', ...categoryNames]
+				setCategories(newCategories)
+
+				// Update cache
+				shopCache.categories = newCategories;
+				shopCache.timestamp = Date.now();
 			} else {
 				// Fallback to just 'All' if fetch fails
 				console.warn('Failed to fetch categories, using default')
@@ -58,6 +83,20 @@ const Shop = () => {
 	}
 
 	const fetchProducts = async () => {
+		// If we already have the products in cache and it's not expired, just filter them
+		if (shopCache.products && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+			let filteredProducts = shopCache.products;
+			if (activeCategory !== 'All') {
+				filteredProducts = shopCache.products.filter(
+					(p) => p.category && p.category.name === activeCategory,
+				)
+			}
+			setProducts(filteredProducts);
+			setTotalPages(shopCache.totalPages);
+			setLoading(false);
+			return;
+		}
+
 		try {
 			setLoading(true)
 			const response = await fetch(
@@ -66,6 +105,13 @@ const Shop = () => {
 			const data = await response.json()
 
 			if (data.success) {
+				// Cache all products
+				if (currentPage === 1) {
+					shopCache.products = data.data;
+					shopCache.totalPages = data.pagination.pages;
+					shopCache.timestamp = Date.now();
+				}
+
 				// Client-side filtering based on selected category
 				let filteredProducts = data.data
 				if (activeCategory !== 'All') {
@@ -186,7 +232,7 @@ const Shop = () => {
 					/>
 				</div>
 
-				<div className='relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
+				<div className='relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 lg:pt-24'>
 					<motion.div
 						initial='hidden'
 						animate='visible'

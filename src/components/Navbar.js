@@ -15,9 +15,13 @@ const Navbar = ({ forceDarkNav = false }) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 30) // Trigger slightly later for better feel
+            // Use state bailout effectively
+            setIsScrolled(prev => {
+                const isNowScrolled = window.scrollY > 30;
+                return prev === isNowScrolled ? prev : isNowScrolled;
+            });
         }
-        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('scroll', handleScroll, { passive: true })
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
@@ -219,9 +223,11 @@ const Navbar = ({ forceDarkNav = false }) => {
                             {/* Shop Button (Capsule Style) */}
                             <Link
                                 to='/shop'
-                                className={`hidden lg:block ml-2 px-6 py-2 rounded-full text-xs font-serif font-bold uppercase tracking-widest transition-all duration-300 ${showDarkNav
-                                    ? 'bg-white text-[#0f1c18] hover:bg-[#d4a574]'
-                                    : 'bg-[#d4a574] text-[#0f1c18] hover:bg-white'
+                                className={`hidden lg:block ml-2 px-6 py-2 rounded-full text-xs font-serif font-bold uppercase tracking-widest transition-all duration-300 ${location.pathname === '/shop'
+                                    ? 'bg-transparent text-[#d4a574] border border-[#d4a574]/30 hover:bg-[#d4a574]/10'
+                                    : showDarkNav
+                                        ? 'bg-white text-[#0f1c18] hover:bg-[#d4a574]'
+                                        : 'bg-[#d4a574] text-[#0f1c18] hover:bg-white'
                                     }`}
                             >
                                 Shop
