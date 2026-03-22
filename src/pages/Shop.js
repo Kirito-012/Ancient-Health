@@ -13,10 +13,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 const shopCache = {
 	products: null,
 	totalPages: 1,
-	categories: null,
-	timestamp: null,
+	categories: null
 }
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
 
 const Shop = () => {
 	const navigate = useNavigate()
@@ -32,7 +30,7 @@ const Shop = () => {
 
 	// Fetch categories on component mount
 	useEffect(() => {
-		if (shopCache.categories && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+		if (shopCache.categories) {
 			setCategories(shopCache.categories);
 			setCategoriesLoading(false);
 		} else {
@@ -41,7 +39,9 @@ const Shop = () => {
 	}, [])
 
 	useEffect(() => {
-		if (activeCategory === 'All' && shopCache.products && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+		// Only use cached products if on page 1 and no category selected, 
+		// otherwise fetchProducts will handle filtering or pagination
+		if (activeCategory === 'All' && shopCache.products && currentPage === 1) {
 			setProducts(shopCache.products);
 			setTotalPages(shopCache.totalPages);
 			setLoading(false);
@@ -67,7 +67,6 @@ const Shop = () => {
 
 				// Update cache
 				shopCache.categories = newCategories;
-				shopCache.timestamp = Date.now();
 			} else {
 				// Fallback to just 'All' if fetch fails
 				console.warn('Failed to fetch categories, using default')
@@ -83,8 +82,8 @@ const Shop = () => {
 	}
 
 	const fetchProducts = async () => {
-		// If we already have the products in cache and it's not expired, just filter them
-		if (shopCache.products && shopCache.timestamp && (Date.now() - shopCache.timestamp < CACHE_DURATION)) {
+		// If we already have the products in cache, just filter them
+		if (shopCache.products && currentPage === 1) {
 			let filteredProducts = shopCache.products;
 			if (activeCategory !== 'All') {
 				filteredProducts = shopCache.products.filter(
@@ -109,7 +108,6 @@ const Shop = () => {
 				if (currentPage === 1) {
 					shopCache.products = data.data;
 					shopCache.totalPages = data.pagination.pages;
-					shopCache.timestamp = Date.now();
 				}
 
 				// Client-side filtering based on selected category

@@ -18,7 +18,7 @@ const renderContent = (raw) => {
             elements.push(
                 <ul key={key++} className="my-5 space-y-2 pl-5">
                     {listItems.map((item, i) => (
-                        <li key={i} className="flex items-start gap-3 text-[#e8e6e3]/80 text-base leading-relaxed">
+                        <li key={i} className="flex items-start gap-3 text-[#1B2B26]/80 text-base leading-relaxed">
                             <span className="mt-2 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-[#d4a574]" />
                             <span>{inlineFormat(item)}</span>
                         </li>
@@ -48,14 +48,14 @@ const renderContent = (raw) => {
         } else if (/^## /.test(line)) {
             flushList()
             elements.push(
-                <h2 key={key++} className="text-2xl font-serif font-bold text-white mt-10 mb-4 pb-2 border-b border-white/10">
+                <h2 key={key++} className="text-2xl font-serif font-bold text-[#1B2B26] mt-10 mb-4 pb-2 border-b border-[#1B2B26]/10">
                     {line.replace(/^## /, '')}
                 </h2>
             )
         } else if (/^# /.test(line)) {
             flushList()
             elements.push(
-                <h1 key={key++} className="text-3xl font-serif font-bold text-white mt-8 mb-5">
+                <h1 key={key++} className="text-3xl font-serif font-bold text-[#1B2B26] mt-8 mb-5">
                     {line.replace(/^# /, '')}
                 </h1>
             )
@@ -66,7 +66,7 @@ const renderContent = (raw) => {
         } else {
             flushList()
             elements.push(
-                <p key={key++} className="text-[#e8e6e3]/75 text-base leading-[1.9] my-4">
+                <p key={key++} className="text-[#1B2B26]/80 text-base leading-[1.9] my-4">
                     {inlineFormat(line)}
                 </p>
             )

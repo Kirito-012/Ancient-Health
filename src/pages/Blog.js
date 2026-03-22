@@ -5,6 +5,12 @@ import Footer from '../components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, User, ArrowRight, Search, BookOpen } from 'lucide-react'
 
+// Module-level cache to prevent re-fetching when navigating back to Blog
+const blogCache = {
+    blogs: null,
+    categories: null
+}
+
 const Blog = () => {
     const [blogs, setBlogs] = useState([])
     const [loading, setLoading] = useState(true)
@@ -15,11 +21,25 @@ const Blog = () => {
     const [categories, setCategories] = useState(['All'])
 
     useEffect(() => {
-        fetchBlogs()
+        if (blogCache.blogs && !search) {
+            setBlogs(blogCache.blogs)
+            setCategories(blogCache.categories)
+            setLoading(false)
+        } else {
+            fetchBlogs()
+        }
         // eslint-disable-next-line
     }, [search])
 
     const fetchBlogs = async () => {
+        // If cached and no text search ongoing, use cache
+        if (blogCache.blogs && !search) {
+            setBlogs(blogCache.blogs)
+            setCategories(blogCache.categories)
+            setLoading(false)
+            return
+        }
+
         try {
             setLoading(true)
             const params = new URLSearchParams()
@@ -31,6 +51,12 @@ const Blog = () => {
                 // Extract unique categories
                 const cats = ['All', ...new Set(data.data.map(b => b.category?.name).filter(Boolean))]
                 setCategories(cats)
+
+                // Save to cache if no search filter applied
+                if (!search) {
+                    blogCache.blogs = data.data;
+                    blogCache.categories = cats;
+                }
             } else {
                 setError('Failed to fetch blogs')
             }
