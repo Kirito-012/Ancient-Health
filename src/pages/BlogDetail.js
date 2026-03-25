@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import HTMLContent from '../components/HTMLContent'
 import { motion } from 'framer-motion'
 import { Calendar, User, ArrowLeft, BookOpen, Share2, Copy, ChevronRight } from 'lucide-react'
 
@@ -41,21 +42,21 @@ const renderContent = (raw) => {
         if (/^### /.test(line)) {
             flushList()
             elements.push(
-                <h3 key={key++} className="text-lg font-serif font-bold text-[#d4a574] mt-8 mb-3">
+                <h3 key={key++} className="text-2xl font-serif font-bold text-[#1B2B26] pt-2 mt-8 mb-4">
                     {line.replace(/^### /, '')}
                 </h3>
             )
         } else if (/^## /.test(line)) {
             flushList()
             elements.push(
-                <h2 key={key++} className="text-2xl font-serif font-bold text-[#1B2B26] mt-10 mb-4 pb-2 border-b border-[#1B2B26]/10">
+                <h2 key={key++} className="text-3xl font-serif font-bold text-[#1B2B26] pt-3 mt-10 mb-5 pb-2 border-b border-[#1B2B26]/10">
                     {line.replace(/^## /, '')}
                 </h2>
             )
         } else if (/^# /.test(line)) {
             flushList()
             elements.push(
-                <h1 key={key++} className="text-3xl font-serif font-bold text-[#1B2B26] mt-8 mb-5">
+                <h1 key={key++} className="text-4xl font-serif font-bold text-[#1B2B26] pt-5 mt-9 mb-6">
                     {line.replace(/^# /, '')}
                 </h1>
             )
@@ -66,7 +67,7 @@ const renderContent = (raw) => {
         } else {
             flushList()
             elements.push(
-                <p key={key++} className="text-[#1B2B26]/80 text-base leading-[1.9] my-4">
+                <p key={key++} className="text-[#1B2B26]/80 text-base leading-[1.9] text-justify my-4">
                     {inlineFormat(line)}
                 </p>
             )
@@ -75,6 +76,8 @@ const renderContent = (raw) => {
     flushList()
     return elements
 }
+
+const hasHTMLTags = (raw = '') => /<\/?[a-z][\s\S]*>/i.test(raw)
 
 const BlogDetail = () => {
     const { id } = useParams()
@@ -283,7 +286,9 @@ const BlogDetail = () => {
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.5 }}
                                     >
-                                        {renderContent(blog.content)}
+                                        {hasHTMLTags(blog.content)
+                                            ? <HTMLContent content={blog.content} className="blog-rich-content" />
+                                            : renderContent(blog.content)}
                                     </motion.div>
                                 </div>
 
