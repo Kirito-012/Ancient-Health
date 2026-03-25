@@ -157,7 +157,7 @@ const App = () => {
 							element={<Blog />}
 						/>
 						<Route
-							path='/blog/:id'
+							path='/blog/:slug'
 							element={<BlogDetail />}
 						/>
 

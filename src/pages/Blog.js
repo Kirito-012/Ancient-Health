@@ -4,12 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, User, ArrowRight, Search, BookOpen } from 'lucide-react'
-
-// Module-level cache to prevent re-fetching when navigating back to Blog
-const blogCache = {
-    blogs: null,
-    categories: null
-}
+import { blogCache } from '../utils/blogUtils'
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([])
@@ -224,7 +219,7 @@ const Blog = () => {
                             >
                                 <p className="text-[#d4a574] text-xs font-bold tracking-[0.2em] uppercase mb-6">✦ Featured Article</p>
                                 <Link
-                                    to={`/blog/${featuredBlog._id}`}
+                                    to={`/blog/${featuredBlog.slug}`}
                                     className="group grid lg:grid-cols-2 gap-0 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl border border-[#d4a574]/10 hover:border-[#d4a574]/30 transition-all duration-500"
                                 >
                                     {/* Image */}
@@ -291,7 +286,7 @@ const Blog = () => {
                                     variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
                                 >
                                     <Link
-                                        to={`/blog/${blog._id}`}
+                                        to={`/blog/${blog.slug}`}
                                         className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-[#d4a574]/10 hover:border-[#d4a574]/40 hover:shadow-xl transition-all duration-400 h-full"
                                     >
                                         {/* Card Image */}

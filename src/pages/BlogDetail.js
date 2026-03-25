@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { blogCache } from '../utils/blogUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HTMLContent from '../components/HTMLContent'
@@ -80,7 +81,7 @@ const renderContent = (raw) => {
 const hasHTMLTags = (raw = '') => /<\/?[a-z][\s\S]*>/i.test(raw)
 
 const BlogDetail = () => {
-    const { id } = useParams()
+    const { slug } = useParams()
     const [blog, setBlog] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -90,7 +91,7 @@ const BlogDetail = () => {
     useEffect(() => {
         fetchBlog()
         // eslint-disable-next-line
-    }, [id])
+    }, [slug])
 
     // Reading progress bar
     useEffect(() => {
@@ -106,7 +107,22 @@ const BlogDetail = () => {
     const fetchBlog = async () => {
         try {
             setLoading(true)
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/blogs/${id}`)
+
+            // Resolve slug → _id via cache, or fetch all blogs as fallback
+            let blogs = blogCache.blogs
+            if (!blogs) {
+                const listRes = await fetch(`${process.env.REACT_APP_API_URL}/api/blogs`)
+                const listData = await listRes.json()
+                if (!listData.success) { setError('Blog post not found.'); return }
+                blogs = listData.data
+                blogCache.blogs = blogs
+                blogCache.categories = ['All', ...new Set(blogs.map(b => b.category?.name).filter(Boolean))]
+            }
+
+            const match = blogs.find(b => b.slug === slug)
+            if (!match) { setError('Blog post not found.'); return }
+
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/blogs/${match._id}`)
             const data = await res.json()
             if (data.success) {
                 setBlog(data.data)
