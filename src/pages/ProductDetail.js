@@ -353,7 +353,7 @@ const ProductDetail = () => {
 											displayImages[activeImageIndex]
 										}
 										alt={product.title}
-										className='relative z-10 w-full h-full object-contain filter drop-shadow-xl transform-gpu will-change-transform backface-visibility-hidden'
+										className='relative z-10 w-full h-full object-cover filter drop-shadow-xl transform-gpu will-change-transform backface-visibility-hidden'
 									/>
 								)}
 							</div>
@@ -372,7 +372,7 @@ const ProductDetail = () => {
 											<img
 												src={img.url || img}
 												alt={`${product.title} thumbnail ${idx + 1}`}
-												className='w-full h-full object-contain mix-blend-multiply'
+												className='w-full h-full object-cover mix-blend-multiply'
 											/>
 										</button>
 									))}
@@ -764,7 +764,7 @@ const ProductDetail = () => {
 												<img
 													src={relProduct.images[0].url}
 													alt={relProduct.title}
-													className='relative w-full h-full object-contain group-hover:scale-110 transition-transform duration-700'
+													className='relative w-full h-full object-cover group-hover:scale-110 transition-transform duration-700'
 												/>
 											) : (
 												<div className='w-full h-full flex items-center justify-center bg-gray-50 rounded-2xl'>

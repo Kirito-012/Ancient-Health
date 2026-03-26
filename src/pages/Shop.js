@@ -429,7 +429,7 @@ const Shop = () => {
 														<img
 															src={product.images[0].url}
 															alt={product.title}
-															className='relative w-full h-full object-contain md:group-hover:scale-110 transition-transform duration-700 transform-gpu will-change-transform'
+															className='relative w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-700 transform-gpu will-change-transform'
 														/>
 													) : (
 														<div className='w-full h-full flex items-center justify-center bg-gray-50 rounded-2xl'>
