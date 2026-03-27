@@ -15,6 +15,8 @@ const renderContent = (raw) => {
     let listItems = []
     let key = 0
 
+    const isHeadingLine = (line = '') => /^(#{1,3})\s+/.test(line.trim())
+
     const flushList = () => {
         if (listItems.length > 0) {
             elements.push(
@@ -39,25 +41,39 @@ const renderContent = (raw) => {
         return <span dangerouslySetInnerHTML={{ __html: text }} />
     }
 
-    lines.forEach((line) => {
+    lines.forEach((line, index) => {
+        const prevNonEmptyLine = [...lines.slice(0, index)].reverse().find(l => l.trim() !== '') || ''
+        const nextNonEmptyLine = lines.slice(index + 1).find(l => l.trim() !== '') || ''
+        const prevIsHeading = isHeadingLine(prevNonEmptyLine)
+        const nextIsHeading = isHeadingLine(nextNonEmptyLine)
+
         if (/^### /.test(line)) {
             flushList()
             elements.push(
-                <h3 key={key++} className="text-2xl font-serif font-bold text-[#1B2B26] pt-2 mt-8 mb-4">
+                <h3
+                    key={key++}
+                    className={`text-lg sm:text-[1.2rem] font-serif font-semibold text-[#2d5f4f] leading-[1.35] border-l-2 border-[#d4a574]/55 pl-3 ${prevIsHeading ? 'mt-3' : 'mt-8'} ${nextIsHeading ? 'mb-2' : 'mb-4'}`}
+                >
                     {line.replace(/^### /, '')}
                 </h3>
             )
         } else if (/^## /.test(line)) {
             flushList()
             elements.push(
-                <h2 key={key++} className="text-3xl font-serif font-bold text-[#1B2B26] pt-3 mt-10 mb-5 pb-2 border-b border-[#1B2B26]/10">
+                <h2
+                    key={key++}
+                    className={`text-2xl sm:text-[2.15rem] font-serif font-semibold text-[#1B2B26] leading-[1.18] ${prevIsHeading ? 'pt-1 mt-3' : 'pt-4 mt-12'} ${nextIsHeading ? 'mb-2 pb-2' : 'mb-6 pb-3'} border-b border-[#d4a574]/28`}
+                >
                     {line.replace(/^## /, '')}
                 </h2>
             )
         } else if (/^# /.test(line)) {
             flushList()
             elements.push(
-                <h1 key={key++} className="text-4xl font-serif font-bold text-[#1B2B26] pt-5 mt-9 mb-6">
+                <h1
+                    key={key++}
+                    className={`text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#1B2B26] leading-[1.1] pt-6 mt-10 ${nextIsHeading ? 'mb-3' : 'mb-7'}`}
+                >
                     {line.replace(/^# /, '')}
                 </h1>
             )
@@ -83,6 +99,7 @@ const hasHTMLTags = (raw = '') => /<\/?[a-z][\s\S]*>/i.test(raw)
 const BlogDetail = () => {
     const { slug } = useParams()
     const [blog, setBlog] = useState(null)
+    const [recentBlogs, setRecentBlogs] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [copied, setCopied] = useState(false)
@@ -121,6 +138,16 @@ const BlogDetail = () => {
 
             const match = blogs.find(b => b.slug === slug)
             if (!match) { setError('Blog post not found.'); return }
+
+            const latestThree = blogs
+                .filter(b => b.slug !== slug)
+                .sort((a, b) => {
+                    const aDate = new Date(a.date || a.createdAt || 0).getTime()
+                    const bDate = new Date(b.date || b.createdAt || 0).getTime()
+                    return bDate - aDate
+                })
+                .slice(0, 3)
+            setRecentBlogs(latestThree)
 
             const res = await fetch(`${process.env.REACT_APP_API_URL}/api/blogs/${match._id}`)
             const data = await res.json()
@@ -261,7 +288,7 @@ const BlogDetail = () => {
                         </div>
 
                         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16">
-                            <div className="grid lg:grid-cols-[1fr_280px] gap-12 items-start">
+                            <div>
 
                                 {/* Meta Description Intro */}
                                 <div>
@@ -277,17 +304,6 @@ const BlogDetail = () => {
                                             </p>
                                         </motion.div>
                                     )}
-
-                                    {/* Author card (mobile below) */}
-                                    <div className="flex items-center gap-4 mb-8 lg:hidden">
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b6b43] flex items-center justify-center text-white font-bold text-lg shadow-md">
-                                            {blog.author?.charAt(0) || 'A'}
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-bold text-[#1B2B26]">{blog.author}</p>
-                                            <p className="text-xs text-[#1B2B26]/50">{formatDate(blog.date)}</p>
-                                        </div>
-                                    </div>
 
                                     {/* Divider */}
                                     <div className="flex items-center gap-4 mb-8">
@@ -306,69 +322,107 @@ const BlogDetail = () => {
                                             ? <HTMLContent content={blog.content} className="blog-rich-content" />
                                             : renderContent(blog.content)}
                                     </motion.div>
-                                </div>
 
-                                {/* Sidebar */}
-                                <aside className="hidden lg:flex flex-col gap-6 sticky top-36">
-                                    {/* Author Card */}
-                                    <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
-                                        <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Written by</p>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b6b43] flex items-center justify-center text-white font-bold text-base shadow-md">
-                                                {blog.author?.charAt(0) || 'A'}
+                                    {/* End of article meta */}
+                                    <div className="mt-12 pt-8 border-t border-[#d4a574]/20">
+                                        <div className="grid md:grid-cols-2 gap-4">
+                                            <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
+                                                <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Written by</p>
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b6b43] flex items-center justify-center text-white font-bold text-base shadow-md">
+                                                        {blog.author?.charAt(0) || 'A'}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-bold text-[#1B2B26]">{blog.author}</p>
+                                                        <p className="text-xs text-[#1B2B26]/50">{formatDate(blog.date)}</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="text-sm font-bold text-[#1B2B26]">{blog.author}</p>
-                                                <p className="text-xs text-[#1B2B26]/50">{formatDate(blog.date)}</p>
+
+                                            <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
+                                                <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Share Article</p>
+                                                <button
+                                                    onClick={handleCopy}
+                                                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B2B26] text-white text-sm font-semibold rounded-xl hover:bg-[#2d5f4f] transition-colors"
+                                                >
+                                                    {copied ? (
+                                                        <>
+                                                            <Copy className="w-4 h-4 text-[#d4a574]" />
+                                                            Copied!
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Share2 className="w-4 h-4" />
+                                                            Copy Link
+                                                        </>
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {/* Share Card */}
-                                    <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
-                                        <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Share Article</p>
-                                        <button
-                                            onClick={handleCopy}
-                                            className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B2B26] text-white text-sm font-semibold rounded-xl hover:bg-[#2d5f4f] transition-colors"
+                                        <Link
+                                            to="/blog"
+                                            className="mt-6 inline-flex items-center gap-2 text-[#1B2B26]/60 hover:text-[#2d5f4f] text-sm font-semibold transition-colors group"
                                         >
-                                            {copied ? (
-                                                <>
-                                                    <Copy className="w-4 h-4 text-[#d4a574]" />
-                                                    Copied!
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Share2 className="w-4 h-4" />
-                                                    Copy Link
-                                                </>
-                                            )}
-                                        </button>
+                                            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                                            Back to Blog
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Recent blogs */}
+                            {recentBlogs.length > 0 && (
+                                <div className="mt-16 pt-10 border-t border-[#d4a574]/20">
+                                    <div className="flex items-center justify-between gap-4 mb-8">
+                                        <h3 className="text-2xl sm:text-3xl font-serif text-[#1B2B26]">Recent Articles</h3>
+                                        <Link to="/blog" className="text-sm font-semibold text-[#2d5f4f] hover:text-[#1B2B26] transition-colors">
+                                            View all
+                                        </Link>
                                     </div>
 
-                                    {/* Back */}
-                                    <Link
-                                        to="/blog"
-                                        className="flex items-center gap-2 text-[#1B2B26]/60 hover:text-[#2d5f4f] text-sm font-semibold transition-colors group"
-                                    >
-                                        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                                        Back to Blog
-                                    </Link>
-                                </aside>
-                            </div>
+                                    <div className="grid md:grid-cols-3 gap-5">
+                                        {recentBlogs.map((item) => (
+                                            <Link
+                                                key={item._id}
+                                                to={`/blog/${item.slug}`}
+                                                className="group rounded-2xl overflow-hidden bg-white border border-[#d4a574]/15 hover:border-[#d4a574]/45 shadow-sm hover:shadow-md transition-all duration-300"
+                                            >
+                                                <div className="h-40 bg-[#1B2B26] overflow-hidden">
+                                                    {item.image ? (
+                                                        <img
+                                                            src={item.image}
+                                                            alt={item.title}
+                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                        />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-[#d4a574]/50">
+                                                            <BookOpen className="w-10 h-10" />
+                                                        </div>
+                                                    )}
+                                                </div>
 
-                            {/* Mobile share / back */}
-                            <div className="flex items-center justify-between gap-4 mt-12 pt-8 border-t border-[#d4a574]/20 lg:hidden">
-                                <Link to="/blog" className="flex items-center gap-2 text-[#1B2B26]/60 text-sm font-semibold hover:text-[#2d5f4f] transition-colors">
-                                    <ArrowLeft className="w-4 h-4" />
-                                    Blog
-                                </Link>
-                                <button
-                                    onClick={handleCopy}
-                                    className="flex items-center gap-2 px-4 py-2 bg-[#1B2B26] text-white text-xs font-semibold rounded-full"
-                                >
-                                    {copied ? <><Copy className="w-3.5 h-3.5" />Copied!</> : <><Share2 className="w-3.5 h-3.5" />Share</>}
-                                </button>
-                            </div>
+                                                <div className="p-5">
+                                                    <div className="flex items-center gap-3 text-[11px] text-[#1B2B26]/55 mb-3">
+                                                        <span className="inline-flex items-center gap-1">
+                                                            <Calendar className="w-3 h-3" />
+                                                            {formatDate(item.date)}
+                                                        </span>
+                                                        <span className="inline-flex items-center gap-1">
+                                                            <User className="w-3 h-3" />
+                                                            {item.author || 'Ancient Health'}
+                                                        </span>
+                                                    </div>
+
+                                                    <h4 className="text-base font-serif text-[#1B2B26] leading-snug line-clamp-2 group-hover:text-[#2d5f4f] transition-colors">
+                                                        {item.title}
+                                                    </h4>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

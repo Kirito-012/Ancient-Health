@@ -168,26 +168,48 @@
 }
 
 .blog-rich-content h1 {
-	font-size: clamp(1.1rem, 3.2vw, 1.2rem);
+	font-size: clamp(2rem, 4.8vw, 2.8rem);
+	line-height: 1.14;
 	padding-top: 1rem;
-	margin-top: 1.4rem;
-	margin-bottom: 0rem;
+	margin-top: 1.8rem;
+	margin-bottom: 1rem;
 }
 
 .blog-rich-content h2 {
-	font-size: clamp(1.1rem, 3.2vw, 1.2rem);
-	padding-top: 0.5rem;
-	margin-top: 1.4rem;
-	margin-bottom: 0rem;
-	padding-bottom: 0.45rem;
-	border-bottom: 1px solid rgba(27, 43, 38, 0.12);
+	font-size: clamp(1.5rem, 3.6vw, 2rem);
+	line-height: 1.22;
+	padding-top: 0.45rem;
+	margin-top: 1.6rem;
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.6rem;
+	border-bottom: 1px solid rgba(212, 165, 116, 0.32);
+	font-weight: 600;
 }
 
 .blog-rich-content h3 {
-	font-size: clamp(1.1rem, 3.2vw, 1.2rem);
-	padding-top: 0rem;
-	margin-top: 1.4rem;
-	margin-bottom: 0.8rem;
+	font-family: 'Playfair Display', serif;
+	font-size: clamp(1.1rem, 2.4vw, 1.35rem);
+	line-height: 1.35;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	color: #2d5f4f;
+	padding-left: 0.75rem;
+	border-left: 2px solid rgba(212, 165, 116, 0.55);
+	margin-top: 1.3rem;
+	margin-bottom: 0.85rem;
+}
+
+.blog-rich-content h1+h2 {
+	margin-top: 0.7rem;
+	padding-top: 0;
+}
+
+.blog-rich-content h2+h3 {
+	margin-top: 0.6rem;
+}
+
+.blog-rich-content h3+p {
+	margin-top: 0.85rem;
 }
 
 .blog-rich-content strong {
