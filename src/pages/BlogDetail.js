@@ -293,7 +293,7 @@ const BlogDetail = () => {
                 <div className="flex flex-col items-center justify-center min-h-screen gap-4">
                     <BookOpen className="w-12 h-12 text-[#d4a574]/50" />
                     <p className="text-white/60">{error}</p>
-                    <Link to="/blog" className="text-[#d4a574] text-sm hover:underline">← Back to Blog</Link>
+                    <Link to="/blog" title="Back to Blog" className="text-[#d4a574] text-sm hover:underline">← Back to Blog</Link>
                 </div>
             )}
 
@@ -310,6 +310,7 @@ const BlogDetail = () => {
                                     transition={{ duration: 1.2, ease: 'easeOut' }}
                                     src={blog.image}
                                     alt={blog.title}
+                                    title={blog.title}
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
@@ -329,9 +330,9 @@ const BlogDetail = () => {
                                 transition={{ delay: 0.2 }}
                                 className="flex items-center gap-2 text-xs text-white/40 mb-6"
                             >
-                                <Link to="/" className="hover:text-[#d4a574] transition-colors">Home</Link>
+                                <Link to="/" title="Ancient Health - Home" className="hover:text-[#d4a574] transition-colors">Home</Link>
                                 <ChevronRight className="w-3 h-3" />
-                                <Link to="/blog" className="hover:text-[#d4a574] transition-colors">Blog</Link>
+                                <Link to="/blog" title="Blog" className="hover:text-[#d4a574] transition-colors">Blog</Link>
                                 <ChevronRight className="w-3 h-3" />
                                 <span className="text-white/60 line-clamp-1 max-w-[200px]">{blog.title}</span>
                             </motion.div>
@@ -420,6 +421,7 @@ const BlogDetail = () => {
                                                             <img
                                                                 src={blog.infographicImage}
                                                                 alt={`${blog.title} infographic`}
+                                                                title={`${blog.title} infographic`}
                                                                 className="w-full h-auto block"
                                                             />
                                                         </div>
@@ -469,6 +471,7 @@ const BlogDetail = () => {
 
                                         <Link
                                             to="/blog"
+                                            title="Back to Blog"
                                             className="mt-6 inline-flex items-center gap-2 text-[#1B2B26]/60 hover:text-[#2d5f4f] text-sm font-semibold transition-colors group"
                                         >
                                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -483,7 +486,7 @@ const BlogDetail = () => {
                                 <div className="mt-16 pt-10 border-t border-[#d4a574]/20">
                                     <div className="flex items-center justify-between gap-4 mb-8">
                                         <h3 className="text-2xl sm:text-3xl font-serif text-[#1B2B26]">Recent Articles</h3>
-                                        <Link to="/blog" className="text-sm font-semibold text-[#2d5f4f] hover:text-[#1B2B26] transition-colors">
+                                        <Link to="/blog" title="View all blog articles" className="text-sm font-semibold text-[#2d5f4f] hover:text-[#1B2B26] transition-colors">
                                             View all
                                         </Link>
                                     </div>
@@ -493,6 +496,7 @@ const BlogDetail = () => {
                                             <Link
                                                 key={item._id}
                                                 to={`/blog/${item.slug}`}
+                                                title={item.title}
                                                 className="group rounded-2xl overflow-hidden bg-white border border-[#d4a574]/15 hover:border-[#d4a574]/45 shadow-sm hover:shadow-md transition-all duration-300"
                                             >
                                                 <div className="h-40 bg-[#1B2B26] overflow-hidden">
@@ -500,6 +504,7 @@ const BlogDetail = () => {
                                                         <img
                                                             src={item.image}
                                                             alt={item.title}
+                                                            title={item.title}
                                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                         />
                                                     ) : (
@@ -548,6 +553,7 @@ const BlogDetail = () => {
                             </p>
                             <Link
                                 to="/blog"
+                                title="All blog articles"
                                 className="inline-flex items-center gap-2 px-7 py-3.5 border border-[#d4a574]/50 text-[#d4a574] font-bold text-sm rounded-full hover:bg-[#d4a574] hover:text-[#0f1c18] transition-all duration-300"
                             >
                                 <BookOpen className="w-4 h-4" />

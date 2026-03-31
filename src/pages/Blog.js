@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, User, ArrowRight, Search, BookOpen } from 'lucide-react'
 import { blogCache } from '../utils/blogUtils'
+
+const SITE_URL = 'https://www.ancienthealth.in'
+const SITE_NAME = 'Ancient Health'
+const PAGE_URL = `${SITE_URL}/blog`
+const PAGE_TITLE = 'The Wellness Chronicle | Ancient Health'
+const PAGE_DESCRIPTION = 'Discover expert Ayurvedic insights, herbal remedies, and holistic wellness tips. Read the Ancient Health blog to achieve natural balance and well-being.'
+const PAGE_KEYWORDS = 'Ayurveda, holistic wellness, ancient health, herbal remedies, Himalayan botanicals, wellness journal, natural healing'
+const PAGE_IMAGE = `${SITE_URL}/og-image.jpeg`
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([])
@@ -82,6 +91,30 @@ const Blog = () => {
 
     return (
         <div className="min-h-screen bg-[#0f1c18]">
+            <Helmet>
+                <title>{PAGE_TITLE}</title>
+                <meta name="description" content={PAGE_DESCRIPTION} />
+                <meta name="keywords" content={PAGE_KEYWORDS} />
+                <meta name="author" content={SITE_NAME} />
+                <meta name="publisher" content={SITE_NAME} />
+                <meta name="robots" content="index, follow" />
+                <link rel="canonical" href={PAGE_URL} />
+
+                {/* Open Graph */}
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content={PAGE_TITLE} />
+                <meta property="og:description" content={PAGE_DESCRIPTION} />
+                <meta property="og:image" content={PAGE_IMAGE} />
+                <meta property="og:url" content={PAGE_URL} />
+                <meta property="og:site_name" content={SITE_NAME} />
+
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={PAGE_TITLE} />
+                <meta name="twitter:description" content={PAGE_DESCRIPTION} />
+                <meta name="twitter:image" content={PAGE_IMAGE} />
+            </Helmet>
+
             <Navbar />
 
             {/* ── Hero ── */}
@@ -220,6 +253,7 @@ const Blog = () => {
                                 <p className="text-[#d4a574] text-xs font-bold tracking-[0.2em] uppercase mb-6">✦ Featured Article</p>
                                 <Link
                                     to={`/blog/${featuredBlog.slug}`}
+                                    title={featuredBlog.title}
                                     className="group grid lg:grid-cols-2 gap-0 bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl border border-[#d4a574]/10 hover:border-[#d4a574]/30 transition-all duration-500"
                                 >
                                     {/* Image */}
@@ -228,6 +262,7 @@ const Blog = () => {
                                             <img
                                                 src={featuredBlog.image}
                                                 alt={featuredBlog.title}
+                                                title={featuredBlog.title}
                                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                             />
                                         ) : (
@@ -287,6 +322,7 @@ const Blog = () => {
                                 >
                                     <Link
                                         to={`/blog/${blog.slug}`}
+                                        title={blog.title}
                                         className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-[#d4a574]/10 hover:border-[#d4a574]/40 hover:shadow-xl transition-all duration-400 h-full"
                                     >
                                         {/* Card Image */}
@@ -295,6 +331,7 @@ const Blog = () => {
                                                 <img
                                                     src={blog.image}
                                                     alt={blog.title}
+                                                    title={blog.title}
                                                     className="w-full h-full object-cover group-hover:scale-107 transition-transform duration-600"
                                                 />
                                             ) : (
@@ -351,7 +388,7 @@ const Blog = () => {
                     <p className="text-[#d4a574] text-xs font-bold tracking-[0.2em] uppercase mb-4">Stay rooted in wisdom</p>
                     <h2 className="text-3xl md:text-4xl font-serif text-white mb-4">Every Herb Has a Story</h2>
                     <p className="text-white/50 mb-8 leading-relaxed">Ancient knowledge distilled into every article — written with reverence for tradition and science.</p>
-                    <Link to="/shop" className="inline-block px-8 py-3.5 bg-[#d4a574] text-[#0f1c18] font-bold text-sm rounded-full hover:bg-[#e8c49a] transition-colors">
+                    <Link to="/shop" title="Explore Our Remedies" className="inline-block px-8 py-3.5 bg-[#d4a574] text-[#0f1c18] font-bold text-sm rounded-full hover:bg-[#e8c49a] transition-colors">
                         Explore Our Remedies
                     </Link>
                 </div>

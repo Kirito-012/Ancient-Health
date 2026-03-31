@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
@@ -128,6 +129,25 @@ const Contact = () => {
 
     return (
         <div className='min-h-screen bg-[#0f1c18] text-[#e8e6e3] font-sans selection:bg-[#d4a574] selection:text-[#0f1c18] overflow-hidden'>
+            <Helmet>
+                <title>Contact Ancient Health | Ayurvedic Support & Customer Care</title>
+                <meta name="description" content="Get in touch with Ancient Health. We'd love to hear from you — questions, feedback, or inquiries about our pure Himalayan botanical remedies." />
+                <meta name="keywords" content="contact Ancient Health, customer support, Ayurveda inquiries, get in touch" />
+                <meta name="author" content="Ancient Health" />
+                <meta name="publisher" content="Ancient Health" />
+                <meta name="robots" content="index, follow" />
+                <link rel="canonical" href="https://www.ancienthealth.in/contact" />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Contact Ancient Health | Ayurvedic Support & Customer Care" />
+                <meta property="og:description" content="Get in touch with Ancient Health. We'd love to hear from you — questions, feedback, or inquiries about our pure Himalayan botanical remedies." />
+                <meta property="og:image" content="https://www.ancienthealth.in/og-image.jpeg" />
+                <meta property="og:url" content="https://www.ancienthealth.in/contact" />
+                <meta property="og:site_name" content="Ancient Health" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Contact Ancient Health | Ayurvedic Support & Customer Care" />
+                <meta name="twitter:description" content="Get in touch with Ancient Health. We'd love to hear from you — questions, feedback, or inquiries about our pure Himalayan botanical remedies." />
+                <meta name="twitter:image" content="https://www.ancienthealth.in/og-image.jpeg" />
+            </Helmet>
             <Navbar />
 
             {/* Grain Overlay */}

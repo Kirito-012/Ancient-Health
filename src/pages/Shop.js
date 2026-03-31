@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -212,6 +213,25 @@ const Shop = () => {
 
 	return (
 		<div className='min-h-screen bg-[#f8faf9]'>
+			<Helmet>
+				<title>Shop Ayurvedic Remedies | Ancient Health</title>
+				<meta name="description" content="Browse our collection of pure, hand-harvested Himalayan botanicals and Ayurvedic remedies. Ethically sourced, potent, and authentic." />
+				<meta name="keywords" content="buy Ayurvedic remedies, Himalayan herbs, shop natural health products, herbal supplements, botanical medicine" />
+				<meta name="author" content="Ancient Health" />
+				<meta name="publisher" content="Ancient Health" />
+				<meta name="robots" content="index, follow" />
+				<link rel="canonical" href="https://www.ancienthealth.in/shop" />
+				<meta property="og:type" content="website" />
+				<meta property="og:title" content="Shop Ayurvedic Remedies | Ancient Health" />
+				<meta property="og:description" content="Browse our collection of pure, hand-harvested Himalayan botanicals and Ayurvedic remedies. Ethically sourced, potent, and authentic." />
+				<meta property="og:image" content="https://www.ancienthealth.in/og-image.jpeg" />
+				<meta property="og:url" content="https://www.ancienthealth.in/shop" />
+				<meta property="og:site_name" content="Ancient Health" />
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content="Shop Ayurvedic Remedies | Ancient Health" />
+				<meta name="twitter:description" content="Browse our collection of pure, hand-harvested Himalayan botanicals and Ayurvedic remedies. Ethically sourced, potent, and authentic." />
+				<meta name="twitter:image" content="https://www.ancienthealth.in/og-image.jpeg" />
+			</Helmet>
 			<Navbar />
 
 			{/* Premium Hero Section */}

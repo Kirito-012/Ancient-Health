@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { motion } from 'framer-motion'
-import { Mail, MapPin, ArrowRight, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react'
+import { Mail, MapPin, ArrowRight, Facebook, Instagram, Linkedin } from 'lucide-react'
 
 const Footer = () => {
     return (
@@ -29,8 +29,8 @@ const Footer = () => {
                         transition={{ duration: 0.6 }}
                         className='lg:col-span-4 will-change-transform'
                     >
-                        <Link to='/' className='inline-block mb-4 group'>
-                            <img src={logo} alt='Ancient Health' className='h-20 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300' />
+                        <Link to='/' title='Ancient Health - Home' className='inline-block mb-4 group'>
+                            <img src={logo} alt='Ancient Health' title='Ancient Health' className='h-20 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300' />
                         </Link>
                         <p className='text-white/60 text-base leading-relaxed mb-8 max-w-sm font-light'>
                             Honoring the wisdom of the Himalayas. We bridge ancient traditions with modern wellness to bring you pure, ethically sourced botanicals.
@@ -41,6 +41,7 @@ const Footer = () => {
                             <div className='flex items-center space-x-3'>
                                 <a
                                     href='https://facebook.com'
+                                    title='Ancient Health on Facebook'
                                     target='_blank'
                                     rel='noopener noreferrer'
                                     className='group relative w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:border-[#d4a574]/50 hover:bg-[#d4a574]/10 transition-all duration-300'
@@ -50,6 +51,7 @@ const Footer = () => {
                                 </a>
                                 <a
                                     href='https://instagram.com'
+                                    title='Ancient Health on Instagram'
                                     target='_blank'
                                     rel='noopener noreferrer'
                                     className='group relative w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:border-[#d4a574]/50 hover:bg-[#d4a574]/10 transition-all duration-300'
@@ -58,16 +60,8 @@ const Footer = () => {
                                     <Instagram className='w-4 h-4 text-white/60 group-hover:text-[#d4a574] transition-colors' />
                                 </a>
                                 <a
-                                    href='https://twitter.com'
-                                    target='_blank'
-                                    rel='noopener noreferrer'
-                                    className='group relative w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:border-[#d4a574]/50 hover:bg-[#d4a574]/10 transition-all duration-300'
-                                >
-                                    <span className='sr-only'>Twitter</span>
-                                    <Twitter className='w-4 h-4 text-white/60 group-hover:text-[#d4a574] transition-colors' />
-                                </a>
-                                <a
                                     href='https://linkedin.com'
+                                    title='Ancient Health on LinkedIn'
                                     target='_blank'
                                     rel='noopener noreferrer'
                                     className='group relative w-10 h-10 bg-white/5 rounded-full flex items-center justify-center border border-white/10 hover:border-[#d4a574]/50 hover:bg-[#d4a574]/10 transition-all duration-300'
@@ -96,7 +90,7 @@ const Footer = () => {
                                 { name: 'Contact', path: '/contact' }
                             ].map((link) => (
                                 <li key={link.name}>
-                                    <Link to={link.path} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
+                                    <Link to={link.path} title={link.name} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
                                         <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300 text-[#d4a574]" />
                                         {link.name}
                                     </Link>
@@ -122,7 +116,7 @@ const Footer = () => {
                                 { name: 'Terms of Service', path: '/terms' }
                             ].map((link) => (
                                 <li key={link.name}>
-                                    <Link to={link.path} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
+                                    <Link to={link.path} title={link.name} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
                                         <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300 text-[#d4a574]" />
                                         {link.name}
                                     </Link>
@@ -152,7 +146,7 @@ const Footer = () => {
                                 <Mail className="w-5 h-5 text-[#d4a574] mt-1 shrink-0" />
                                 <div>
                                     <p className='text-white/90 text-sm font-medium mb-1'>Inquiries</p>
-                                    <a href='mailto:hello@ancienthealth.com' className='text-white/50 hover:text-[#d4a574] text-sm font-light transition-colors'>
+                                    <a href='mailto:hello@ancienthealth.com' title='Email Ancient Health' className='text-white/50 hover:text-[#d4a574] text-sm font-light transition-colors'>
                                         hello@ancienthealth.com
                                     </a>
                                 </div>

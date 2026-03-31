@@ -97,6 +97,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                     <Link
                                         key={link.name}
                                         to={link.path}
+                                        title={link.name}
                                         className={`
                                             relative px-4 py-2 text-sm font-serif font-medium transition-colors duration-300 rounded-full tracking-wide
                                             ${isActive
@@ -113,11 +114,12 @@ const Navbar = ({ forceDarkNav = false }) => {
 
                         {/* Logo - Absolute Center */}
                         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
-                            <Link to='/' className='block group'>
+                            <Link to='/' title='Ancient Health - Home' className='block group'>
                                 <div className='relative flex items-center justify-center'>
                                     <img
                                         src={logo}
                                         alt='Ancient Health'
+                                        title='Ancient Health'
                                         className={`w-auto transition-all duration-500 filter brightness-110 ${showDarkNav ? 'h-8 lg:h-9' : 'h-10 lg:h-14'}`}
                                     />
                                     {/* Subtle Glow behind logo */}
@@ -170,6 +172,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                                 <div className="px-2 py-2 space-y-1">
                                                     <Link
                                                         to="/profile"
+                                                        title="My Profile"
                                                         onClick={() => setIsProfileOpen(false)}
                                                         className="flex items-center gap-3 px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
                                                     >
@@ -179,6 +182,7 @@ const Navbar = ({ forceDarkNav = false }) => {
 
                                                     <Link
                                                         to="/my-orders"
+                                                        title="My Orders"
                                                         onClick={() => setIsProfileOpen(false)}
                                                         className="flex items-center gap-3 px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all group"
                                                     >
@@ -205,13 +209,13 @@ const Navbar = ({ forceDarkNav = false }) => {
                                     </AnimatePresence>
                                 </div>
                             ) : (
-                                <Link to='/login' className='hidden lg:block px-4 py-2 text-xs font-serif font-bold text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all tracking-widest uppercase'>
+                                <Link to='/login' title='Login' className='hidden lg:block px-4 py-2 text-xs font-serif font-bold text-white/90 hover:text-white hover:bg-white/10 rounded-full transition-all tracking-widest uppercase'>
                                     Login
                                 </Link>
                             )}
 
                             {/* Cart */}
-                            <Link to='/cart' className='group relative flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
+                            <Link to='/cart' title='Cart' className='group relative flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
                                 <ShoppingBag className="w-4 h-4" />
                                 {cart?.totalItems > 0 && (
                                     <span className='absolute top-2 right-2 bg-[#d4a574] text-[#0f1c18] text-[8px] font-bold rounded-full h-3 w-3 flex items-center justify-center ring-2 ring-[#0f1c18]'>
@@ -223,6 +227,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                             {/* Shop Button (Capsule Style) */}
                             <Link
                                 to='/shop'
+                                title='Shop'
                                 className={`hidden lg:block ml-2 px-6 py-2 rounded-full text-xs font-serif font-bold uppercase tracking-widest transition-all duration-300 ${location.pathname === '/shop'
                                     ? 'bg-transparent text-[#d4a574] border border-[#d4a574]/30 hover:bg-[#d4a574]/10'
                                     : showDarkNav
@@ -252,6 +257,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                     <Link
                                         key={link.name}
                                         to={link.path}
+                                        title={link.name}
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         className="flex items-center justify-between px-4 py-3 rounded-xl text-white/90 hover:bg-white/5 transition-all group"
                                     >
@@ -263,6 +269,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                 {/* Shop Link - Mobile Only */}
                                 <Link
                                     to="/shop"
+                                    title="Shop"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="flex items-center justify-between px-4 py-3 rounded-xl text-white/90 hover:bg-white/5 transition-all group"
                                 >
@@ -276,6 +283,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                     <>
                                         <Link
                                             to="/profile"
+                                            title="My Profile"
                                             onClick={() => setIsMobileMenuOpen(false)}
                                             className="block px-4 py-3 rounded-xl text-xs font-serif font-bold text-[#d4a574] hover:bg-white/5 uppercase tracking-widest"
                                         >
@@ -294,6 +302,7 @@ const Navbar = ({ forceDarkNav = false }) => {
                                 ) : (
                                     <Link
                                         to="/login"
+                                        title="Login"
                                         onClick={() => setIsMobileMenuOpen(false)}
                                         className="block px-4 py-3 rounded-xl text-xs font-serif font-bold text-[#d4a574] hover:bg-white/5 uppercase tracking-widest"
                                     >
