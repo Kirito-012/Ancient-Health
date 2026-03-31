@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -6,44 +6,42 @@ import {
 	Navigate,
 } from 'react-router-dom'
 import Home from './pages/Home'
-import Shop from './pages/Shop'
-import About from './pages/About'
-import Contact from './pages/Contact'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Cart from './pages/Cart'
-import Profile from './pages/Profile'
 import ProtectedRoute from './components/ProtectedRoute'
 import ProtectedAdminRoute from './components/ProtectedAdminRoute'
-import AdminDashboard from './admin/pages/AdminDashboard'
-import AdminHome from './admin/pages/AdminHome'
-import AddProduct from './admin/pages/AddProduct'
-import ManageProducts from './admin/pages/ManageProducts'
-import AddCategory from './admin/pages/AddCategory'
-import ManageCategories from './admin/pages/ManageCategories'
-import AddBlog from './admin/pages/AddBlog'
-import ManageBlogs from './admin/pages/ManageBlogs'
-import Users from './admin/pages/Users'
-import AllOrders from './admin/pages/AllOrders'
-import CompletedOrders from './admin/pages/CompletedOrders'
-import Checkout from './pages/Checkout'
-import OrderSuccess from './pages/OrderSuccess'
-import MyOrders from './pages/MyOrders'
-import Blog from './pages/Blog'
-import BlogDetail from './pages/BlogDetail'
-import ProductDetail from './pages/ProductDetail' // NEW
-
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-
 import { ReactLenis } from 'lenis/react'
-
 import ScrollToTop from './components/ScrollToTop'
 import GlobalLoader from './components/GlobalLoader'
 import ChatBot from './components/ChatBot'
 import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react'
+
+const Shop = lazy(() => import('./pages/Shop'))
+const About = lazy(() => import('./pages/About'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Login = lazy(() => import('./pages/Login'))
+const Signup = lazy(() => import('./pages/Signup'))
+const Cart = lazy(() => import('./pages/Cart'))
+const Profile = lazy(() => import('./pages/Profile'))
+const AdminDashboard = lazy(() => import('./admin/pages/AdminDashboard'))
+const AdminHome = lazy(() => import('./admin/pages/AdminHome'))
+const AddProduct = lazy(() => import('./admin/pages/AddProduct'))
+const ManageProducts = lazy(() => import('./admin/pages/ManageProducts'))
+const AddCategory = lazy(() => import('./admin/pages/AddCategory'))
+const ManageCategories = lazy(() => import('./admin/pages/ManageCategories'))
+const AddBlog = lazy(() => import('./admin/pages/AddBlog'))
+const ManageBlogs = lazy(() => import('./admin/pages/ManageBlogs'))
+const Users = lazy(() => import('./admin/pages/Users'))
+const AllOrders = lazy(() => import('./admin/pages/AllOrders'))
+const CompletedOrders = lazy(() => import('./admin/pages/CompletedOrders'))
+const Checkout = lazy(() => import('./pages/Checkout'))
+const OrderSuccess = lazy(() => import('./pages/OrderSuccess'))
+const MyOrders = lazy(() => import('./pages/MyOrders'))
+const Blog = lazy(() => import('./pages/Blog'))
+const BlogDetail = lazy(() => import('./pages/BlogDetail'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail')) // NEW
 
 const App = () => {
 	return (
@@ -91,8 +89,9 @@ const App = () => {
 				<CartProvider>
 					<ScrollToTop />
 					<ChatBot />
-					<Routes>
-						{/* Homepage */}
+					<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-4 border-[#d4a574] border-t-transparent rounded-full animate-spin"></div></div>}>
+						<Routes>
+							{/* Homepage */}
 						<Route
 							path='/'
 							element={<Home />}
@@ -239,6 +238,7 @@ const App = () => {
 							}
 						/>
 					</Routes>
+					</Suspense>
 				</CartProvider>
 			</Router>
 		</ReactLenis>

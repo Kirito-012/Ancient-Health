@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { Suspense, lazy } from 'react'
 import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import HeroSection from '../components/HeroSection'
-import PuritySection from '../components/PuritySection'
-import WellnessRetreat from '../components/WellnessRetreat'
-import FeaturedProducts from '../components/FeaturedProducts'
-import StorySection from '../components/StorySection'
-import CTASection from '../components/CTASection'
-import Footer from '../components/Footer'
+
+const PuritySection = lazy(() => import('../components/PuritySection'))
+const WellnessRetreat = lazy(() => import('../components/WellnessRetreat'))
+const FeaturedProducts = lazy(() => import('../components/FeaturedProducts'))
+const StorySection = lazy(() => import('../components/StorySection'))
+const CTASection = lazy(() => import('../components/CTASection'))
+const Footer = lazy(() => import('../components/Footer'))
 
 const Home = () => {
 	return (
@@ -33,12 +34,14 @@ const Home = () => {
 			</Helmet>
 			<Navbar />
 			<HeroSection />
-			<PuritySection />
-			<FeaturedProducts />
-			<StorySection />
-			<WellnessRetreat />
-			<CTASection />
-			<Footer />
+			<Suspense fallback={<div className="min-h-[200px]" />}>
+				<PuritySection />
+				<FeaturedProducts />
+				<StorySection />
+				<WellnessRetreat />
+				<CTASection />
+				<Footer />
+			</Suspense>
 		</div>
 	)
 }

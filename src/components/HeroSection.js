@@ -41,6 +41,7 @@ const HeroSection = () => {
                         className="w-full h-full object-cover opacity-50 scale-110"
                         loading="eager"
                         fetchPriority="high"
+                        decoding="async"
                     />
                 </motion.div>
 
