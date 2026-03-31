@@ -33,6 +33,7 @@ import Blog from './pages/Blog'
 import BlogDetail from './pages/BlogDetail'
 import ProductDetail from './pages/ProductDetail' // NEW
 
+import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { CartProvider } from './context/CartContext'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -46,6 +47,10 @@ import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react'
 
 const App = () => {
 	return (
+		<HelmetProvider>
+		<Helmet>
+			<title>Ancient Health</title>
+		</Helmet>
 		<ReactLenis root>
 			<GlobalLoader />
 			<ToastContainer
@@ -237,6 +242,7 @@ const App = () => {
 				</CartProvider>
 			</Router>
 		</ReactLenis>
+		</HelmetProvider>
 	)
 }
 

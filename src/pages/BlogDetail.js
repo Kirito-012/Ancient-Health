@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { blogCache } from '../utils/blogUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HTMLContent from '../components/HTMLContent'
 import { motion } from 'framer-motion'
 import { Calendar, User, ArrowLeft, BookOpen, Share2, Copy, ChevronRight } from 'lucide-react'
+
+const SITE_URL = 'https://www.ancienthealth.in'
+const SITE_NAME = 'Ancient Health'
+const LOGO_URL = `${SITE_URL}/logo192.png`
 
 // Simple markdown-to-JSX renderer (handles headings, bold, italic, lists, paragraphs)
 const renderContent = (raw) => {
@@ -70,12 +75,12 @@ const renderContent = (raw) => {
         } else if (/^# /.test(line)) {
             flushList()
             elements.push(
-                <h1
+                <h2
                     key={key++}
                     className={`text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-[#1B2B26] leading-[1.1] pt-6 mt-10 ${nextIsHeading ? 'mb-3' : 'mb-7'}`}
                 >
                     {line.replace(/^# /, '')}
-                </h1>
+                </h2>
             )
         } else if (/^[-*] /.test(line)) {
             listItems.push(line.replace(/^[-*] /, ''))
@@ -96,6 +101,24 @@ const renderContent = (raw) => {
 
 const hasHTMLTags = (raw = '') => /<\/?[a-z][\s\S]*>/i.test(raw)
 
+const stripLeadingH1 = (html) => html.replace(/^\s*<h1[^>]*>.*?<\/h1>\s*/i, '')
+
+// Split HTML after the Nth closing </p> tag — safe block-level boundary
+const splitHTMLAfterParagraph = (html, n = 3) => {
+    let count = 0
+    let idx = -1
+    let searchFrom = 0
+    while (count < n) {
+        const found = html.indexOf('</p>', searchFrom)
+        if (found === -1) break
+        count++
+        idx = found + 4
+        searchFrom = idx
+    }
+    if (idx === -1 || idx >= html.length) return [html, '']
+    return [html.slice(0, idx), html.slice(idx)]
+}
+
 const BlogDetail = () => {
     const { slug } = useParams()
     const [blog, setBlog] = useState(null)
@@ -109,6 +132,18 @@ const BlogDetail = () => {
         fetchBlog()
         // eslint-disable-next-line
     }, [slug])
+
+    // Imperatively set meta description so it always reflects the blog data
+    useEffect(() => {
+        const content = blog?.metaDescription || 'Ancient Health - Pure & Potent Hand-harvested remedies from the heart of the Himalayas.'
+        let meta = document.querySelector('meta[name="description"]')
+        if (!meta) {
+            meta = document.createElement('meta')
+            meta.setAttribute('name', 'description')
+            document.head.appendChild(meta)
+        }
+        meta.setAttribute('content', content)
+    }, [blog])
 
     // Reading progress bar
     useEffect(() => {
@@ -174,8 +209,65 @@ const BlogDetail = () => {
         setTimeout(() => setCopied(false), 2000)
     }
 
+    const canonicalUrl = `${SITE_URL}/blog/${slug}`
+    const pageTitle = blog ? `${blog.metaTitle || blog.title} | ${SITE_NAME}` : SITE_NAME
+    const pageDescription = blog?.metaDescription || `Pure & Potent Hand-harvested remedies from the heart of the Himalayas.`
+    const pageImage = blog?.image || `${SITE_URL}/og-image.jpeg`
+    const pageAuthor = blog?.author || SITE_NAME
+    const datePublished = blog?.date || blog?.createdAt || ''
+    const dateModified = blog?.updatedAt || datePublished
+
+    const jsonLd = blog ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: blog.title,
+        description: pageDescription,
+        image: pageImage,
+        author: { '@type': 'Person', name: pageAuthor },
+        publisher: {
+            '@type': 'Organization',
+            name: SITE_NAME,
+            logo: { '@type': 'ImageObject', url: LOGO_URL }
+        },
+        datePublished,
+        dateModified,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl }
+    } : null
+
     return (
         <div className="min-h-screen bg-[#0f1c18]">
+            <Helmet>
+                <title>{pageTitle}</title>
+                <meta name="author" content={pageAuthor} />
+                <meta name="publisher" content={SITE_NAME} />
+                <meta name="robots" content="index, follow" />
+                <link rel="canonical" href={canonicalUrl} />
+
+                {/* Open Graph */}
+                <meta property="og:type" content="article" />
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDescription} />
+                <meta property="og:image" content={pageImage} />
+                <meta property="og:url" content={canonicalUrl} />
+                <meta property="og:site_name" content={SITE_NAME} />
+                {datePublished && <meta property="article:published_time" content={new Date(datePublished).toISOString()} />}
+                {dateModified && <meta property="article:modified_time" content={new Date(dateModified).toISOString()} />}
+                {blog?.category?.name && <meta property="article:section" content={blog.category.name} />}
+
+                {/* Twitter Card */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={pageTitle} />
+                <meta name="twitter:description" content={pageDescription} />
+                <meta name="twitter:image" content={pageImage} />
+
+                {/* JSON-LD */}
+                {jsonLd && (
+                    <script type="application/ld+json">
+                        {JSON.stringify(jsonLd)}
+                    </script>
+                )}
+            </Helmet>
+
             {/* Reading Progress Bar */}
             <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 bg-transparent pointer-events-none">
                 <motion.div
@@ -318,9 +410,24 @@ const BlogDetail = () => {
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.5 }}
                                     >
-                                        {hasHTMLTags(blog.content)
-                                            ? <HTMLContent content={blog.content} className="blog-rich-content" />
-                                            : renderContent(blog.content)}
+                                        {hasHTMLTags(blog.content) ? (
+                                            blog.infographicImage ? (() => {
+                                                const [first, second] = splitHTMLAfterParagraph(stripLeadingH1(blog.content))
+                                                return (
+                                                    <>
+                                                        <HTMLContent content={first} className="blog-rich-content" />
+                                                        <div className="my-10 rounded-2xl overflow-hidden border border-[#d4a574]/20 shadow-md">
+                                                            <img
+                                                                src={blog.infographicImage}
+                                                                alt={`${blog.title} infographic`}
+                                                                className="w-full h-auto block"
+                                                            />
+                                                        </div>
+                                                        <HTMLContent content={second} className="blog-rich-content" />
+                                                    </>
+                                                )
+                                            })() : <HTMLContent content={stripLeadingH1(blog.content)} className="blog-rich-content" />
+                                        ) : renderContent(blog.content)}
                                     </motion.div>
 
                                     {/* End of article meta */}
