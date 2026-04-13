@@ -146,12 +146,16 @@ const FeaturedProducts = () => {
                             <motion.div
                                 variants={itemVariants}
                                 key={product._id}
-                                onClick={() => {
-                                    if (window.innerWidth < 1024) {
+                                onClick={() => navigate(`/shop/${product.slug || product._id}`)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault()
                                         navigate(`/shop/${product.slug || product._id}`)
                                     }
                                 }}
-                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-2xl lg:rounded-[2rem] overflow-hidden border border-white/5 md:hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform md:hover:transform md:hover:-translate-y-2'
+                                role='link'
+                                tabIndex={0}
+                                className='group relative bg-[#162923]/40 backdrop-blur-md rounded-2xl lg:rounded-[2rem] overflow-hidden border border-white/5 md:hover:border-[#d4a574]/30 transition-all duration-300 will-change-transform md:hover:transform md:hover:-translate-y-2 cursor-pointer'
                             >
                                 {/* Badge */}
                                 {product.offer > 0 && (

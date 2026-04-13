@@ -1,4 +1,7 @@
+'use client'
+
 import React, { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
@@ -446,9 +449,13 @@ const Profile = () => {
                                 ) : orders.length > 0 ? (
                                     <div className="space-y-4">
                                         {orders.slice(0, 3).map(order => (
-                                            <div
+                                            <Link
                                                 key={order._id}
-                                                className="group bg-gradient-to-br from-white to-gray-50/50 border-2 border-gray-200 rounded-2xl p-6 hover:border-[#2d5f4f]/30 hover:shadow-lg transition-all duration-300"
+                                                to={`/my-orders?focusOrder=${order._id}`}
+                                                className="block"
+                                            >
+                                            <div
+                                                className="group bg-gradient-to-br from-white to-gray-50/50 border-2 border-gray-200 rounded-2xl p-6 hover:border-[#2d5f4f]/30 hover:shadow-lg transition-all duration-300 cursor-pointer"
                                             >
                                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                                                     <div className="flex items-center gap-3">
@@ -489,19 +496,20 @@ const Profile = () => {
                                                     <span className="text-2xl font-bold text-[#2d5f4f]">₹{formatPrice(order.totalAmount)}</span>
                                                 </div>
                                             </div>
+                                            </Link>
                                         ))}
 
                                         {orders.length > 3 && (
                                             <div className="mt-8 text-center border-t border-gray-100 pt-6">
-                                                <a
-                                                    href="/my-orders"
+                                                <Link
+                                                    to="/my-orders"
                                                     className="inline-flex items-center justify-center gap-2 group px-8 py-3 bg-white border-2 border-gray-200 text-gray-600 font-semibold rounded-xl hover:text-[#2d5f4f] hover:border-[#2d5f4f] hover:bg-[#2d5f4f]/5 transition-all duration-300 shadow-sm hover:shadow-md"
                                                 >
                                                     View All Orders
                                                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                                     </svg>
-                                                </a>
+                                                </Link>
                                             </div>
                                         )}
                                     </div>

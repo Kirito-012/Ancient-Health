@@ -1,6 +1,8 @@
+'use client'
+
 
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import axios from 'axios'
@@ -10,9 +12,13 @@ import { formatPrice } from '../utils/formatPrice'
 const MyOrders = () => {
     const { token } = useCart()
     const navigate = useNavigate()
+    const location = useLocation()
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [highlightedOrderId, setHighlightedOrderId] = useState(null)
+
+    const focusOrderId = new URLSearchParams(location.search).get('focusOrder')
 
     useEffect(() => {
         if (!token) {
@@ -41,6 +47,25 @@ const MyOrders = () => {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (loading || !focusOrderId || orders.length === 0) return
+
+        const targetCard = document.getElementById(`order-${focusOrderId}`)
+        if (!targetCard) return
+
+        setHighlightedOrderId(focusOrderId)
+
+        requestAnimationFrame(() => {
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        })
+
+        const timer = setTimeout(() => {
+            setHighlightedOrderId(null)
+        }, 1800)
+
+        return () => clearTimeout(timer)
+    }, [loading, orders, focusOrderId])
     
     // eslint-disable-next-line
     const getStatusColor = (status) => {
@@ -129,7 +154,14 @@ const MyOrders = () => {
                                 const isCancelled = order.orderStatus === 'cancelled'
 
                                 return (
-                                    <div key={order._id} className='bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg overflow-hidden border border-gray-200/50 hover:shadow-xl transition-all duration-300'>
+                                    <div
+                                        id={`order-${order._id}`}
+                                        key={order._id}
+                                        className={`bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg overflow-hidden border hover:shadow-xl transition-all duration-300 ${highlightedOrderId === order._id
+                                            ? 'border-[#2d5f4f] ring-2 ring-[#2d5f4f]/30'
+                                            : 'border-gray-200/50'
+                                            }`}
+                                    >
                                         {/* Order Header */}
                                         <div className='p-6 border-b border-gray-100 bg-gray-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4'>
                                             <div className='flex items-center gap-4'>

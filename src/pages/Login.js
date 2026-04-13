@@ -28,7 +28,6 @@ const Login = () => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [isResending, setIsResending] = useState(false)
 	const [resendTimer, setResendTimer] = useState(0)
-	const [hasSentOtp, setHasSentOtp] = useState(false)
 	const [otpVerified, setOtpVerified] = useState(false)
 	const [emailPrompt, setEmailPrompt] = useState('')
 
@@ -130,7 +129,6 @@ const Login = () => {
 			)
 
 			if (response.data.success) {
-				setHasSentOtp(true)
 				setResendTimer(30)
 				toast.success('OTP sent to your email', { autoClose: 2500 })
 			}
@@ -235,7 +233,6 @@ const Login = () => {
 				setForgotData({ email: '', otp: '' })
 				setChangeData({ password: '', confirmPassword: '' })
 				setOtpVerified(false)
-				setHasSentOtp(false)
 				setResendTimer(0)
 				setEmailPrompt('')
 			}
@@ -259,8 +256,6 @@ const Login = () => {
 		setMode('login')
 		setChangeData({ password: '', confirmPassword: '' })
 		setOtpVerified(false)
-		setHasSentOtp(false)
-		setResendTimer(0)
 		setEmailPrompt('')
 	}
 
@@ -443,10 +438,8 @@ const Login = () => {
 												{isResending
 													? 'Sending...'
 													: resendTimer > 0
-														? `${hasSentOtp ? 'Resend OTP' : 'Send OTP'} (${resendTimer}s)`
-														: hasSentOtp
-															? 'Resend OTP'
-															: 'Send OTP'}
+														? `Resend Mail (${resendTimer}s)`
+														: 'Resend Mail'}
 											</span>
 										</button>
 
