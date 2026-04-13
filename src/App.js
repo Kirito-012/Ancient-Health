@@ -4,6 +4,7 @@ import {
 	Routes,
 	Route,
 	Navigate,
+	useLocation,
 } from 'react-router-dom'
 import Home from './pages/Home'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -42,6 +43,21 @@ const MyOrders = lazy(() => import('./pages/MyOrders'))
 const Blog = lazy(() => import('./pages/Blog'))
 const BlogDetail = lazy(() => import('./pages/BlogDetail'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail')) // NEW
+
+const TrailingSlashRedirect = () => {
+	const { pathname, search, hash } = useLocation()
+
+	if (pathname !== '/' && !pathname.endsWith('/')) {
+		return (
+			<Navigate
+				to={`${pathname}/${search}${hash}`}
+				replace
+			/>
+		)
+	}
+
+	return null
+}
 
 const App = () => {
 	return (
@@ -87,6 +103,7 @@ const App = () => {
 
 			<Router>
 				<CartProvider>
+					<TrailingSlashRedirect />
 					<ScrollToTop />
 					<ChatBot />
 					<Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white"><div className="w-8 h-8 border-4 border-[#d4a574] border-t-transparent rounded-full animate-spin"></div></div>}>
