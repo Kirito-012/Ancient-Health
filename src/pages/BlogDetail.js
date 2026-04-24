@@ -383,10 +383,12 @@ const BlogDetail = () => {
                         </div>
 
                         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-16">
-                            <div>
+                            <div className="flex gap-8 lg:gap-10 items-start">
 
-                                {/* Meta Description Intro */}
-                                <div>
+                                {/* ── Main Article Column ── */}
+                                <div className="flex-1 min-w-0">
+
+                                    {/* Meta Description Intro */}
                                     {blog.metaDescription && (
                                         <motion.div
                                             initial={{ opacity: 0, y: 15 }}
@@ -436,38 +438,16 @@ const BlogDetail = () => {
 
                                     {/* End of article meta */}
                                     <div className="mt-12 pt-8 border-t border-[#d4a574]/20">
-                                        <div className="grid md:grid-cols-2 gap-4">
-                                            <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
-                                                <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Written by</p>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b6b43] flex items-center justify-center text-white font-bold text-base shadow-md">
-                                                        {blog.author?.charAt(0) || 'A'}
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-bold text-[#1B2B26]">{blog.author}</p>
-                                                        <p className="text-xs text-[#1B2B26]/50">{formatDate(blog.date)}</p>
-                                                    </div>
+                                        <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
+                                            <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Written by</p>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b6b43] flex items-center justify-center text-white font-bold text-base shadow-md">
+                                                    {blog.author?.charAt(0) || 'A'}
                                                 </div>
-                                            </div>
-
-                                            <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
-                                                <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Share Article</p>
-                                                <button
-                                                    onClick={handleCopy}
-                                                    className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B2B26] text-white text-sm font-semibold rounded-xl hover:bg-[#2d5f4f] transition-colors"
-                                                >
-                                                    {copied ? (
-                                                        <>
-                                                            <Copy className="w-4 h-4 text-[#d4a574]" />
-                                                            Copied!
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Share2 className="w-4 h-4" />
-                                                            Copy Link
-                                                        </>
-                                                    )}
-                                                </button>
+                                                <div>
+                                                    <p className="text-sm font-bold text-[#1B2B26]">{blog.author}</p>
+                                                    <p className="text-xs text-[#1B2B26]/50">{formatDate(blog.date)}</p>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -481,62 +461,84 @@ const BlogDetail = () => {
                                         </Link>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Recent blogs */}
-                            {recentBlogs.length > 0 && (
-                                <div className="mt-16 pt-10 border-t border-[#d4a574]/20">
-                                    <div className="flex items-center justify-between gap-4 mb-8">
-                                        <h3 className="text-2xl sm:text-3xl font-serif text-[#1B2B26]">Recent Articles</h3>
-                                        <Link to="/blog" title="View all blog articles" className="text-sm font-semibold text-[#2d5f4f] hover:text-[#1B2B26] transition-colors">
-                                            View all
-                                        </Link>
+                                {/* ── Sidebar ── */}
+                                <aside className="w-72 flex-shrink-0 sticky top-24 hidden lg:flex flex-col gap-6">
+
+                                    {/* Share card */}
+                                    <div className="bg-white rounded-2xl p-6 border border-[#d4a574]/15 shadow-sm">
+                                        <p className="text-xs font-bold text-[#1B2B26]/40 uppercase tracking-widest mb-4">Share Article</p>
+                                        <button
+                                            onClick={handleCopy}
+                                            className="w-full flex items-center justify-center gap-2 py-3 bg-[#1B2B26] text-white text-sm font-semibold rounded-xl hover:bg-[#2d5f4f] transition-colors"
+                                        >
+                                            {copied ? (
+                                                <>
+                                                    <Copy className="w-4 h-4 text-[#d4a574]" />
+                                                    Copied!
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Share2 className="w-4 h-4" />
+                                                    Copy Link
+                                                </>
+                                            )}
+                                        </button>
                                     </div>
 
-                                    <div className="grid md:grid-cols-3 gap-5">
-                                        {recentBlogs.map((item) => (
-                                            <Link
-                                                key={item._id}
-                                                to={`/blog/${item.slug}`}
-                                                title={item.title}
-                                                className="group rounded-2xl overflow-hidden bg-white border border-[#d4a574]/15 hover:border-[#d4a574]/45 shadow-sm hover:shadow-md transition-all duration-300"
-                                            >
-                                                <div className="h-40 bg-[#1B2B26] overflow-hidden">
-                                                    {item.image ? (
-                                                        <img
-                                                            src={item.image}
-                                                            alt={item.title}
-                                                            title={item.title}
-                                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                        />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-[#d4a574]/50">
-                                                            <BookOpen className="w-10 h-10" />
+                                    {/* Related articles */}
+                                    {recentBlogs.length > 0 && (
+                                        <div>
+                                            <div className="flex items-center justify-between gap-2 mb-4">
+                                                <h3 className="text-lg font-serif text-[#1B2B26]">Recent Articles</h3>
+                                                <Link to="/blog" title="View all blog articles" className="text-xs font-semibold text-[#2d5f4f] hover:text-[#1B2B26] transition-colors">
+                                                    View all
+                                                </Link>
+                                            </div>
+
+                                            <div className="flex flex-col gap-4">
+                                                {recentBlogs.map((item) => (
+                                                    <Link
+                                                        key={item._id}
+                                                        to={`/blog/${item.slug}`}
+                                                        title={item.title}
+                                                        className="group rounded-2xl overflow-hidden bg-white border border-[#d4a574]/15 hover:border-[#d4a574]/45 shadow-sm hover:shadow-md transition-all duration-300"
+                                                    >
+                                                        <div className="h-32 bg-[#1B2B26] overflow-hidden">
+                                                            {item.image ? (
+                                                                <img
+                                                                    src={item.image}
+                                                                    alt={item.title}
+                                                                    title={item.title}
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-full h-full flex items-center justify-center text-[#d4a574]/50">
+                                                                    <BookOpen className="w-8 h-8" />
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    )}
-                                                </div>
 
-                                                <div className="p-5">
-                                                    <div className="flex items-center gap-3 text-[11px] text-[#1B2B26]/55 mb-3">
-                                                        <span className="inline-flex items-center gap-1">
-                                                            <Calendar className="w-3 h-3" />
-                                                            {formatDate(item.date)}
-                                                        </span>
-                                                        <span className="inline-flex items-center gap-1">
-                                                            <User className="w-3 h-3" />
-                                                            {item.author || 'Ancient Health'}
-                                                        </span>
-                                                    </div>
+                                                        <div className="p-4">
+                                                            <div className="flex items-center gap-2 text-[10px] text-[#1B2B26]/55 mb-2">
+                                                                <span className="inline-flex items-center gap-1">
+                                                                    <Calendar className="w-3 h-3" />
+                                                                    {formatDate(item.date)}
+                                                                </span>
+                                                            </div>
 
-                                                    <h4 className="text-base font-serif text-[#1B2B26] leading-snug line-clamp-2 group-hover:text-[#2d5f4f] transition-colors">
-                                                        {item.title}
-                                                    </h4>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+                                                            <h4 className="text-sm font-serif text-[#1B2B26] leading-snug line-clamp-2 group-hover:text-[#2d5f4f] transition-colors">
+                                                                {item.title}
+                                                            </h4>
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </aside>
+
+                            </div>
                         </div>
                     </div>
 
