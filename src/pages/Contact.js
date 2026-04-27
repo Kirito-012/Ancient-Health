@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
+import JsonLd from '../components/JsonLd'
+import { buildFaqSchema } from '../utils/schemaUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
@@ -150,6 +152,7 @@ const Contact = () => {
                 <meta name="twitter:description" content="Get in touch with Ancient Health. We'd love to hear from you — questions, feedback, or inquiries about our pure Himalayan botanical remedies." />
                 <meta name="twitter:image" content="https://www.ancienthealth.in/og-image.jpeg" />
             </Helmet>
+            <JsonLd schema={buildFaqSchema(faqData)} />
             <Navbar />
 
             {/* Grain Overlay */}

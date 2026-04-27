@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useNavigate } from 'react-router-dom'
+import JsonLd from '../components/JsonLd'
+import { buildItemListSchema, SITE_URL } from '../utils/schemaUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { useCart } from '../context/CartContext'
@@ -234,6 +236,7 @@ const Shop = () => {
 				<meta name="twitter:description" content="Browse our collection of pure, hand-harvested Himalayan botanicals and Ayurvedic remedies. Ethically sourced, potent, and authentic." />
 				<meta name="twitter:image" content="https://www.ancienthealth.in/og-image.jpeg" />
 			</Helmet>
+			<JsonLd schema={products.length > 0 ? buildItemListSchema(products, `${SITE_URL}/shop/`) : null} />
 			<Navbar />
 
 			{/* Premium Hero Section */}

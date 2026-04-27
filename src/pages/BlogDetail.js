@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import { blogCache } from '../utils/blogUtils'
+import JsonLd from '../components/JsonLd'
+import { buildBreadcrumbSchema } from '../utils/schemaUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import HTMLContent from '../components/HTMLContent'
@@ -236,6 +238,12 @@ const BlogDetail = () => {
         mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl }
     } : null
 
+    const breadcrumbSchema = blog ? buildBreadcrumbSchema([
+        { name: 'Home', url: `${SITE_URL}/` },
+        { name: 'Blog', url: `${SITE_URL}/blog/` },
+        { name: blog.title, url: canonicalUrl },
+    ]) : null
+
     return (
         <div className="min-h-screen bg-[#0f1c18]">
             <Helmet>
@@ -269,6 +277,7 @@ const BlogDetail = () => {
                     </script>
                 )}
             </Helmet>
+            <JsonLd schema={breadcrumbSchema} />
 
             {/* Reading Progress Bar */}
             <div className="fixed top-0 left-0 right-0 z-[100] h-0.5 bg-transparent pointer-events-none">

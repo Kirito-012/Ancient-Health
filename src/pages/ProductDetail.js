@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { motion } from 'framer-motion'
+import JsonLd from '../components/JsonLd'
+import { buildProductSchema, buildBreadcrumbSchema, SITE_URL, SITE_NAME } from '../utils/schemaUtils'
 import {
 	ArrowLeft,
 	Star,
@@ -297,8 +300,38 @@ const ProductDetail = () => {
 	const finalPrice =
 		discount > 0 ? currentPrice * (1 - discount / 100) : currentPrice
 
+	// SEO
+	const productUrl = `${SITE_URL}/shop/${product.slug}`
+	const primaryImage = product.images?.[0]?.url || `${SITE_URL}/og-image.jpeg`
+	const metaDescription = product.description
+		? product.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 160)
+		: `Buy ${product.title} from Ancient Health — pure Ayurvedic formulations.`
+	const productSchema = buildProductSchema(product, productUrl)
+	const breadcrumbSchema = buildBreadcrumbSchema([
+		{ name: 'Home', url: `${SITE_URL}/` },
+		{ name: 'Shop', url: `${SITE_URL}/shop/` },
+		{ name: product.title, url: productUrl },
+	])
+
 	return (
 		<div className='min-h-screen bg-[#f8faf9] flex flex-col selection:bg-[#2d5f4f]/20'>
+			<Helmet>
+				<title>{product.title} | {SITE_NAME}</title>
+				<meta name="description" content={metaDescription} />
+				<meta name="robots" content="index, follow" />
+				<link rel="canonical" href={productUrl} />
+				<meta property="og:type" content="product" />
+				<meta property="og:title" content={`${product.title} | ${SITE_NAME}`} />
+				<meta property="og:description" content={metaDescription} />
+				<meta property="og:image" content={primaryImage} />
+				<meta property="og:url" content={productUrl} />
+				<meta property="og:site_name" content={SITE_NAME} />
+				<meta name="twitter:card" content="summary_large_image" />
+				<meta name="twitter:title" content={`${product.title} | ${SITE_NAME}`} />
+				<meta name="twitter:description" content={metaDescription} />
+				<meta name="twitter:image" content={primaryImage} />
+			</Helmet>
+			<JsonLd schema={[productSchema, breadcrumbSchema]} />
 			<Navbar forceDarkNav={true} />
 
 			<main className='flex-1 pb-20'>

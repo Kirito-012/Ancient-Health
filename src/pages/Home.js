@@ -3,6 +3,8 @@
 import React, { Suspense, lazy } from 'react'
 import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
+import JsonLd from '../components/JsonLd'
+import { buildOrganizationSchema, buildWebSiteSchema } from '../utils/schemaUtils'
 import HeroSection from '../components/HeroSection'
 
 const PuritySection = lazy(() => import('../components/PuritySection'))
@@ -34,6 +36,7 @@ const Home = () => {
 				<meta name="twitter:description" content="Discover pure, hand-harvested botanicals from the heart of the Himalayas. Ancient Health brings you ethically sourced Ayurvedic remedies for modern wellness." />
 				<meta name="twitter:image" content="https://www.ancienthealth.in/og-image.jpeg" />
 			</Helmet>
+			<JsonLd schema={[buildOrganizationSchema(), buildWebSiteSchema()]} />
 			<Navbar />
 			<HeroSection />
 			<Suspense fallback={<div className="min-h-[200px]" />}>
