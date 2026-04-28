@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import JsonLd from '../components/JsonLd'
 import { buildFaqSchema } from '../utils/schemaUtils'
@@ -10,10 +10,19 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { Mail, MapPin, Instagram, Twitter, Linkedin, Send, CalendarDays, Clock, Phone, Sparkles, CheckCircle2 } from 'lucide-react'
 import { useCart } from '../context/CartContext'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 
 const Contact = () => {
     const { user } = useCart()
+    const { hash } = useLocation()
+
+    useEffect(() => {
+        if (hash === '#common-queries') {
+            const el = document.getElementById('common-queries')
+            if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+        }
+    }, [hash])
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -616,7 +625,7 @@ const Contact = () => {
             <div className='w-full h-[1px] bg-white/10 max-w-7xl mx-auto'></div>
 
             {/* Minimalist FAQ */}
-            <section className='py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto'>
+            <section id='common-queries' className='py-20 lg:py-32 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto'>
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}

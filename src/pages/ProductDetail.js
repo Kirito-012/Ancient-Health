@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import JsonLd from '../components/JsonLd'
 import { buildProductSchema, buildBreadcrumbSchema, SITE_URL, SITE_NAME } from '../utils/schemaUtils'
 import {
@@ -17,6 +17,7 @@ import {
 	ShieldCheck,
 	ChevronLeft,
 	ChevronRight,
+	Share2,
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -42,6 +43,7 @@ const ProductDetail = () => {
 	const [quantity, setQuantity] = useState(1)
 	const [selectedVariantIdx, setSelectedVariantIdx] = useState(0)
 	const [isAddingToCart, setIsAddingToCart] = useState(false)
+	const [quantityDirection, setQuantityDirection] = useState(1)
 
 	// Fetch product data
 	useEffect(() => {
@@ -106,6 +108,7 @@ const ProductDetail = () => {
 			? activeVariant.stock || 0
 			: product?.stock || 0
 
+		setQuantityDirection(amount > 0 ? 1 : -1)
 		setQuantity((prev) => {
 			const next = prev + amount
 			if (next < 1) return 1
@@ -331,7 +334,7 @@ const ProductDetail = () => {
 
 			<main className='flex-1 pb-20'>
 				{/* Hero Product Section */}
-				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 lg:pt-28 lg:pb-16'>
+				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-8 lg:pt-40 lg:pb-16'>
 					<div className='flex flex-col lg:flex-row gap-12 xl:gap-20 items-start'>
 						{/* LEFT SIDE: Image Gallery */}
 						<div className='w-full lg:w-1/2 flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start'>
@@ -423,9 +426,26 @@ const ProductDetail = () => {
 								)}
 
 								{/* Title */}
-								<h1 className='text-2xl md:text-3xl font-serif text-[#1e4035] leading-tight mb-2 font-playfair pr-10'>
-									{product.title}
-								</h1>
+								<div className='flex items-start gap-3 mb-2'>
+									<h1 className='flex-1 text-2xl md:text-3xl font-serif text-[#1e4035] leading-tight font-playfair'>
+										{product.title}
+									</h1>
+									<button
+										onClick={async () => {
+											try {
+												if (navigator.share) {
+													await navigator.share({ title: product.title, url: productUrl })
+												} else {
+													await navigator.clipboard.writeText(productUrl)
+													toast.success('Link copied to clipboard!', { icon: '🔗' })
+												}
+											} catch {}
+										}}
+										className='shrink-0 mt-1 p-2 rounded-xl border border-gray-200 bg-white text-gray-400 hover:text-[#2d5f4f] hover:border-[#2d5f4f]/40 hover:bg-[#2d5f4f]/5 transition-all duration-300'
+										aria-label='Share product'>
+										<Share2 className='w-4 h-4' />
+									</button>
+								</div>
 
 								{/* Reviews snippet */}
 								<div className='flex items-center gap-3 mb-4'>
@@ -532,9 +552,19 @@ const ProductDetail = () => {
 											disabled={currentStock <= 0}>
 											<Minus className='w-3.5 h-3.5' />
 										</button>
-										<span className='w-9 text-center text-sm font-bold text-gray-800'>
-											{quantity}
-										</span>
+										<div className='w-9 h-8 relative overflow-hidden flex items-center justify-center'>
+											<AnimatePresence mode='popLayout' initial={false}>
+												<motion.span
+													key={quantity}
+													initial={{ y: quantityDirection * 16, opacity: 0 }}
+													animate={{ y: 0, opacity: 1 }}
+													exit={{ y: quantityDirection * -16, opacity: 0 }}
+													transition={{ duration: 0.18, ease: 'easeOut' }}
+													className='absolute text-sm font-bold text-gray-800 tabular-nums'>
+													{quantity}
+												</motion.span>
+											</AnimatePresence>
+										</div>
 										<button
 											onClick={() => handleQuantityChange(1)}
 											className='w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#2d5f4f] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50'

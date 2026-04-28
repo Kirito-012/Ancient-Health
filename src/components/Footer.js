@@ -1,10 +1,46 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { motion } from 'framer-motion'
 import { Mail, MapPin, ArrowRight, Facebook, Instagram, Linkedin } from 'lucide-react'
+import { useCart } from '../context/CartContext'
+import { toast } from 'react-toastify'
 
 const Footer = () => {
+    const { token } = useCart()
+    const navigate = useNavigate()
+
+    const handleTrackOrder = () => {
+        if (token) {
+            navigate('/my-orders')
+        } else {
+            toast.info(
+                <div className='flex items-center justify-between gap-4 w-full'>
+                    <div className='flex flex-col'>
+                        <span className='font-serif text-[#1e4035] font-bold text-sm'>Login Required</span>
+                        <span className='text-xs text-[#2d5f4f]/80'>You need to login first</span>
+                    </div>
+                </div>,
+                {
+                    icon: '🔒',
+                    style: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(45, 95, 79, 0.15)',
+                        borderRadius: '12px',
+                        boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+                        padding: '16px',
+                        color: '#1e4035',
+                    },
+                    progressStyle: {
+                        background: 'linear-gradient(to right, #2d5f4f, #1e4035)',
+                        height: '3px',
+                    },
+                    onOpen: () => setTimeout(() => navigate('/login'), 1500),
+                }
+            )
+        }
+    }
+
     return (
         <footer className='relative bg-[#0f1c18] text-[#e8e6e3] overflow-hidden pt-20 pb-10'>
             {/* Grain Overlay */}
@@ -110,9 +146,8 @@ const Footer = () => {
                         <h3 className='text-white font-serif text-lg mb-6'>Support</h3>
                         <ul className='space-y-4'>
                             {[
-                                { name: 'FAQ', path: '/faq' },
+                                { name: 'FAQ', path: '/contact#common-queries' },
                                 { name: 'Shipping & Returns', path: '/shipping' },
-                                { name: 'Track Order', path: '/track' },
                                 { name: 'Terms of Service', path: '/terms' }
                             ].map((link) => (
                                 <li key={link.name}>
@@ -122,6 +157,12 @@ const Footer = () => {
                                     </Link>
                                 </li>
                             ))}
+                            <li>
+                                <button onClick={handleTrackOrder} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
+                                    <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300 text-[#d4a574]" />
+                                    Track Order
+                                </button>
+                            </li>
                         </ul>
                     </motion.div>
 
