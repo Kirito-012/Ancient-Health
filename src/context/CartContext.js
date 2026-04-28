@@ -102,53 +102,70 @@ export const CartProvider = ({ children }) => {
         return { items, totalItems, totalPrice }
     }
 
-    const addToCart = async (productId, quantity = 1, productDetails = null) => {
+    const addToCart = async (productId, quantity = 1, variantId = null) => {
         if (!token) {
             // Guest Logic
             setLoading(true)
             try {
+                // Always fetch the product so we get fresh price/stock and variant data
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}`)
+                if (!res.data.success) return false
+                const product = res.data.data
+
+                // Resolve variant if provided
+                let variant = null
+                if (variantId && product.hasVariants && product.variants?.length > 0) {
+                    variant = product.variants.find(v => v._id?.toString() === variantId.toString())
+                }
+
+                const effectiveOffer = variant && variant.offer != null
+                    ? variant.offer
+                    : (product.offer || 0)
+                const basePrice = variant ? variant.price : product.price
+                const itemPrice = effectiveOffer > 0
+                    ? basePrice - (basePrice * effectiveOffer) / 100
+                    : basePrice
+                const itemStock = variant ? variant.stock : product.stock
+                const itemImage = (variant?.images?.length > 0 ? variant.images[0].url : null)
+                    || product.images?.[0]?.url
+                    || ''
+                const variantLabel = variant
+                    ? variant.attributes.map(a => a.value).join(' / ')
+                    : null
+
                 const currentItems = [...cart.items]
-                const existingItemIndex = currentItems.findIndex(item => item.productId === productId)
+                const existingItemIndex = currentItems.findIndex(item => {
+                    const productMatch = item.productId === productId
+                    const variantMatch = variantId
+                        ? item.variantId === variantId
+                        : !item.variantId
+                    return productMatch && variantMatch
+                })
 
                 let newItems
                 if (existingItemIndex > -1) {
-                    // Check stock if productDetails provided
-                    if (productDetails && currentItems[existingItemIndex].quantity + quantity > productDetails.stock) {
-                        toast.error(`Only ${productDetails.stock} items available`)
+                    const newQty = currentItems[existingItemIndex].quantity + quantity
+                    if (newQty > itemStock) {
+                        toast.error(`Only ${itemStock} items available`)
                         return false
                     }
-
-                    currentItems[existingItemIndex].quantity += quantity
+                    currentItems[existingItemIndex].quantity = newQty
                     newItems = currentItems
                 } else {
-                    if (!productDetails) {
-                        // Should fetch product details if not provided, but for now fallback or efficient approach
-                        // In a real app we might need to fetch price/image here if not passed.
-                        // For this refactor, we assume Shop passes necessary details or we fetch.
-                        // To keep it simple, we expect basic details if possible, or we fetch.
-                        // Since the existing Shop.js passes ID, we might need to fetch or use what we have.
-                        // Let's try to fetch if we don't have details, OR trust the caller to update context/logic
-                        // But `addToCart` signature in `Shop.js` only passes `product._id`.
-                        // We need to fetch product info for guest cart display.
-
-                        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${productId}`)
-                        if (res.data.success) {
-                            productDetails = res.data.data
-                        }
-                    }
-
-                    if (productDetails) {
-                        newItems = [...currentItems, {
-                            productId: productDetails._id,
-                            title: productDetails.title,
-                            price: productDetails.finalPrice || productDetails.price,
-                            image: productDetails.images?.[0]?.url || '',
-                            quantity,
-                            stock: productDetails.stock
-                        }]
-                    } else {
+                    if (quantity > itemStock) {
+                        toast.error(`Only ${itemStock} items available`)
                         return false
                     }
+                    newItems = [...currentItems, {
+                        productId: product._id,
+                        variantId: variant?._id || null,
+                        variantLabel,
+                        title: product.title,
+                        price: itemPrice,
+                        image: itemImage,
+                        quantity,
+                        stock: itemStock,
+                    }]
                 }
 
                 setCart(calculateCartTotals(newItems))
@@ -167,7 +184,7 @@ export const CartProvider = ({ children }) => {
             setLoading(true)
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/api/cart/add`,
-                { productId, quantity },
+                { productId, quantity, variantId: variantId || undefined },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
             if (response.data.success) {

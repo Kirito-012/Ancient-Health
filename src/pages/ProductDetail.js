@@ -11,10 +11,10 @@ import {
 	Star,
 	Plus,
 	Minus,
+	ShoppingCart,
 	Truck,
 	RefreshCw,
 	ShieldCheck,
-	ChevronDown,
 	ChevronLeft,
 	ChevronRight,
 } from 'lucide-react'
@@ -40,8 +40,7 @@ const ProductDetail = () => {
 	// UI states
 	const [activeImageIndex, setActiveImageIndex] = useState(0)
 	const [quantity, setQuantity] = useState(1)
-	const [selectedVariant, setSelectedVariant] = useState(null)
-	const [activeDropdownIndex, setActiveDropdownIndex] = useState(null)
+	const [selectedVariantIdx, setSelectedVariantIdx] = useState(0)
 	const [isAddingToCart, setIsAddingToCart] = useState(false)
 
 	// Fetch product data
@@ -58,12 +57,7 @@ const ProductDetail = () => {
 					const fetchedProduct = data.data
 					setProduct(fetchedProduct)
 
-					if (
-						fetchedProduct.hasVariants &&
-						fetchedProduct.variants?.length > 0
-					) {
-						setSelectedVariant(fetchedProduct.variants[0])
-					}
+					setSelectedVariantIdx(0)
 
 					if (fetchedProduct.category) {
 						fetchRelatedProducts(
@@ -107,8 +101,9 @@ const ProductDetail = () => {
 
 	// Cart handlers
 	const handleQuantityChange = (amount) => {
-		const currentStock = selectedVariant
-			? selectedVariant.stock || 0
+		const activeVariant = product?.hasVariants ? product?.variants?.[selectedVariantIdx] : null
+		const currentStock = activeVariant
+			? activeVariant.stock || 0
 			: product?.stock || 0
 
 		setQuantity((prev) => {
@@ -128,10 +123,11 @@ const ProductDetail = () => {
 		setIsAddingToCart(true)
 		try {
 			// Note: If variant support exists in cart context, pass selectedVariant info
+			const activeVariant = product?.hasVariants ? product?.variants?.[selectedVariantIdx] : null
 			const success = await addToCart(
 				product._id,
 				quantity,
-				selectedVariant?._id,
+				activeVariant?._id,
 			)
 
 			if (success) {
@@ -234,10 +230,6 @@ const ProductDetail = () => {
 		}
 	}
 
-	const toggleDropdown = (index) => {
-		setActiveDropdownIndex(activeDropdownIndex === index ? null : index)
-	}
-
 	if (loading) {
 		return (
 			<div className='min-h-screen bg-[#f8faf9] flex flex-col'>
@@ -282,6 +274,7 @@ const ProductDetail = () => {
 	}
 
 	// Determine current display values based on variants
+	const selectedVariant = product.hasVariants ? product.variants?.[selectedVariantIdx] : null
 	const currentPrice = selectedVariant ? selectedVariant.price : product.price
 	const currentStock = selectedVariant ? selectedVariant.stock : product.stock
 	const currentImages =
@@ -295,8 +288,10 @@ const ProductDetail = () => {
 			? currentImages
 			: [{ url: '/placeholder-image.png' }] // Default empty state later
 
-	// Calculates discounted price if offer exists
-	const discount = product.offer || 0
+	// Per-variant offer overrides product-level offer; falls back to product.offer
+	const discount = selectedVariant && selectedVariant.offer != null
+		? selectedVariant.offer
+		: (product.offer || 0)
 	const finalPrice =
 		discount > 0 ? currentPrice * (1 - discount / 100) : currentPrice
 
@@ -337,9 +332,9 @@ const ProductDetail = () => {
 			<main className='flex-1 pb-20'>
 				{/* Hero Product Section */}
 				<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8 lg:pt-28 lg:pb-16'>
-					<div className='flex flex-col lg:flex-row gap-12 xl:gap-20'>
+					<div className='flex flex-col lg:flex-row gap-12 xl:gap-20 items-start'>
 						{/* LEFT SIDE: Image Gallery */}
-						<div className='w-full lg:w-1/2 flex flex-col gap-4'>
+						<div className='w-full lg:w-1/2 flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start'>
 							{/* Main Image */}
 							<div className='relative aspect-square rounded-3xl overflow-hidden bg-white border border-gray-100 shadow-sm flex items-center justify-center p-8 group'>
 								<div className='absolute inset-0 bg-gradient-to-br from-[#2d5f4f]/5 to-transparent mix-blend-multiply opacity-50'></div>
@@ -420,219 +415,216 @@ const ProductDetail = () => {
 							<div className='mb-8'>
 								{/* Category Badge */}
 								{product.category && (
-									<div className='mb-4'>
-										<span className='inline-block px-3 py-1 bg-[#2d5f4f]/10 text-[#2d5f4f] text-xs font-bold uppercase tracking-widest rounded-full border border-[#2d5f4f]/20'>
+									<div className='mb-3'>
+										<span className='inline-block px-2.5 py-0.5 bg-[#2d5f4f]/10 text-[#2d5f4f] text-[10px] font-bold uppercase tracking-widest rounded-full border border-[#2d5f4f]/20'>
 											{product.category.name}
 										</span>
 									</div>
 								)}
 
 								{/* Title */}
-								<h1 className='text-3xl md:text-5xl font-serif text-[#1e4035] leading-tight mb-4 font-playfair pr-10'>
+								<h1 className='text-2xl md:text-3xl font-serif text-[#1e4035] leading-tight mb-2 font-playfair pr-10'>
 									{product.title}
 								</h1>
 
 								{/* Reviews snippet */}
-								<div className='flex items-center gap-4 mb-6'>
-									<div className='flex items-center gap-1 bg-[#fef9c3] px-2.5 py-1 rounded-md border border-yellow-200'>
-										<Star className='w-4 h-4 fill-yellow-400 text-yellow-400' />
-										<span className='text-sm font-bold text-yellow-800 tracking-wide'>
+								<div className='flex items-center gap-3 mb-4'>
+									<div className='flex items-center gap-1 bg-[#fef9c3] px-2 py-0.5 rounded-md border border-yellow-200'>
+										<Star className='w-3.5 h-3.5 fill-yellow-400 text-yellow-400' />
+										<span className='text-xs font-bold text-yellow-800 tracking-wide'>
 											{product.ratings ? product.ratings.toFixed(1) : '4.9'}
 										</span>
 									</div>
-									<button className='text-sm text-gray-400 hover:text-[#2d5f4f] transition-colors underline decoration-dashed underline-offset-4'>
+									<button className='text-xs text-gray-400 hover:text-[#2d5f4f] transition-colors underline decoration-dashed underline-offset-4'>
 										Read Trusted Reviews
 									</button>
 								</div>
 
 								{/* Pricing */}
-								<div className='flex flex-col gap-1 mb-8 bg-white p-6 rounded-3xl border border-gray-100 shadow-sm'>
-									<div className='flex items-end gap-3 flex-wrap'>
-										<span className='text-4xl font-bold text-[#2d5f4f] tracking-tight'>
+								<div className='flex flex-col gap-0.5 mb-5 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm'>
+									<div className='flex items-end gap-2 flex-wrap'>
+										<span className='text-3xl font-bold text-[#2d5f4f] tracking-tight'>
 											₹{formatPrice(finalPrice)}
 										</span>
 										{discount > 0 && (
 											<>
-												<span className='text-xl text-gray-400 line-through mb-1'>
+												<span className='text-base text-gray-400 line-through mb-0.5'>
 													₹{formatPrice(currentPrice)}
 												</span>
-												<span className='text-sm font-bold text-red-500 bg-red-50 px-2 py-1 rounded-md mb-1.5'>
+												<span className='text-xs font-bold text-red-500 bg-red-50 px-1.5 py-0.5 rounded mb-1'>
 													{discount}% OFF
 												</span>
 											</>
 										)}
 									</div>
-									<p className='text-xs text-gray-400 font-medium uppercase tracking-wider mt-1'>
+									<p className='text-[10px] text-gray-400 font-medium uppercase tracking-wider mt-0.5'>
 										MRP (Inclusive of all taxes)
 									</p>
 								</div>
 
 								{/* Variants (If Exist) */}
 								{product.hasVariants && product.variants?.length > 0 && (
-									<div className='mb-8'>
-										<h3 className='text-sm font-bold text-[#1e4035] uppercase tracking-wider mb-4 border-b border-gray-100 pb-2'>
+									<div className='mb-5'>
+										<h3 className='text-xs font-bold text-[#1e4035] uppercase tracking-wider mb-2.5 border-b border-gray-100 pb-1.5'>
 											Available Options
 										</h3>
-										<div className='flex flex-wrap gap-3'>
-											{product.variants.map((variant, idx) => (
+										<div className='flex flex-wrap gap-2'>
+											{product.variants.map((variant, idx) => {
+												const variantOffer = variant.offer != null ? variant.offer : (product.offer || 0)
+												return (
 												<button
-													key={variant._id || idx}
+													key={idx}
 													onClick={() => {
-														setSelectedVariant(variant)
-														setQuantity(1) // Reset quantity on variant swap
+														setSelectedVariantIdx(idx)
+														setQuantity(1)
 													}}
-													className={`px-5 py-2.5 rounded-xl border-2 text-sm font-semibold transition-all duration-300 ${selectedVariant?._id === variant._id
-														? 'border-[#2d5f4f] bg-[#2d5f4f]/5 text-[#2d5f4f] shadow-sm ring-4 ring-[#2d5f4f]/10'
-														: 'border-gray-200 bg-white text-gray-600 hover:border-[#2d5f4f]/50 hover:bg-gray-50'
-														}`}>
-													{variant.attributes.map((a) => a.value).join(' / ')}
+													className={`flex flex-col items-center px-6 py-3 rounded-xl border-2 transition-all duration-300 ${
+														selectedVariantIdx === idx
+															? 'border-[#2d5f4f] bg-[#2d5f4f] text-white shadow-md shadow-[#2d5f4f]/20 ring-2 ring-[#2d5f4f]/10'
+															: 'border-gray-200 bg-white text-gray-700 hover:border-[#2d5f4f]/50 hover:bg-[#2d5f4f]/5 hover:text-[#2d5f4f]'
+													}`}>
+													<span className='text-xs font-bold leading-tight'>
+														{variant.attributes.map((a) => a.value).join(' / ')}
+													</span>
+													<div className='flex items-baseline gap-1 mt-0.5'>
+														<span className={`text-[11px] font-bold ${selectedVariantIdx === idx ? 'text-white' : 'text-[#2d5f4f]'}`}>
+															₹{formatPrice(variantOffer > 0 ? variant.price * (1 - variantOffer / 100) : variant.price)}
+														</span>
+														{variantOffer > 0 && (
+															<span className={`text-[9px] font-medium line-through ${selectedVariantIdx === idx ? 'text-white/50' : 'text-gray-400'}`}>
+																₹{formatPrice(variant.price)}
+															</span>
+														)}
+													</div>
 												</button>
-											))}
+												)
+											})}
 										</div>
 									</div>
 								)}
 
 								{/* Stock Status */}
-								<div className='mb-6'>
+								<div className='mb-4'>
 									{currentStock > 10 ? (
-										<p className='flex items-center gap-2 text-sm font-semibold text-emerald-600'>
-											<span className='w-2 h-2 rounded-full bg-emerald-500 animate-pulse'></span>
+										<p className='flex items-center gap-2 text-xs font-semibold text-emerald-600'>
+											<span className='w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse'></span>
 											In Stock & Ready to Ship
 										</p>
 									) : currentStock > 0 ? (
-										<p className='flex items-center gap-2 text-sm font-semibold text-amber-600'>
-											<span className='w-2 h-2 rounded-full bg-amber-500 animate-pulse'></span>
+										<p className='flex items-center gap-2 text-xs font-semibold text-amber-600'>
+											<span className='w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse'></span>
 											Only {currentStock} Left - Order Soon
 										</p>
 									) : (
-										<p className='flex items-center gap-2 text-sm font-semibold text-red-600'>
-											<span className='w-2 h-2 rounded-full bg-red-500'></span>
+										<p className='flex items-center gap-2 text-xs font-semibold text-red-600'>
+											<span className='w-1.5 h-1.5 rounded-full bg-red-500'></span>
 											Out of Stock
 										</p>
 									)}
 								</div>
 
 								{/* Add to Cart Row */}
-								<div className='flex gap-4 mb-8'>
-									<div className='flex items-center border-2 border-gray-200 rounded-2xl bg-white focus-within:border-[#2d5f4f] transition-colors p-1'>
+								<div className='flex gap-3 mb-6'>
+									<div className='flex items-center border-2 border-gray-200 rounded-xl bg-white focus-within:border-[#2d5f4f] transition-colors p-0.5'>
 										<button
 											onClick={() => handleQuantityChange(-1)}
-											className='w-10 h-10 flex items-center justify-center text-gray-500 hover:text-[#2d5f4f] hover:bg-gray-50 rounded-xl transition-colors disabled:opacity-50'
+											className='w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#2d5f4f] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50'
 											disabled={currentStock <= 0}>
-											<Minus className='w-4 h-4' />
+											<Minus className='w-3.5 h-3.5' />
 										</button>
-										<span className='w-12 text-center font-bold text-gray-800'>
+										<span className='w-9 text-center text-sm font-bold text-gray-800'>
 											{quantity}
 										</span>
 										<button
 											onClick={() => handleQuantityChange(1)}
-											className='w-10 h-10 flex items-center justify-center text-gray-500 hover:text-[#2d5f4f] hover:bg-gray-50 rounded-xl transition-colors disabled:opacity-50'
+											className='w-8 h-8 flex items-center justify-center text-gray-500 hover:text-[#2d5f4f] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50'
 											disabled={currentStock <= 0}>
-											<Plus className='w-4 h-4' />
+											<Plus className='w-3.5 h-3.5' />
 										</button>
 									</div>
 
 									<button
 										onClick={handleAddToCart}
 										disabled={currentStock <= 0 || isAddingToCart}
-										className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-2xl font-bold text-lg shadow-lg shadow-[#2d5f4f]/20 transition-all duration-300 ${currentStock <= 0
-											? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-											: 'bg-[#2d5f4f] text-white hover:bg-[#1e4035] hover:-translate-y-1'
+										className={`group relative overflow-hidden flex items-center justify-center gap-2.5 px-9 py-3 rounded-xl font-bold text-sm uppercase tracking-[0.15em] transition-all duration-300 ${currentStock <= 0
+											? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+											: 'bg-gradient-to-br from-[#2d5f4f] via-[#264f43] to-[#1e4035] text-white shadow-lg shadow-[#2d5f4f]/30 hover:shadow-xl hover:shadow-[#2d5f4f]/40 hover:-translate-y-0.5 active:translate-y-0 ring-1 ring-white/10'
 											}`}>
+										{currentStock > 0 && (
+											<span className='absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:translate-x-full transition-transform duration-700 ease-out pointer-events-none'></span>
+										)}
 										{isAddingToCart ? (
-											<div className='w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
+											<div className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin'></div>
 										) : (
 											<>
-												Add to Cart
-												<svg
-													className='w-5 h-5 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all'
-													fill='none'
-													stroke='currentColor'
-													viewBox='0 0 24 24'>
-													<path
-														strokeLinecap='round'
-														strokeLinejoin='round'
-														strokeWidth={2}
-														d='M14 5l7 7m0 0l-7 7m7-7H3'
-													/>
-												</svg>
+												<ShoppingCart className='w-[18px] h-[18px] transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-12' strokeWidth={2.4} />
+												<span className='relative'>Add to Cart</span>
 											</>
 										)}
 									</button>
 								</div>
 
 								{/* Trust Badges */}
-								<div className='grid grid-cols-3 gap-3 mb-10'>
+								<div className='grid grid-cols-3 gap-3 my-12'>
 									{/* Free Shipping */}
-									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-[#d4a574]/10 via-white to-[#d4a574]/5 border border-[#d4a574]/25 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#d4a574]/20 to-transparent pointer-events-none'></div>
-										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#d4a574] to-[#c4905e] flex items-center justify-center text-white shadow-md shadow-[#d4a574]/30 mb-1'>
-											<Truck className='w-5 h-5' />
+									<div className='flex flex-col items-center text-center gap-2 group'>
+										<div className='relative w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br from-[#d4a574] to-[#c4905e] flex items-center justify-center text-white shadow-md shadow-[#d4a574]/40 ring-2 ring-[#d4a574]/10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500'>
+											<Truck className='w-5 h-5 lg:w-6 lg:h-6' strokeWidth={2.2} />
 										</div>
-										<p className='text-[11px] font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
-											Free Shipping
-										</p>
-										<p className='text-[10px] text-gray-400 font-medium -mt-1'>
-											on orders above ₹499
-										</p>
+										<div>
+											<p className='text-[10px] lg:text-xs font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
+												Free Shipping
+											</p>
+											<p className='text-[9px] lg:text-[10px] text-gray-500 font-medium mt-0.5'>
+												on orders above ₹499
+											</p>
+										</div>
 									</div>
 
 									{/* Easy Returns */}
-									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-[#2d5f4f]/10 via-white to-[#2d5f4f]/5 border border-[#2d5f4f]/20 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#2d5f4f]/20 to-transparent pointer-events-none'></div>
-										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center text-white shadow-md shadow-[#2d5f4f]/30 mb-1'>
-											<RefreshCw className='w-5 h-5' />
+									<div className='flex flex-col items-center text-center gap-2 group'>
+										<div className='relative w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br from-[#2d5f4f] to-[#1e4035] flex items-center justify-center text-white shadow-md shadow-[#2d5f4f]/40 ring-2 ring-[#2d5f4f]/10 group-hover:scale-110 group-hover:-rotate-3 transition-all duration-500'>
+											<RefreshCw className='w-5 h-5 lg:w-6 lg:h-6' strokeWidth={2.2} />
 										</div>
-										<p className='text-[11px] font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
-											Easy Returns
-										</p>
-										<p className='text-[10px] text-gray-400 font-medium -mt-1'>
-											up to 10 days
-										</p>
+										<div>
+											<p className='text-[10px] lg:text-xs font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
+												Easy Returns
+											</p>
+											<p className='text-[9px] lg:text-[10px] text-gray-500 font-medium mt-0.5'>
+												up to 10 days
+											</p>
+										</div>
 									</div>
 
 									{/* 100% Organic */}
-									<div className='relative flex flex-col items-center text-center gap-2 px-3 py-5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-white to-emerald-500/5 border border-emerald-500/20 shadow-sm overflow-hidden group hover:shadow-md transition-shadow duration-300'>
-										<div className='absolute -top-10 -right-10 w-24 h-24 bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-emerald-500/20 to-transparent pointer-events-none'></div>
-										<div className='relative w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-md shadow-emerald-500/30 mb-1'>
-											<ShieldCheck className='w-5 h-5' />
+									<div className='flex flex-col items-center text-center gap-2 group'>
+										<div className='relative w-12 h-12 lg:w-14 lg:h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-md shadow-emerald-500/40 ring-2 ring-emerald-500/10 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500'>
+											<ShieldCheck className='w-5 h-5 lg:w-6 lg:h-6' strokeWidth={2.2} />
 										</div>
-										<p className='text-[11px] font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
-											100% Organic
-										</p>
-										<p className='text-[10px] text-gray-400 font-medium -mt-1'>
-											& lab certified
-										</p>
+										<div>
+											<p className='text-[10px] lg:text-xs font-bold text-[#1e4035] uppercase tracking-wider leading-tight'>
+												100% Organic
+											</p>
+											<p className='text-[9px] lg:text-[10px] text-gray-500 font-medium mt-0.5'>
+												& lab certified
+											</p>
+										</div>
 									</div>
 								</div>
 
-								{/* Dynamic Description Dropdowns */}
+								{/* Description Sections */}
 								{product.descriptionDropdowns &&
 									product.descriptionDropdowns.length > 0 && (
 										<div className='flex flex-col gap-3'>
 											{product.descriptionDropdowns.map((dropdown, index) => (
-												<div
-													key={index}
-													className='bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm'>
-													<button
-														onClick={() => toggleDropdown(index)}
-														className='w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors'>
-														<span className='font-bold text-[#1e4035] tracking-wide'>
-															{dropdown.heading}
-														</span>
-														<div
-															className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${activeDropdownIndex === index ? 'bg-[#2d5f4f] text-white rotate-180' : 'bg-gray-100 text-gray-500'}`}>
-															<ChevronDown className='w-4 h-4' />
-														</div>
-													</button>
-
-													<div
-														className={`overflow-hidden transition-all duration-300 ease-in-out ${activeDropdownIndex === index ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-														<HTMLContent
-															content={dropdown.content}
-															className='px-6 pr-10 pb-5 text-gray-600 prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:text-[#2d5f4f] prose-a:text-[#d4a574] break-words whitespace-normal [&_*]:!whitespace-normal [&_*]:!break-words'
-														/>
-													</div>
+												<div key={index}>
+													<h3 className='inline-block text-sm lg:text-base font-bold uppercase tracking-wider text-[#2d5f4f] mb-2 pb-1 border-b-2 border-[#d4a574]'>
+														{dropdown.heading}
+													</h3>
+													<HTMLContent
+														content={dropdown.content}
+														className='text-gray-600 text-[13px] prose prose-sm max-w-none prose-p:leading-snug prose-p:my-1.5 prose-ul:my-1.5 prose-ul:leading-snug prose-li:my-0.5 prose-headings:text-[#2d5f4f] prose-headings:my-2 prose-a:text-[#d4a574] break-words whitespace-normal [&_*]:!whitespace-normal [&_*]:!break-words'
+													/>
 												</div>
 											))}
 										</div>

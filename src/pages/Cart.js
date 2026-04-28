@@ -94,7 +94,7 @@ const Cart = () => {
                             {/* Cart Items */}
                             <div className='lg:col-span-2 space-y-4'>
                                 {cart.items.map((item, index) => (
-                                    <div key={item.productId}
+                                    <div key={`${item.productId}-${item.variantId || 'default'}`}
                                         className='group bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-4 sm:p-6 flex flex-wrap sm:flex-nowrap items-center gap-4 sm:gap-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.01] border border-gray-200/50'
                                         style={{ animationDelay: `${index * 50}ms` }}
                                     >
@@ -107,6 +107,9 @@ const Cart = () => {
                                         {/* Product Details */}
                                         <div className='w-[calc(100%-6rem)] sm:w-auto sm:flex-1 text-left'>
                                             <h3 className='text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-[#2d5f4f] transition-colors line-clamp-2'>{item.title}</h3>
+                                            {item.variantLabel && (
+                                                <span className='inline-block mb-1 px-2 py-0.5 bg-[#2d5f4f]/10 text-[#2d5f4f] text-xs font-semibold rounded-full border border-[#2d5f4f]/20'>{item.variantLabel}</span>
+                                            )}
                                             <p className='text-xl sm:text-2xl font-bold text-[#2d5f4f]'>₹{formatPrice(item.price)}</p>
                                             {item.stock < 10 && (
                                                 <p className='text-xs text-orange-600 font-medium mt-1'>Only {item.stock} left in stock!</p>

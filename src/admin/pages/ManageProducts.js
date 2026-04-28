@@ -226,6 +226,7 @@ const ManageProducts = () => {
 		// Ensure variants have necessary fields and migrate legacy single image to images array
 		const loadedVariants = (product.variants || []).map((v) => ({
 			...v,
+			offer: v.offer == null ? '' : v.offer,
 			images: v.images || (v.image ? [{url: v.image, key: v.image}] : []),
 		}))
 		setVariants(loadedVariants)
@@ -426,6 +427,10 @@ const ManageProducts = () => {
 		setVariants(newVariants)
 	}
 
+	const handleRemoveVariant = (index) => {
+		setVariants(variants.filter((_, i) => i !== index))
+	}
+
 	const handleVariantImageUpload = (e, variantIndex) => {
 		const files = Array.from(e.target.files)
 		files.forEach((file) => {
@@ -475,7 +480,12 @@ const ManageProducts = () => {
 				stock: hasVariants ? 0 : editForm.stock ? parseInt(editForm.stock) : 0,
 				faqs: validFaqs,
 				hasVariants,
-				variants: hasVariants ? variants : [],
+				variants: hasVariants
+					? variants.map(v => ({
+						...v,
+						offer: v.offer === '' || v.offer == null ? null : parseFloat(v.offer),
+					}))
+					: [],
 				descriptionDropdowns: editDescriptionDropdowns,
 				videoSection: editVideoSection.video ? editVideoSection : undefined,
 			}
@@ -1613,9 +1623,11 @@ const ManageProducts = () => {
 													<tr>
 														<th className='px-3 py-2 text-left'>Variant</th>
 														<th className='px-3 py-2 text-left'>Price</th>
+														<th className='px-3 py-2 text-left'>Offer %</th>
 														<th className='px-3 py-2 text-left'>Stock</th>
 														<th className='px-3 py-2 text-left'>SKU</th>
 														<th className='px-3 py-2 text-left'>Image</th>
+														<th className='px-3 py-2'></th>
 													</tr>
 												</thead>
 												<tbody className='divide-y divide-slate-100'>
@@ -1641,6 +1653,24 @@ const ManageProducts = () => {
 																	}
 																	className='w-20 px-2 py-1 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
 																	placeholder='0.00'
+																/>
+															</td>
+															<td className='px-3 py-2'>
+																<input
+																	type='number'
+																	value={variant.offer ?? ''}
+																	onChange={(e) =>
+																		handleVariantChange(
+																			index,
+																			'offer',
+																			e.target.value,
+																		)
+																	}
+																	className='w-16 px-2 py-1 text-sm border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500'
+																	placeholder='—'
+																	min='0'
+																	max='100'
+																	title='Leave blank to use the product-level offer'
 																/>
 															</td>
 															<td className='px-3 py-2'>
@@ -1709,6 +1739,17 @@ const ManageProducts = () => {
 																		/>
 																	</label>
 																</div>
+															</td>
+															<td className='px-3 py-2 text-right'>
+																<button
+																	type='button'
+																	onClick={() => handleRemoveVariant(index)}
+																	className='text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors'
+																	title='Delete variant'>
+																	<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+																		<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3' />
+																	</svg>
+																</button>
 															</td>
 														</tr>
 													))}

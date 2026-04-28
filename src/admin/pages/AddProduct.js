@@ -306,6 +306,7 @@ const AddProduct = () => {
 			return {
 				attributes: attrs,
 				price: formData.price || '',
+				offer: '',
 				stock: '',
 				sku: autoSku,
 				images: [], // Multiple images support
@@ -319,6 +320,10 @@ const AddProduct = () => {
 		const newVariants = [...variants]
 		newVariants[index][field] = value
 		setVariants(newVariants)
+	}
+
+	const handleRemoveVariant = (index) => {
+		setVariants(variants.filter((_, i) => i !== index))
 	}
 
 	// Quick Upload for Variant
@@ -434,7 +439,12 @@ const AddProduct = () => {
 				stock: hasVariants ? 0 : formData.stock ? parseInt(formData.stock) : 0,
 				faqs: validFaqs,
 				hasVariants,
-				variants: hasVariants ? variants : [],
+				variants: hasVariants
+					? variants.map(v => ({
+						...v,
+						offer: v.offer === '' || v.offer == null ? null : parseFloat(v.offer),
+					}))
+					: [],
 				descriptionDropdowns,
 				videoSection: videoSection.video ? videoSection : undefined,
 			}
@@ -948,9 +958,11 @@ const AddProduct = () => {
 									<tr>
 										<th className='px-4 py-3'>Variant</th>
 										<th className='px-4 py-3'>Price</th>
+										<th className='px-4 py-3'>Offer %</th>
 										<th className='px-4 py-3'>Stock</th>
 										<th className='px-4 py-3'>SKU</th>
 										<th className='px-4 py-3'>Image</th>
+										<th className='px-4 py-3'></th>
 									</tr>
 								</thead>
 								<tbody className='divide-y divide-slate-100'>
@@ -970,6 +982,20 @@ const AddProduct = () => {
 													}
 													className='w-24 px-2 py-1 border border-slate-300 rounded'
 													placeholder='0.00'
+												/>
+											</td>
+											<td className='px-4 py-3'>
+												<input
+													type='number'
+													value={variant.offer ?? ''}
+													onChange={(e) =>
+														handleVariantChange(index, 'offer', e.target.value)
+													}
+													className='w-20 px-2 py-1 border border-slate-300 rounded'
+													placeholder='—'
+													min='0'
+													max='100'
+													title='Leave blank to use the product-level offer'
 												/>
 											</td>
 											<td className='px-4 py-3'>
@@ -1025,6 +1051,17 @@ const AddProduct = () => {
 														/>
 													</label>
 												</div>
+											</td>
+											<td className='px-4 py-3 text-right'>
+												<button
+													type='button'
+													onClick={() => handleRemoveVariant(index)}
+													className='text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition-colors'
+													title='Delete variant'>
+													<svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+														<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3' />
+													</svg>
+												</button>
 											</td>
 										</tr>
 									))}

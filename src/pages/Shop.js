@@ -525,11 +525,7 @@ const Shop = () => {
 																		₹{product.price.toFixed(2)}
 																	</span>
 																	<span className='text-sm lg:text-xl font-bold text-[#2d5f4f]'>
-																		₹
-																		{(
-																			product.price *
-																			(1 - product.offer / 100)
-																		).toFixed(2)}
+																		₹{(product.price * (1 - product.offer / 100)).toFixed(2)}
 																	</span>
 																</>
 															) : (
@@ -565,7 +561,7 @@ const Shop = () => {
 												{/* Hover overlay border */}
 												<div className='absolute inset-0 border-2 border-[#2d5f4f] rounded-2xl lg:rounded-3xl opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
 											</motion.div>
-										))}
+									))}
 									</AnimatePresence>
 								</motion.div>
 
