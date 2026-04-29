@@ -148,7 +148,8 @@ const Footer = () => {
                             {[
                                 { name: 'FAQ', path: '/contact#common-queries' },
                                 { name: 'Shipping & Returns', path: '/shipping' },
-                                { name: 'Terms of Service', path: '/terms' }
+                                { name: 'Terms of Service', path: '/terms-conditions' },
+                                { name: 'Privacy Policy', path: '/privacy-policy' }
                             ].map((link) => (
                                 <li key={link.name}>
                                     <Link to={link.path} title={link.name} className='text-white/60 hover:text-[#d4a574] text-sm transition-colors duration-300 flex items-center group'>
@@ -180,15 +181,15 @@ const Footer = () => {
                                 <MapPin className="w-5 h-5 text-[#d4a574] mt-1 shrink-0" />
                                 <div>
                                     <p className='text-white/90 text-sm font-medium mb-1'>Sanctuary</p>
-                                    <p className='text-white/50 text-sm font-light'>Himalayan Region, India</p>
+                                    <p className='text-white/50 text-sm font-light'>K NO 43/1, Near Inter College, Village Khedli, Bahadrabad, Haridwar - 249402, Uttarakhand, India</p>
                                 </div>
                             </li>
                             <li className='flex items-start space-x-4'>
                                 <Mail className="w-5 h-5 text-[#d4a574] mt-1 shrink-0" />
                                 <div>
                                     <p className='text-white/90 text-sm font-medium mb-1'>Inquiries</p>
-                                    <a href='mailto:hello@ancienthealth.com' title='Email Ancient Health' className='text-white/50 hover:text-[#d4a574] text-sm font-light transition-colors'>
-                                        hello@ancienthealth.com
+                                    <a href='mailto:theancienthealth7@gmail.com' title='Email Ancient Health' className='text-white/50 hover:text-[#d4a574] text-sm font-light transition-colors'>
+                                        theancienthealth7@gmail.com
                                     </a>
                                 </div>
                             </li>

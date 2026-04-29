@@ -43,6 +43,9 @@ const MyOrders = lazy(() => import('./pages/MyOrders'))
 const Blog = lazy(() => import('./pages/Blog'))
 const BlogDetail = lazy(() => import('./pages/BlogDetail'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail')) // NEW
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsConditions = lazy(() => import('./pages/TermsConditions'))
+const Shipping = lazy(() => import('./pages/Shipping'))
 
 const TrailingSlashRedirect = () => {
 	const { pathname, search, hash } = useLocation()
@@ -180,6 +183,24 @@ const App = () => {
 						<Route
 							path='/blog/:slug'
 							element={<BlogDetail />}
+						/>
+
+						{/* Privacy Policy Page */}
+						<Route
+							path='/privacy-policy'
+							element={<PrivacyPolicy />}
+						/>
+
+						{/* Terms & Conditions Page */}
+						<Route
+							path='/terms-conditions'
+							element={<TermsConditions />}
+						/>
+
+						{/* Shipping & Returns Page */}
+						<Route
+							path='/shipping'
+							element={<Shipping />}
 						/>
 
 						{/* Login Page */}

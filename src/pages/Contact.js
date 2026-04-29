@@ -247,7 +247,7 @@ const Contact = () => {
                                         </div>
                                         <div>
                                             <h4 className='text-white text-sm font-medium uppercase tracking-widest mb-1'>Studio</h4>
-                                            <p className='text-white/50 text-sm font-light'>123 Wellness Way, Himalaya City</p>
+                                            <p className='text-white/50 text-sm font-light'>K NO 43/1, Near Inter College, Village Khedli, Bahadrabad, Haridwar - 249402, Uttarakhand, India</p>
                                         </div>
                                     </div>
 
@@ -257,7 +257,7 @@ const Contact = () => {
                                         </div>
                                         <div>
                                             <h4 className='text-white text-sm font-medium uppercase tracking-widest mb-1'>Digital</h4>
-                                            <p className='text-white/50 text-sm font-light'>support@ancienthealth.com</p>
+                                            <p className='text-white/50 text-sm font-light'>theancienthealth7@gmail.com</p>
                                         </div>
                                     </div>
                                 </div>
