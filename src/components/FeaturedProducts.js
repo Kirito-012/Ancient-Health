@@ -7,16 +7,16 @@ import { formatPrice } from '../utils/formatPrice'
 import { useCart } from '../context/CartContext'
 import { toast } from 'react-toastify'
 
-const VISIBLE = 4
-
 const FeaturedProducts = () => {
     const navigate = useNavigate()
     const { addToCart } = useCart()
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const [visibleIndices, setVisibleIndices] = useState([0, 1, 2, 3])
+    const [visibleCount, setVisibleCount] = useState(window.innerWidth < 768 ? 2 : 4)
+    const [visibleIndices, setVisibleIndices] = useState([])
     const [direction, setDirection] = useState(1)
+    const touchStartX = React.useRef(null)
 
     const handleAddToCart = async (product) => {
         const success = await addToCart(product._id, 1)
@@ -64,7 +64,8 @@ const FeaturedProducts = () => {
                 if (data.success) {
                     const p = data.data
                     setProducts(p)
-                    setVisibleIndices(Array.from({ length: Math.min(VISIBLE, p.length) }, (_, i) => i))
+                    const count = window.innerWidth < 768 ? 2 : 4
+                    setVisibleIndices(Array.from({ length: Math.min(count, p.length) }, (_, i) => i))
                 } else {
                     setError('Failed to load featured products')
                 }
@@ -78,8 +79,23 @@ const FeaturedProducts = () => {
         fetchProducts()
     }, [])
 
+    useEffect(() => {
+        const handleResize = () => {
+            const count = window.innerWidth < 768 ? 2 : 4
+            setVisibleCount(count)
+            if (products.length > 0) {
+                setVisibleIndices(prev => {
+                    const start = prev[0] ?? 0
+                    return Array.from({ length: Math.min(count, products.length) }, (_, i) => (start + i) % products.length)
+                })
+            }
+        }
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [products.length])
+
     const slide = (dir) => {
-        if (products.length <= 1) return
+        if (products.length <= visibleCount) return
         setDirection(dir)
         setVisibleIndices((prev) => {
             if (dir > 0) {
@@ -90,6 +106,14 @@ const FeaturedProducts = () => {
                 return [next, ...prev.slice(0, -1)]
             }
         })
+    }
+
+    const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX }
+    const handleTouchEnd = (e) => {
+        if (touchStartX.current === null) return
+        const diff = touchStartX.current - e.changedTouches[0].clientX
+        if (Math.abs(diff) > 40) slide(diff > 0 ? 1 : -1)
+        touchStartX.current = null
     }
 
     const cardVariants = {
@@ -172,7 +196,11 @@ const FeaturedProducts = () => {
                         )}
 
                         {/* Cards */}
-                        <div className='overflow-hidden'>
+                        <div
+                            className='overflow-hidden'
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={handleTouchEnd}
+                        >
                             <div className='grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-10'>
                             <AnimatePresence mode='popLayout' custom={direction} initial={false}>
                                 {visibleIndices.map((idx) => {
@@ -304,7 +332,7 @@ const FeaturedProducts = () => {
                         </div>
 
                         {/* Dot indicators */}
-                        {products.length > VISIBLE && (
+                        {products.length > visibleCount && (
                             <div className='flex justify-center gap-1.5 mt-8'>
                                 {products.map((_, i) => (
                                     <button
@@ -313,7 +341,7 @@ const FeaturedProducts = () => {
                                             const current = visibleIndices[0]
                                             setDirection(i > current ? 1 : -1)
                                             setVisibleIndices(
-                                                Array.from({ length: Math.min(VISIBLE, products.length) }, (_, j) =>
+                                                Array.from({ length: Math.min(visibleCount, products.length) }, (_, j) =>
                                                     (i + j) % products.length
                                                 )
                                             )
