@@ -54,8 +54,8 @@ const WellnessRetreat = () => {
                         </span>
                     </div>
                     <h2 className='text-4xl sm:text-5xl lg:text-6xl font-serif text-white mb-6'>
-                        Sacred
-                        <span className='block mt-2 italic text-[#d4a574]'>Pilgrimages</span>
+                        Wellness
+                        <span className='block mt-2 italic text-[#d4a574]'>Retreats</span>
                     </h2>
                     <p className='text-lg text-white/60 max-w-2xl mx-auto leading-relaxed font-light'>
                         Leave the chaos behind. Immerse yourself in transformative experiences designed to restore balance and reconnect you with your inner vitality.
@@ -137,7 +137,7 @@ const WellnessRetreat = () => {
                                 <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
                                 <span className='relative z-10 flex items-center space-x-3'>
                                     <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
-                                        Acquire Elixirs
+                                        Shop Now
                                     </span>
                                     <ArrowRight className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
                                 </span>

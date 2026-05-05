@@ -88,7 +88,7 @@ const HeroSection = () => {
                                 <div className='absolute inset-0 w-0 bg-[#d4a574] transition-all duration-[700ms] ease-out group-hover:w-full opacity-90'></div>
                                 <span className='relative z-10 flex items-center space-x-3'>
                                     <span className='uppercase tracking-[0.2em] text-xs font-serif text-[#d4a574] group-hover:text-[#0f1c18] transition-colors duration-500'>
-                                        Explore Elixirs
+                                        Shop Now
                                     </span>
                                     <ArrowRight className="w-4 h-4 text-[#d4a574] group-hover:text-[#0f1c18] transition-all duration-500 transform group-hover:translate-x-1" />
                                 </span>

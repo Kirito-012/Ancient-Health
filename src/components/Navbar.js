@@ -115,16 +115,12 @@ const Navbar = ({ forceDarkNav = false }) => {
                         {/* Logo - Absolute Center */}
                         <div className='absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
                             <Link to='/' title='Ancient Health - Home' className='block group'>
-                                <div className='relative flex items-center justify-center'>
-                                    <img
-                                        src={logo}
-                                        alt='Ancient Health'
-                                        title='Ancient Health'
-                                        className={`w-auto transition-all duration-500 filter brightness-110 ${showDarkNav ? 'h-8 lg:h-9' : 'h-10 lg:h-14'}`}
-                                    />
-                                    {/* Subtle Glow behind logo */}
-                                    <div className='absolute -inset-4 bg-[#d4a574]/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
-                                </div>
+                                <img
+                                    src={logo}
+                                    alt='Ancient Health'
+                                    title='Ancient Health'
+                                    className={`w-auto transition-all duration-500 filter brightness-110 ${showDarkNav ? 'h-8 lg:h-9' : 'h-10 lg:h-14'}`}
+                                />
                             </Link>
                         </div>
 

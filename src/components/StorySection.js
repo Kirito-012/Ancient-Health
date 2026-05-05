@@ -25,7 +25,7 @@ const StorySection = () => {
                 >
                     <div className='inline-block mb-4'>
                         <span className='text-xs font-serif tracking-[0.2em] text-[#2d5f4f] uppercase border-b border-[#2d5f4f]/30 pb-1'>
-                            The Odyssey
+                            The Journey
                         </span>
                     </div>
                     <h2 className='text-3xl sm:text-5xl lg:text-6xl font-serif text-[#0f1c18] mb-6'>
@@ -158,7 +158,7 @@ const StorySection = () => {
 
                         <div className='relative z-10 max-w-3xl mx-auto'>
                             <span className='inline-block text-xs font-serif tracking-[0.2em] text-[#d4a574] uppercase mb-4 md:mb-6'>
-                                The Covenant
+                                Our Promise
                             </span>
                             <h3 className='text-3xl sm:text-4xl lg:text-5xl font-serif text-white mb-6 md:mb-8 leading-tight'>
                                 Purity You Can Trust
