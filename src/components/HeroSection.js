@@ -58,13 +58,13 @@ const HeroSection = () => {
     ]
 
     return (
-        <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3] selection:bg-[#d4a574] selection:text-[#0f1c18]'>
+        <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3] selection:bg-[#d4a574] selection:text-[#0f1c18] w-full max-w-full'>
 
             {/* Grain Overlay */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
 
             {/* Parallax Background */}
-            <div className='absolute inset-0 z-0 overflow-hidden'>
+            <div className='absolute inset-0 z-0 overflow-hidden w-full'>
                 <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
                 <motion.div style={{ y: y1 }} className='absolute inset-0'>
                     <img
@@ -99,7 +99,7 @@ const HeroSection = () => {
                         </motion.p>
 
                         {/* Headline */}
-                        <motion.h1 variants={itemVariants} className='text-5xl sm:text-6xl lg:text-7xl font-serif font-light leading-[0.95] tracking-tight'>
+                        <motion.h1 variants={itemVariants} className='text-5xl sm:text-6xl lg:text-7xl font-serif font-light leading-[1.1] sm:leading-[0.95] tracking-tight'>
                             <span className='block text-white'>Hand-harvested</span>
                             <span className='block text-[#d4a574] italic'>Ayurveda,</span>
                             <span className='block text-white'>lab-verified pure.</span>

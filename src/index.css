@@ -13,6 +13,10 @@
 		--color-accent-light: #e8c9a0;
 	}
 
+	html {
+		overflow-x: hidden;
+	}
+
 	body {
 		font-family: 'Inter', sans-serif;
 		overflow-x: hidden;
