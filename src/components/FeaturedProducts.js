@@ -93,13 +93,13 @@ const FeaturedProducts = () => {
                 >
                     {/* Eyebrow */}
                     <p className='text-[#d4a574] text-xs tracking-[0.35em] uppercase font-sans mb-4'>
-                        Shop the Apothecary
+                        Shop All Products
                     </p>
 
                     {/* Title + description row */}
                     <div className='flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4'>
                         <h2 className='text-5xl sm:text-6xl font-serif font-light text-white'>
-                            Find your <span className='italic text-[#d4a574]'>ritual.</span>
+                            Find your <span className='italic text-[#d4a574]'>product.</span>
                         </h2>
                         <p className='text-white/40 font-sans text-sm leading-relaxed max-w-xs lg:text-right'>
                             Filter by what your body is asking for today. Every remedy ships with its own lab report.

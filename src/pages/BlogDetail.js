@@ -240,7 +240,7 @@ const BlogDetail = () => {
 
     const breadcrumbSchema = blog ? buildBreadcrumbSchema([
         { name: 'Home', url: `${SITE_URL}/` },
-        { name: 'Blog', url: `${SITE_URL}/blog/` },
+        { name: 'Journal', url: `${SITE_URL}/blog/` },
         { name: blog.title, url: canonicalUrl },
     ]) : null
 
@@ -304,7 +304,7 @@ const BlogDetail = () => {
                 <div className="flex flex-col items-center justify-center min-h-screen gap-4">
                     <BookOpen className="w-12 h-12 text-[#d4a574]/50" />
                     <p className="text-white/60">{error}</p>
-                    <Link to="/blog" title="Back to Blog" className="text-[#d4a574] text-sm hover:underline">← Back to Blog</Link>
+                    <Link to="/blog" title="Back to Journal" className="text-[#d4a574] text-sm hover:underline">← Back to Journal</Link>
                 </div>
             )}
 
@@ -343,7 +343,7 @@ const BlogDetail = () => {
                             >
                                 <Link to="/" title="Ancient Health - Home" className="hover:text-[#d4a574] transition-colors">Home</Link>
                                 <ChevronRight className="w-3 h-3" />
-                                <Link to="/blog" title="Blog" className="hover:text-[#d4a574] transition-colors">Blog</Link>
+                                <Link to="/blog" title="Journal" className="hover:text-[#d4a574] transition-colors">Journal</Link>
                                 <ChevronRight className="w-3 h-3" />
                                 <span className="text-white/60 line-clamp-1 max-w-[200px]">{blog.title}</span>
                             </motion.div>
@@ -462,11 +462,11 @@ const BlogDetail = () => {
 
                                         <Link
                                             to="/blog"
-                                            title="Back to Blog"
+                                            title="Back to Journal"
                                             className="mt-6 inline-flex items-center gap-2 text-[#1B2B26]/60 hover:text-[#2d5f4f] text-sm font-semibold transition-colors group"
                                         >
                                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                                            Back to Blog
+                                            Back to Journal
                                         </Link>
                                     </div>
                                 </div>
@@ -566,7 +566,7 @@ const BlogDetail = () => {
                             </p>
                             <Link
                                 to="/blog"
-                                title="All blog articles"
+                                title="All journal articles"
                                 className="inline-flex items-center gap-2 px-7 py-3.5 border border-[#d4a574]/50 text-[#d4a574] font-bold text-sm rounded-full hover:bg-[#d4a574] hover:text-[#0f1c18] transition-all duration-300"
                             >
                                 <BookOpen className="w-4 h-4" />

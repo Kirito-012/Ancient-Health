@@ -48,7 +48,7 @@ const BlogSection = () => {
                             The Journal
                         </p>
                         <h2 className='text-4xl sm:text-5xl lg:text-6xl font-serif font-light text-white leading-tight'>
-                            Field <span className='italic text-[#d4a574]'>notes</span> from the source.
+                            From the <span className='italic text-[#d4a574]'>source.</span>
                         </h2>
                     </div>
                     <Link

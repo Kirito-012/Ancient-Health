@@ -1,7 +1,35 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
+import { useLenis } from 'lenis/react'
 
 const PuritySection = () => {
+    const sectionRef = useRef(null)
+    const leftRef = useRef(null)
+
+    useLenis(() => {
+        const section = sectionRef.current
+        const left = leftRef.current
+        if (!section || !left) return
+
+        // Only apply on lg screens (≥1024px)
+        if (window.innerWidth < 1024) {
+            left.style.transform = 'translateY(0)'
+            return
+        }
+
+        const { top, bottom } = section.getBoundingClientRect()
+        const offset = 96 // top-24 = 6rem = 96px
+        const leftH = left.offsetHeight
+
+        if (top <= offset && bottom > leftH + offset) {
+            left.style.transform = `translateY(${offset - top}px)`
+        } else if (bottom <= leftH + offset) {
+            left.style.transform = `translateY(${bottom - leftH - offset}px)`
+        } else {
+            left.style.transform = 'translateY(0)'
+        }
+    })
+
     return (
         <section className='relative py-20 lg:py-24 bg-[#fdfbf7] text-[#1f2937]'>
             {/* Grain Overlay */}
@@ -55,10 +83,10 @@ const PuritySection = () => {
                 </motion.div>
 
                 {/* Sticky-left + scrolling-right section */}
-                <div className='lg:flex lg:gap-24'>
+                <div ref={sectionRef} className='lg:grid lg:grid-cols-2 lg:gap-24 lg:items-start'>
 
-                    {/* LEFT — sticky */}
-                    <div className='lg:w-1/2 mb-16 lg:mb-0 lg:flex-shrink-0 lg:sticky lg:top-[20vh] lg:self-start'>
+                    {/* LEFT — JS-pinned (CSS sticky breaks inside Lenis) */}
+                    <div ref={leftRef} className='mb-16 lg:mb-0'>
                         <p className='text-xs tracking-[0.3em] uppercase text-[#d4a574] font-sans mb-6'>
                             Why Ancient Health
                         </p>
@@ -74,7 +102,7 @@ const PuritySection = () => {
                     </div>
 
                     {/* RIGHT — scrolling points */}
-                    <div className='lg:w-1/2 space-y-0'>
+                    <div className='space-y-0'>
                         {[
                             {
                                 num: '01',

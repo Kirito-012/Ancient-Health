@@ -170,7 +170,7 @@ const HeroSection = () => {
 
                                 {/* Panel header */}
                                 <div className='flex items-center justify-between mb-6'>
-                                    <span className='text-xs tracking-[0.3em] uppercase text-white/50 font-sans'>The Apothecary</span>
+                                    <span className='text-xs tracking-[0.3em] uppercase text-white/50 font-sans'>Our Products</span>
                                     <Link to='/shop' className='flex items-center gap-1 text-xs tracking-widest uppercase text-white/40 hover:text-[#d4a574] transition-colors duration-300 font-sans'>
                                         View All {totalProducts ?? ''} <ArrowRight className='w-3.5 h-3.5' />
                                     </Link>

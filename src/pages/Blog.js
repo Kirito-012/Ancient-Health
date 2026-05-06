@@ -12,8 +12,8 @@ import { blogCache } from '../utils/blogUtils'
 const SITE_URL = 'https://www.ancienthealth.in'
 const SITE_NAME = 'Ancient Health'
 const PAGE_URL = `${SITE_URL}/blog/`
-const PAGE_TITLE = 'The Wellness Chronicle | Ancient Health'
-const PAGE_DESCRIPTION = 'Discover expert Ayurvedic insights, herbal remedies, and holistic wellness tips. Read the Ancient Health blog to achieve natural balance and well-being.'
+const PAGE_TITLE = 'Ayurveda & Wellness Journal | Ancient Health'
+const PAGE_DESCRIPTION = 'Discover expert Ayurvedic insights, herbal remedies, and holistic wellness tips. Read the Ancient Health journal to achieve natural balance and well-being.'
 const PAGE_KEYWORDS = 'Ayurveda, holistic wellness, ancient health, herbal remedies, Himalayan botanicals, wellness journal, natural healing'
 const PAGE_IMAGE = `${SITE_URL}/og-image.jpeg`
 
@@ -136,16 +136,13 @@ const Blog = () => {
                     >
                         <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#d4a574]/30 bg-[#d4a574]/10 text-[#d4a574] text-xs font-bold tracking-[0.2em] uppercase mb-6">
                             <BookOpen className="w-3 h-3" />
-                            Ancient Wisdom
+                            Our Journal
                         </span>
                         <h1 className="text-5xl md:text-7xl font-serif text-white mb-5 leading-tight">
-                            The Wellness
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#d4a574] to-[#e8c49a]">
-                                Chronicle
-                            </span>
+                            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#d4a574] to-[#e8c49a]">Journal</span>
                         </h1>
                         <p className="text-white/60 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-                            Timeless insights on Ayurveda, holistic living, and the ancient science of well-being — curated for the modern seeker.
+                            Insights on Ayurveda, herbal wellness, and natural living — from the Ancient Health team.
                         </p>
 
                         {/* Search Bar */}

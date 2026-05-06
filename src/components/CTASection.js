@@ -67,7 +67,7 @@ const CTASection = () => {
                         className='group ml-auto flex items-center gap-4 bg-[#d4a574] hover:bg-[#c49460] transition-colors duration-300 rounded-full pl-8 pr-5 py-4 cursor-pointer'
                     >
                         <span className='text-[#0f1c18] text-xs tracking-[0.25em] uppercase font-sans font-semibold whitespace-nowrap'>
-                            Shop the Apothecary
+                            Shop All Products
                         </span>
                         <span className='w-8 h-8 rounded-full bg-[#0f1c18]/15 flex items-center justify-center flex-shrink-0 group-hover:bg-[#0f1c18]/25 transition-colors duration-300'>
                             <ArrowUpRight className='w-4 h-4 text-[#0f1c18]' />

@@ -39,7 +39,7 @@ const Navbar = ({ forceDarkNav = false }) => {
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'About', path: '/about' },
-        { name: 'Blog', path: '/blog' },
+        { name: 'Journal', path: '/blog' },
         { name: 'Wellness', path: '/wellness' },
         { name: 'Contact', path: '/contact' },
     ]

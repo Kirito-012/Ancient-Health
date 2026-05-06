@@ -10,7 +10,7 @@ const reviews = [
         verified: true,
         time: '2 weeks ago',
         product: 'AYURVEDIC HERBAL SOAP',
-        title: 'My morning ritual, transformed.',
+        title: 'My morning routine, transformed.',
         body: 'Three weeks in and my skin has never felt cleaner — no harsh chemicals, no residue. The lab report in the box sealed the deal for me. Worth every rupee.',
     },
     {
@@ -70,7 +70,7 @@ const ReviewsSection = () => {
                         </div>
                         <span className='text-white font-serif text-sm'>4.9 / 5</span>
                         <span className='text-white/20 text-xs'>|</span>
-                        <span className='text-white/40 text-xs font-sans'>Across all remedies</span>
+                        <span className='text-white/40 text-xs font-sans'>Across all products</span>
                     </div>
                 </motion.div>
 
