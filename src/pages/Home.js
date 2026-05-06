@@ -6,11 +6,13 @@ import Navbar from '../components/Navbar'
 import JsonLd from '../components/JsonLd'
 import { buildOrganizationSchema, buildWebSiteSchema } from '../utils/schemaUtils'
 import HeroSection from '../components/HeroSection'
+import SocialProofBar from '../components/SocialProofBar'
 
 const PuritySection = lazy(() => import('../components/PuritySection'))
 const WellnessRetreat = lazy(() => import('../components/WellnessRetreat'))
 const FeaturedProducts = lazy(() => import('../components/FeaturedProducts'))
-const StorySection = lazy(() => import('../components/StorySection'))
+const ReviewsSection = lazy(() => import('../components/ReviewsSection'))
+const BlogSection = lazy(() => import('../components/BlogSection'))
 const CTASection = lazy(() => import('../components/CTASection'))
 const Footer = lazy(() => import('../components/Footer'))
 
@@ -39,11 +41,13 @@ const Home = () => {
 			<JsonLd schema={[buildOrganizationSchema(), buildWebSiteSchema()]} />
 			<Navbar />
 			<HeroSection />
+			<SocialProofBar />
 			<Suspense fallback={<div className="min-h-[200px]" />}>
-				<PuritySection />
 				<FeaturedProducts />
-				<StorySection />
-				<WellnessRetreat />
+				<PuritySection />
+				<ReviewsSection />
+				<BlogSection />
+				{/* <WellnessRetreat /> */}
 				<CTASection />
 				<Footer />
 			</Suspense>

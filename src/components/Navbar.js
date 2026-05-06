@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import logo from "../assets/logo.png"
 import { useCart } from '../context/CartContext'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, LogOut, ShoppingBag, Menu, X, ChevronRight } from 'lucide-react'
+import { User, LogOut, ShoppingBag, ShoppingCart, Menu, X, ChevronRight } from 'lucide-react'
 
 const Navbar = ({ forceDarkNav = false }) => {
     const { cart, token, logout, user } = useCart()
@@ -211,8 +211,8 @@ const Navbar = ({ forceDarkNav = false }) => {
                             )}
 
                             {/* Cart */}
-                            <Link to='/cart' title='Cart' className='group relative flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:bg-white/10 hover:text-white transition-all duration-300'>
-                                <ShoppingBag className="w-4 h-4" />
+                            <Link to='/cart' title='Cart' className='group relative flex items-center justify-center w-10 h-10 rounded-full text-white/80 hover:text-white transition-all duration-300'>
+                                <ShoppingCart className="w-4 h-4" />
                                 {cart?.totalItems > 0 && (
                                     <span className='absolute top-2 right-2 bg-[#d4a574] text-[#0f1c18] text-[8px] font-bold rounded-full h-3 w-3 flex items-center justify-center ring-2 ring-[#0f1c18]'>
                                         {cart.totalItems}
