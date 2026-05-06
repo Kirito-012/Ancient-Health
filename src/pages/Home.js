@@ -9,7 +9,6 @@ import HeroSection from '../components/HeroSection'
 import SocialProofBar from '../components/SocialProofBar'
 
 const PuritySection = lazy(() => import('../components/PuritySection'))
-const WellnessRetreat = lazy(() => import('../components/WellnessRetreat'))
 const FeaturedProducts = lazy(() => import('../components/FeaturedProducts'))
 const ReviewsSection = lazy(() => import('../components/ReviewsSection'))
 const BlogSection = lazy(() => import('../components/BlogSection'))
