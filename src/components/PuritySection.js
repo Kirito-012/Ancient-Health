@@ -1,51 +1,62 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useLenis } from 'lenis/react'
 
 const PuritySection = () => {
     const sectionRef = useRef(null)
     const leftRef = useRef(null)
 
-    useLenis(() => {
-        const section = sectionRef.current
-        const left = leftRef.current
-        if (!section || !left) return
+    useEffect(() => {
+        if (window.innerWidth < 1024) return
 
-        // Only apply on lg screens (≥1024px)
-        if (window.innerWidth < 1024) {
-            left.style.transform = 'translateY(0)'
-            return
+        let rafId = null
+        let lastTop = null
+        let lastBottom = null
+
+        const update = () => {
+            const section = sectionRef.current
+            const left = leftRef.current
+            if (!section || !left) return
+
+            const { top, bottom } = section.getBoundingClientRect()
+            if (top === lastTop && bottom === lastBottom) return
+            lastTop = top
+            lastBottom = bottom
+
+            const offset = 96
+            const leftH = left.offsetHeight
+
+            if (top <= offset && bottom > leftH + offset) {
+                left.style.transform = `translateY(${offset - top}px)`
+            } else if (bottom <= leftH + offset) {
+                left.style.transform = `translateY(${bottom - leftH - offset}px)`
+            } else {
+                left.style.transform = 'translateY(0)'
+            }
         }
 
-        const { top, bottom } = section.getBoundingClientRect()
-        const offset = 96 // top-24 = 6rem = 96px
-        const leftH = left.offsetHeight
-
-        if (top <= offset && bottom > leftH + offset) {
-            left.style.transform = `translateY(${offset - top}px)`
-        } else if (bottom <= leftH + offset) {
-            left.style.transform = `translateY(${bottom - leftH - offset}px)`
-        } else {
-            left.style.transform = 'translateY(0)'
+        const onScroll = () => {
+            if (rafId) return
+            rafId = requestAnimationFrame(() => {
+                update()
+                rafId = null
+            })
         }
-    })
+
+        window.addEventListener('scroll', onScroll, { passive: true })
+        return () => {
+            window.removeEventListener('scroll', onScroll)
+            if (rafId) cancelAnimationFrame(rafId)
+        }
+    }, [])
 
     return (
         <section className='relative py-20 lg:py-24 bg-[#fdfbf7] text-[#1f2937]'>
             {/* Grain Overlay */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.05]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
-            {/* Decorative elements - Adjusted for Light Theme */}
-            <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                className='absolute top-20 right-0 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[100px]'
-            ></motion.div>
-            <motion.div
-                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className='absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#2d5f4f]/10 rounded-full blur-[100px]'
-            ></motion.div>
+            {/* Static decorative glows — no animation to avoid main-thread layout work */}
+            <div className='absolute top-20 right-0 w-[500px] h-[500px] bg-[#d4a574]/8 rounded-full blur-[100px] pointer-events-none'></div>
+            <div className='absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#2d5f4f]/8 rounded-full blur-[100px] pointer-events-none'></div>
 
             <div className='relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                 {/* Quote Section - Minimalist Design */}
