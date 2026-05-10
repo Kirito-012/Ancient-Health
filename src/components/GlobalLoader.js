@@ -5,28 +5,15 @@ const GlobalLoader = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // We want to ensure the loader stays on screen for at least a minimum 
-        // amount of time so it doesn't just flash if the user has a fast connection.
-        const minimumLoadTime = new Promise(resolve => setTimeout(resolve, 1500));
+        const onLoad = () => setIsLoading(false);
 
-        // Wait for the window to fully load (assets, images, scripts)
-        const windowLoad = new Promise(resolve => {
-            if (document.readyState === 'complete') {
-                resolve();
-            } else {
-                window.addEventListener('load', resolve);
-            }
-        });
+        if (document.readyState === 'complete') {
+            onLoad();
+        } else {
+            window.addEventListener('load', onLoad);
+        }
 
-        // Wait for both the minimum time AND the window load event
-        Promise.all([minimumLoadTime, windowLoad]).then(() => {
-            // Add a tiny extra delay for smoothness before firing the exit animation
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 300);
-        });
-
-        return () => window.removeEventListener('load', () => { });
+        return () => window.removeEventListener('load', onLoad);
     }, []);
 
     return (
@@ -39,7 +26,7 @@ const GlobalLoader = () => {
                     className="fixed inset-0 z-[99999] bg-[#0f1c18] flex items-center justify-center overflow-hidden"
                 >
                     {/* Grain Background */}
-                    <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                    <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
                     {/* Animated Glow Backdrop */}
                     <motion.div

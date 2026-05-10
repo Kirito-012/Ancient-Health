@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import logo from "../assets/logo.png"
+import logo from "../assets/logo.webp"
 import { useCart } from '../context/CartContext'
 import { motion, AnimatePresence } from 'framer-motion'
 import { User, LogOut, ShoppingBag, ShoppingCart, Menu, X, ChevronRight } from 'lucide-react'

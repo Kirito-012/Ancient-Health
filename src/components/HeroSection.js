@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
 import { formatPrice } from '../utils/formatPrice'
+import heroBg from '../assets/hero-forest.webp'
 
 const BADGES = ['#1 BESTSELLER', 'NEW', "EDITOR'S PICK"]
 
@@ -61,19 +62,22 @@ const HeroSection = () => {
         <section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3] selection:bg-[#d4a574] selection:text-[#0f1c18] w-full max-w-full'>
 
             {/* Grain Overlay */}
-            <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
+            <div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
             {/* Parallax Background */}
             <div className='absolute inset-0 z-0 overflow-hidden w-full'>
                 <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
                 <motion.div style={{ y: y1 }} className='absolute inset-0'>
                     <img
-                        src="https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=60&w=1920&auto=format&fit=crop"
-                        alt="Ancient Mystical Forest"
+                        src={heroBg}
+                        alt=""
+                        aria-hidden="true"
                         className="w-full h-full object-cover opacity-50 scale-110"
                         loading="eager"
-                        fetchPriority="high"
-                        decoding="async"
+                        fetchpriority="high"
+                        decoding="sync"
+                        width="1920"
+                        height="1275"
                     />
                 </motion.div>
                 <motion.div

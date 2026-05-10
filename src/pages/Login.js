@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import heroBg from '../assets/hero-forest.webp'
 import { motion } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 
@@ -263,13 +264,13 @@ const Login = () => {
 		<section className='relative min-h-screen flex items-center overflow-hidden bg-[#0f1c18] text-[#e8e6e3]'>
 			<Navbar />
 
-			<div className='absolute inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
+			<div className='absolute inset-0 pointer-events-none z-50 opacity-[0.03]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
 			<div className='absolute inset-0 z-0 overflow-hidden'>
 				<div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 				<div className='absolute inset-0'>
 					<img
-						src='https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?q=60&w=1920&auto=format&fit=crop'
+						src={heroBg}
 						alt='Ancient Mystical Forest'
 						className='w-full h-full object-cover opacity-50 scale-105'
 						style={{ willChange: 'transform' }}

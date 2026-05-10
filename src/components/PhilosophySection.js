@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
+import philosophyMountains from '../assets/philosophy-mountains.webp'
+import philosophyWellness from '../assets/philosophy-wellness.webp'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,19 +13,19 @@ const philosophyContent = [
         title: "Origins",
         heading: "Born from the Earth",
         text: "Our journey begins where the air is thin and the earth is pure. High in the Himalayas, nature has preserved its most potent secrets for millennia. We don't just source ingredients; we honor the ancient soil that births them.",
-        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=60&w=1920&auto=format&fit=crop"
+        image: philosophyMountains
     },
     {
         title: "Ritual",
         heading: "The Art of Preparation",
         text: "True wellness is a slow process. We reject industrial shortcuts in favor of traditional methods—sun-drying, stone-grinding, and hand-blending. Every jar is a testament to patience, ensuring that the vital energy (Prana) of the herb remains intact.",
-        image: "https://images.pexels.com/photos/5480239/pexels-photo-5480239.jpeg?auto=compress&cs=tinysrgb&h=1080&w=1920&fit=crop"
+        image: philosophyWellness
     },
     {
         title: "Harmony",
         heading: "Balance Within",
         text: "We believe the body is a microcosm of the universe. Our formulations are designed not just to treat symptoms, but to restore elemental balance. It is a dialogue between nature and your inner self, guiding you back to a state of wholeness.",
-        image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=60&w=1920&auto=format&fit=crop"
+        image: philosophyWellness
     }
 ]
 

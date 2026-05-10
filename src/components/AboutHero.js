@@ -1,5 +1,6 @@
 import React from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import aboutForest from '../assets/about-forest.webp'
 
 const AboutHero = () => {
     const { scrollY } = useScroll()
@@ -18,11 +19,13 @@ const AboutHero = () => {
 
                 {/* Misty Forest Image */}
                 <img
-                    src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=60&w=1920&auto=format&fit=crop"
+                    src={aboutForest}
                     alt='Misty Himalayan Forest'
                     className='w-full h-full object-cover scale-110 opacity-70'
                     loading="eager"
-                    fetchPriority="high"
+                    fetchpriority="high"
+                    width="1920"
+                    height="1275"
                 />
             </motion.div>
 

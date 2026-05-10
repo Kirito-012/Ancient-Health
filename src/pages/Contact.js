@@ -6,6 +6,7 @@ import JsonLd from '../components/JsonLd'
 import { buildFaqSchema } from '../utils/schemaUtils'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import contactNature from '../assets/contact-nature.webp'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { Mail, MapPin, Instagram, Twitter, Linkedin, Send, CalendarDays, Clock, Phone, Sparkles, CheckCircle2 } from 'lucide-react'
@@ -165,7 +166,7 @@ const Contact = () => {
             <Navbar />
 
             {/* Grain Overlay */}
-            <div className='fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url("https://grainy-gradients.vercel.app/noise.svg")]'></div>
+            <div className='fixed inset-0 pointer-events-none z-50 opacity-[0.03]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
             {/* Immersive Hero */}
             <section className='relative h-screen flex items-center justify-center overflow-hidden'>
@@ -174,7 +175,7 @@ const Contact = () => {
                     <motion.div style={{ y: y1 }} className='absolute inset-0'>
                         {/* Placeholder for a high-quality, dark, moody nature image */}
                         <img
-                            src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=60&w=1920&auto=format&fit=crop"
+                            src={contactNature}
                             alt="Misty Forest"
                             className="w-full h-full object-cover opacity-60 scale-110"
                             loading="eager"
@@ -221,7 +222,7 @@ const Contact = () => {
                     {/* Card Container */}
                     <div className='relative bg-[#0f1c18]/60 backdrop-blur-2xl border border-white/5 rounded-3xl overflow-hidden shadow-2xl'>
                         {/* Internal Grain Texture */}
-                        <div className='absolute inset-0 opacity-[0.05] pointer-events-none bg-[url("https://grainy-gradients.vercel.app/noise.svg")] z-0'></div>
+                        <div className='absolute inset-0 pointer-events-none opacity-[0.05] z-0' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
                         {/* Decorative Top Line */}
                         <div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/50 to-transparent z-10'></div>
@@ -420,7 +421,7 @@ const Contact = () => {
                     <div className='relative bg-[#0f1c18]/60 backdrop-blur-2xl border border-white/8 rounded-3xl overflow-hidden shadow-2xl'>
                         {/* Top shimmer */}
                         <div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/50 to-transparent' />
-                        <div className='absolute inset-0 opacity-[0.03] pointer-events-none bg-[url("https://grainy-gradients.vercel.app/noise.svg")]' />
+                        <div className='absolute inset-0 pointer-events-none opacity-[0.03]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
                         <div className='grid lg:grid-cols-12 relative z-10'>
 

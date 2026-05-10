@@ -10,7 +10,7 @@ import Footer from '../components/Footer'
 import { useCart } from '../context/CartContext'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import shop_bg from '../assets/shop_bg.png'
+import shop_bg from '../assets/shop_bg.webp'
 import { stripHtml } from '../utils/textUtils'
 import { motion, AnimatePresence } from 'framer-motion'
 

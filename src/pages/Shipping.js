@@ -107,7 +107,7 @@ const Shipping = () => {
             <main className='min-h-screen bg-[#faf8f5]'>
                 {/* Hero */}
                 <section className='relative bg-[#0f1c18] pt-32 pb-20 overflow-hidden'>
-                    <div className='absolute inset-0 pointer-events-none opacity-[0.03] bg-[url("https://grainy-gradients.vercel.app/noise.svg")]' />
+                    <div className='absolute inset-0 pointer-events-none opacity-[0.03]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
                     <div className='absolute -top-20 -left-20 w-[400px] h-[400px] bg-[#2d5f4f]/10 rounded-full blur-[80px]' />
                     <div className='absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#d4a574]/30 to-transparent' />
 
