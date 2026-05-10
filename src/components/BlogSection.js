@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
@@ -12,24 +12,31 @@ const readTime = (content) => {
 const BlogSection = () => {
     const [blogs, setBlogs] = useState([])
     const [loading, setLoading] = useState(true)
+    const sectionRef = useRef(null)
 
     useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/blogs?limit=6&sort=-createdAt`)
-                const data = await res.json()
-                setBlogs((data.data || []).slice(0, 6))
-            } catch (err) {
-                console.error('BlogSection fetch error:', err)
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchBlogs()
+        const el = sectionRef.current
+        if (!el) return
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    observer.disconnect()
+                    fetch(`${process.env.REACT_APP_API_URL}/api/blogs?limit=6&sort=-createdAt`)
+                        .then(r => r.json())
+                        .then(data => setBlogs((data.data || []).slice(0, 6)))
+                        .catch(err => console.error('BlogSection fetch error:', err))
+                        .finally(() => setLoading(false))
+                }
+            },
+            { rootMargin: '300px' }
+        )
+        observer.observe(el)
+        return () => observer.disconnect()
     }, [])
 
     return (
-        <section className='relative bg-[#0f1c18] text-[#e8e6e3] py-20 lg:py-28'>
+        <section ref={sectionRef} className='relative bg-[#0f1c18] text-[#e8e6e3] py-20 lg:py-28'>
             {/* Grain */}
             <div className='absolute inset-0 pointer-events-none opacity-[0.03]' style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}}></div>
 
@@ -88,6 +95,10 @@ const BlogSection = () => {
                                                 src={blog.image}
                                                 alt={blog.imageAlt || blog.title}
                                                 className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
+                                                loading="lazy"
+                                                decoding="async"
+                                                width="600"
+                                                height="450"
                                             />
                                         ) : (
                                             <div className='w-full h-full bg-white/5'></div>

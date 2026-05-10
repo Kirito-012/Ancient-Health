@@ -57,6 +57,10 @@ const StorySection = () => {
                                     src={storyHarvest}
                                     alt='Sacred Harvest'
                                     className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform'
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="1024"
+                                    height="1024"
                                 />
                             </div>
                         </motion.div>
@@ -137,6 +141,10 @@ const StorySection = () => {
                                     src={storyProcess}
                                     alt='Ancient Purification'
                                     className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 will-change-transform'
+                                    loading="lazy"
+                                    decoding="async"
+                                    width="1024"
+                                    height="1024"
                                 />
                             </div>
                         </motion.div>

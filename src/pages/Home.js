@@ -43,10 +43,17 @@ const Home = () => {
 			<SocialProofBar />
 			<Suspense fallback={<div className="min-h-[200px]" />}>
 				<FeaturedProducts />
+			</Suspense>
+			<Suspense fallback={<div className="min-h-[200px]" />}>
 				<PuritySection />
+			</Suspense>
+			<Suspense fallback={<div className="min-h-[200px]" />}>
 				<ReviewsSection />
+			</Suspense>
+			<Suspense fallback={<div className="min-h-[200px]" />}>
 				<BlogSection />
-				{/* <WellnessRetreat /> */}
+			</Suspense>
+			<Suspense fallback={<div className="min-h-[200px]" />}>
 				<CTASection />
 				<Footer />
 			</Suspense>

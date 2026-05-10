@@ -31,21 +31,28 @@
 
 	<title>Ancient Health</title>
 
-	<!-- Preconnect for fonts -->
+	<!-- Preconnect for fonts and API -->
 	<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link rel="preconnect" href="https://api.ancienthealth.in" crossorigin />
 	<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" media="print" onload="this.media='all'" />
 	<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" /></noscript>
 
-	<!-- Deferred Google Analytics -->
+	<!-- Google Analytics — loaded after page is idle to avoid forced reflow on critical path -->
 	<script>
 		window.dataLayer = window.dataLayer || [];
 		function gtag(){dataLayer.push(arguments);}
 		gtag('js', new Date());
-		gtag('config', 'G-0K4GL58F65');
+		gtag('config', 'G-0K4GL58F65', { send_page_view: false });
+		(window.requestIdleCallback || function(cb){ setTimeout(cb, 1); })(function() {
+			var s = document.createElement('script');
+			s.src = 'https://www.googletagmanager.com/gtag/js?id=G-0K4GL58F65';
+			s.async = true;
+			document.head.appendChild(s);
+			gtag('event', 'page_view');
+		});
 	</script>
-	<script defer src="https://www.googletagmanager.com/gtag/js?id=G-0K4GL58F65"></script>
 </head>
 
 <body>

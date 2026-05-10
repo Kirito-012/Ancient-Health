@@ -78,6 +78,10 @@ const WellnessRetreat = () => {
                                 src={retreatImage}
                                 alt='Himalayan Sacred Retreat'
                                 className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90 will-change-transform'
+                                loading="lazy"
+                                decoding="async"
+                                width="1024"
+                                height="1024"
                             />
                             <div className='absolute inset-0 bg-[#0f1c18]/20 group-hover:bg-transparent transition-colors duration-500'></div>
                         </div>

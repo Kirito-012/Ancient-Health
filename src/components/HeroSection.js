@@ -36,7 +36,7 @@ const HeroSection = () => {
     }, [])
 
     const containerVariants = {
-        hidden: { opacity: 0 },
+        hidden: { opacity: 1 },
         visible: {
             opacity: 1,
             transition: { staggerChildren: 0.25, delayChildren: 0.2 }
@@ -50,6 +50,11 @@ const HeroSection = () => {
             y: 0,
             transition: { duration: 1, ease: 'easeOut' }
         }
+    }
+
+    const h1Variants = {
+        hidden: { opacity: 1, y: 0 },
+        visible: { opacity: 1, y: 0 }
     }
 
     const trustBadges = [
@@ -102,10 +107,10 @@ const HeroSection = () => {
                             Ancient Health · Est. 2024
                         </motion.p>
 
-                        {/* Headline */}
-                        <motion.h1 variants={itemVariants} className='text-5xl sm:text-6xl lg:text-7xl font-serif font-light leading-[1.1] sm:leading-[0.95] tracking-tight'>
-                            <span className='block text-white'>Hand-harvested</span>
-                            <span className='block text-[#d4a574] italic'>Ayurveda,</span>
+                        {/* Headline — h1Variants keeps it visible at t=0 for LCP measurement */}
+                        <motion.h1 variants={h1Variants} className='text-5xl sm:text-6xl lg:text-7xl font-serif font-light leading-[1.1] sm:leading-[0.95] tracking-tight'>
+                            <motion.span variants={itemVariants} className='block text-white'>Hand-harvested</motion.span>
+                            <motion.span variants={itemVariants} className='block text-[#d4a574] italic'>Ayurveda,</motion.span>
                             <span className='block text-white'>lab-verified pure.</span>
                         </motion.h1>
 
