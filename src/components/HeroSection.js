@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Star } from 'lucide-react'
 import { formatPrice } from '../utils/formatPrice'
 import heroBg from '../assets/hero-forest.webp'
@@ -8,26 +8,9 @@ import heroBg from '../assets/hero-forest.webp'
 const BADGES = ['#1 BESTSELLER', 'NEW', "EDITOR'S PICK"]
 
 const HeroSection = () => {
-    const bgRef = useRef(null)
-    const panelRef = useRef(null)
-
-    useEffect(() => {
-        let rafId = null
-        const onScroll = () => {
-            if (rafId) return
-            rafId = requestAnimationFrame(() => {
-                const y = window.scrollY
-                if (bgRef.current) bgRef.current.style.transform = `translateY(${y * 0.4}px)`
-                if (panelRef.current) panelRef.current.style.transform = `translateY(${y * -0.3}px)`
-                rafId = null
-            })
-        }
-        window.addEventListener('scroll', onScroll, { passive: true })
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-            if (rafId) cancelAnimationFrame(rafId)
-        }
-    }, [])
+    const { scrollY } = useScroll()
+    const y1 = useTransform(scrollY, [0, 500], [0, 200])
+    const y2 = useTransform(scrollY, [0, 500], [0, -150])
 
     const [products, setProducts] = useState([])
     const [totalProducts, setTotalProducts] = useState(null)
@@ -89,7 +72,7 @@ const HeroSection = () => {
             {/* Parallax Background */}
             <div className='absolute inset-0 z-0 overflow-hidden w-full'>
                 <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
-                <div ref={bgRef} className='absolute inset-0 will-change-transform'>
+                <motion.div style={{ y: y1 }} className='absolute inset-0'>
                     <img
                         src={heroBg}
                         alt=""
@@ -101,7 +84,7 @@ const HeroSection = () => {
                         width="1920"
                         height="1275"
                     />
-                </div>
+                </motion.div>
                 <div className='absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#d4a574]/10 rounded-full blur-[120px] pointer-events-none' />
             </div>
 
@@ -184,7 +167,7 @@ const HeroSection = () => {
                         transition={{ duration: 1.2, delay: 0.5, ease: "easeOut" }}
                         className='relative hidden lg:block'
                     >
-                        <div ref={panelRef} className='will-change-transform'>
+                        <motion.div style={{ y: y2 }}>
                             <div className='relative bg-[#0f1c18]/40 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 overflow-hidden shadow-2xl'>
                                 {/* Glass glints */}
                                 <div className='absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent'></div>
@@ -267,7 +250,7 @@ const HeroSection = () => {
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
 
                 </div>

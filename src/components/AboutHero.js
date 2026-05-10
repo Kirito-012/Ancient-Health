@@ -1,33 +1,16 @@
-import React, { useRef, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import React from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import aboutForest from '../assets/about-forest.webp'
 
 const AboutHero = () => {
-    const bgRef = useRef(null)
-    const contentRef = useRef(null)
-
-    useEffect(() => {
-        let rafId = null
-        const onScroll = () => {
-            if (rafId) return
-            rafId = requestAnimationFrame(() => {
-                const y = window.scrollY
-                if (bgRef.current) bgRef.current.style.transform = `translateY(${y * 0.3}px)`
-                if (contentRef.current) contentRef.current.style.opacity = Math.max(0, 1 - y / 300)
-                rafId = null
-            })
-        }
-        window.addEventListener('scroll', onScroll, { passive: true })
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-            if (rafId) cancelAnimationFrame(rafId)
-        }
-    }, [])
+    const { scrollY } = useScroll()
+    const y = useTransform(scrollY, [0, 500], [0, 150])
+    const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
     return (
         <section className='relative h-screen flex items-center justify-center overflow-hidden bg-[#0f1c18]'>
             {/* Background Image with Parallax */}
-            <div ref={bgRef} className='absolute inset-0 z-0 will-change-transform'>
+            <motion.div style={{ y }} className='absolute inset-0 z-0'>
                 {/* Heavy gradient overlay for seamless transition */}
                 <div className='absolute inset-0 bg-gradient-to-b from-[#0f1c18]/30 via-[#0f1c18]/60 to-[#0f1c18] z-10'></div>
 
@@ -41,10 +24,13 @@ const AboutHero = () => {
                     width="1920"
                     height="1275"
                 />
-            </div>
+            </motion.div>
 
             {/* Content */}
-            <div ref={contentRef} className='relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
+            <motion.div
+                style={{ opacity }}
+                className='relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center'
+            >
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -74,7 +60,7 @@ const AboutHero = () => {
                 >
                     Bridging the gap between time-honored Himalayan traditions and modern wellness, bringing you nature's purest remedies.
                 </motion.p>
-            </div>
+            </motion.div>
 
             {/* Scroll Indicator */}
             <motion.div

@@ -1,53 +1,40 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
+import { useLenis } from 'lenis/react'
 
 const PuritySection = () => {
     const sectionRef = useRef(null)
     const leftRef = useRef(null)
+    const leftHeightRef = useRef(null)
 
-    useEffect(() => {
-        if (window.innerWidth < 1024) return
-
-        let rafId = null
-        let lastTop = null
-        let lastBottom = null
-
-        const update = () => {
-            const section = sectionRef.current
-            const left = leftRef.current
-            if (!section || !left) return
-
-            const { top, bottom } = section.getBoundingClientRect()
-            if (top === lastTop && bottom === lastBottom) return
-            lastTop = top
-            lastBottom = bottom
-
-            const offset = 96
-            const leftH = left.offsetHeight
-
-            if (top <= offset && bottom > leftH + offset) {
-                left.style.transform = `translateY(${offset - top}px)`
-            } else if (bottom <= leftH + offset) {
-                left.style.transform = `translateY(${bottom - leftH - offset}px)`
-            } else {
-                left.style.transform = 'translateY(0)'
-            }
+    useLenis(() => {
+        const section = sectionRef.current
+        const left = leftRef.current
+        if (!section || !left) return
+        if (window.innerWidth < 1024) {
+            left.style.transform = 'translateY(0)'
+            return
         }
 
-        const onScroll = () => {
-            if (rafId) return
-            rafId = requestAnimationFrame(() => {
-                update()
-                rafId = null
-            })
+        // Cache offsetHeight — only read it once (it doesn't change during scroll)
+        if (leftHeightRef.current === null) {
+            leftHeightRef.current = left.offsetHeight
         }
 
-        window.addEventListener('scroll', onScroll, { passive: true })
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-            if (rafId) cancelAnimationFrame(rafId)
+        // Single batched read — getBoundingClientRect is the only layout read
+        const { top, bottom } = section.getBoundingClientRect()
+        const offset = 96
+        const leftH = leftHeightRef.current
+
+        // Write transform — no interleaved reads after this point
+        if (top <= offset && bottom > leftH + offset) {
+            left.style.transform = `translateY(${offset - top}px)`
+        } else if (bottom <= leftH + offset) {
+            left.style.transform = `translateY(${bottom - leftH - offset}px)`
+        } else {
+            left.style.transform = 'translateY(0)'
         }
-    }, [])
+    })
 
     return (
         <section className='relative py-20 lg:py-24 bg-[#fdfbf7] text-[#1f2937]'>
