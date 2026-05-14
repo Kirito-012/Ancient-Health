@@ -8,6 +8,7 @@ import Footer from '../components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar, User, ArrowRight, Search, BookOpen } from 'lucide-react'
 import { blogCache } from '../utils/blogUtils'
+import journalHero from '../assets/journal-hero.webp'
 
 const SITE_URL = 'https://www.ancienthealth.in'
 const SITE_NAME = 'Ancient Health'
@@ -121,12 +122,13 @@ const Blog = () => {
 
             {/* ── Hero ── */}
             <div className="relative pt-28 pb-20 overflow-hidden">
-                {/* Background decoration */}
-                <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute top-0 left-0 w-full h-full opacity-60" style={{backgroundImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")"}} />
-                    <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-[#d4a574]/5 rounded-full blur-[120px]" />
-                    <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#2d5f4f]/10 rounded-full blur-[100px]" />
-                </div>
+                {/* Background photo */}
+                <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${journalHero})` }}
+                />
+                {/* Dark overlay for legibility */}
+                <div className="absolute inset-0" style={{ backgroundColor: 'rgba(15, 28, 24, 0.78)' }} />
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <motion.div

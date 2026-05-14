@@ -132,16 +132,13 @@ const FeaturedProducts = () => {
                             <button
                                 key={cat._id}
                                 onClick={() => setActiveCategory(cat._id)}
-                                className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs tracking-[0.15em] uppercase font-sans transition-all duration-300 ${
+                                className={`px-5 py-2 rounded-full text-xs tracking-[0.15em] uppercase font-sans transition-all duration-300 ${
                                     activeCategory === cat._id
                                         ? 'bg-[#d4a574] text-[#0f1c18] font-semibold'
                                         : 'border border-white/15 text-white/50 hover:border-white/30 hover:text-white/80'
                                 }`}
                             >
                                 {cat.name}
-                                <span className={`text-[10px] ${activeCategory === cat._id ? 'text-[#0f1c18]/60' : 'text-white/30'}`}>
-                                    {countFor(cat._id)}
-                                </span>
                             </button>
                         ))}
                     </div>

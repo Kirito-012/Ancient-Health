@@ -107,7 +107,7 @@ const HeroSection = () => {
                         <motion.h1 variants={h1Variants} className='text-5xl sm:text-6xl lg:text-7xl font-serif font-light leading-[1.1] sm:leading-[0.95] tracking-tight'>
                             <motion.span variants={itemVariants} className='block text-white'>Hand-harvested</motion.span>
                             <motion.span variants={itemVariants} className='block text-[#d4a574] italic'>Ayurveda,</motion.span>
-                            <span className='block text-white'>lab-verified pure.</span>
+                            <motion.span variants={itemVariants} className='block text-white'>lab-verified pure.</motion.span>
                         </motion.h1>
 
                         {/* Body */}
