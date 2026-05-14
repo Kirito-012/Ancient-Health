@@ -229,3 +229,116 @@
 .blog-rich-content a:hover {
 	color: #1e4035;
 }
+
+/* Smooth scroll + offset for in-page heading anchors */
+.blog-rich-content {
+	scroll-behavior: smooth;
+}
+
+.blog-rich-content h1[id],
+.blog-rich-content h2[id],
+.blog-rich-content h3[id] {
+	scroll-margin-top: 80px;
+}
+
+/* Table of Contents card */
+.blog-rich-content .toc {
+	background: #ffffff;
+	border-left: 3px solid #d4a574;
+	border-radius: 12px;
+	padding: 20px 24px;
+	margin: 24px 0 32px;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.blog-rich-content .toc .toc-title {
+	font-family: 'Inter', system-ui, sans-serif;
+	font-weight: 700;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: rgba(27, 43, 38, 0.4);
+	margin: 0 0 12px;
+	text-align: left;
+	line-height: 1.4;
+}
+
+.blog-rich-content .toc ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.blog-rich-content .toc li {
+	margin: 0;
+}
+
+.blog-rich-content .toc li a {
+	text-decoration: none;
+	transition: color 0.2s ease;
+	line-height: 1.45;
+}
+
+.blog-rich-content .toc .toc-h2 > a {
+	font-weight: 600;
+	font-size: 0.9rem;
+	color: #2d5f4f;
+}
+
+.blog-rich-content .toc ul {
+	counter-reset: toc-sub;
+}
+
+.blog-rich-content .toc .toc-h2 {
+	counter-reset: toc-sub;
+}
+
+.blog-rich-content .toc .toc-h3 {
+	counter-increment: toc-sub;
+	padding-left: 28px;
+	position: relative;
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+}
+
+.blog-rich-content .toc .toc-h3::before {
+	content: counter(toc-sub, lower-alpha) ".";
+	position: absolute;
+	left: 12px;
+	color: #d4a574;
+	font-weight: 700;
+	font-size: 0.85rem;
+	font-variant-numeric: tabular-nums;
+	line-height: inherit;
+}
+
+.blog-rich-content .toc .toc-h3 > a {
+	font-weight: 400;
+	font-size: 0.85rem;
+	color: #1B2B26;
+}
+
+.blog-rich-content .toc .toc-h2 > a > .toc-num {
+	color: #d4a574;
+	font-weight: 700;
+	margin-right: 4px;
+	font-variant-numeric: tabular-nums;
+}
+
+.blog-rich-content .toc .toc-h3 > a > .toc-num {
+	display: none;
+}
+
+.blog-rich-content .toc li a:hover {
+	color: #d4a574;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.blog-rich-content .toc li a:hover .toc-num {
+	color: #d4a574;
+}

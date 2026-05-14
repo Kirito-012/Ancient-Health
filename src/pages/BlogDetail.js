@@ -107,17 +107,32 @@ const hasHTMLTags = (raw = '') => /<\/?[a-z][\s\S]*>/i.test(raw)
 
 const stripLeadingH1 = (html) => html.replace(/^\s*<h1[^>]*>.*?<\/h1>\s*/i, '')
 
-// Split HTML after the Nth closing </p> tag — safe block-level boundary
+// Find the [start, end) range of any <nav class="toc"> ... </nav> block so we
+// can skip </p> tags inside it (e.g. the <p class="toc-title">) when splitting.
+const findTocRange = (html) => {
+    const openMatch = html.match(/<nav\b[^>]*class=["'][^"']*\btoc\b[^"']*["'][^>]*>/i)
+    if (!openMatch) return null
+    const start = openMatch.index
+    const closeIdx = html.indexOf('</nav>', start + openMatch[0].length)
+    if (closeIdx === -1) return null
+    return [start, closeIdx + '</nav>'.length]
+}
+
+// Split HTML after the Nth closing </p> tag — safe block-level boundary.
+// </p> tags inside the TOC nav are ignored so the infographic isn't pulled up.
 const splitHTMLAfterParagraph = (html, n = 3) => {
+    const tocRange = findTocRange(html)
     let count = 0
     let idx = -1
     let searchFrom = 0
     while (count < n) {
         const found = html.indexOf('</p>', searchFrom)
         if (found === -1) break
+        const inToc = tocRange && found >= tocRange[0] && found < tocRange[1]
+        searchFrom = found + 4
+        if (inToc) continue
         count++
         idx = found + 4
-        searchFrom = idx
     }
     if (idx === -1 || idx >= html.length) return [html, '']
     return [html.slice(0, idx), html.slice(idx)]
