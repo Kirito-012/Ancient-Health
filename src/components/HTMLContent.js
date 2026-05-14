@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react'
 import DOMPurify from 'isomorphic-dompurify'
 
-const NAVBAR_OFFSET = 80
+const NAVBAR_OFFSET = 120
 
 const sanitizeConfig = {
     ADD_ATTR: ['id', 'aria-label'],
