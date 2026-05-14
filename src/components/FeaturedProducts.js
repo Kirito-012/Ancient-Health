@@ -47,8 +47,6 @@ const FeaturedProducts = () => {
         ? allProducts
         : allProducts.filter(p => p.category?._id === activeCategory || p.category?.slug === activeCategory)
 
-    const countFor = (catId) => allProducts.filter(p => p.category?._id === catId).length
-
     const handleAddToCart = async (e, product) => {
         e.preventDefault()
         e.stopPropagation()
